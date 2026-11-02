@@ -22,6 +22,10 @@ abstract final class RemoteConfigKeys {
   static const String expiryHoursToday = 'expiry_hours_today';
   static const String expiryHoursThisWeek = 'expiry_hours_this_week';
   static const String stagedNotifExpandMinutes = 'staged_notif_expand_minutes';
+  // Kızılay ve Sağlık Bakanlığı güncel kurallarıyla doğrulanmalıdır
+  static const String plasmaIntervalDays = 'plasma_interval_days';
+  static const String eligibilitySurveyJson = 'eligibility_survey_json';
+  static const String donationReminderHour = 'donation_reminder_hour';
 }
 
 /// Remote Config servisi arayüzü.
@@ -44,6 +48,17 @@ abstract class RemoteConfigService {
   int get expiryHoursToday;
   int get expiryHoursThisWeek;
   int get stagedNotifExpandMinutes;
+
+  // Bağış takibi (Aşama A)
+  // Kızılay ve Sağlık Bakanlığı güncel kurallarıyla doğrulanmalıdır
+  int get plasmaIntervalDays;
+
+  /// Bağışa uygunluk ön kontrol anketi (JSON). Boşsa yerel asset kullanılır.
+  /// Kızılay ve Sağlık Bakanlığı güncel kurallarıyla doğrulanmalıdır.
+  String get eligibilitySurveyJson;
+
+  /// "Tekrar bağış yapabilirsin" hatırlatıcısının yerel saati (0-23).
+  int get donationReminderHour;
 }
 
 /// Firebase Remote Config uygulayıcısı.
@@ -74,6 +89,10 @@ class FirebaseRemoteConfigService implements RemoteConfigService {
     RemoteConfigKeys.expiryHoursToday: 48,
     RemoteConfigKeys.expiryHoursThisWeek: 168,
     RemoteConfigKeys.stagedNotifExpandMinutes: 15,
+    // Kızılay ve Sağlık Bakanlığı güncel kurallarıyla doğrulanmalıdır
+    RemoteConfigKeys.plasmaIntervalDays: 14,
+    RemoteConfigKeys.eligibilitySurveyJson: '',
+    RemoteConfigKeys.donationReminderHour: 10,
   };
 
   @override
@@ -171,6 +190,19 @@ class FirebaseRemoteConfigService implements RemoteConfigService {
   @override
   int get stagedNotifExpandMinutes =>
       _getInt(RemoteConfigKeys.stagedNotifExpandMinutes);
+
+  // Kızılay ve Sağlık Bakanlığı güncel kurallarıyla doğrulanmalıdır
+  @override
+  int get plasmaIntervalDays => _getInt(RemoteConfigKeys.plasmaIntervalDays);
+
+  // Kızılay ve Sağlık Bakanlığı güncel kurallarıyla doğrulanmalıdır
+  @override
+  String get eligibilitySurveyJson =>
+      _getString(RemoteConfigKeys.eligibilitySurveyJson);
+
+  @override
+  int get donationReminderHour =>
+      _getInt(RemoteConfigKeys.donationReminderHour);
 }
 
 final remoteConfigServiceProvider = Provider<RemoteConfigService>((ref) {

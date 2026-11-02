@@ -3,6 +3,7 @@
  * Çalıştırma:
  *   firebase emulators:exec --only firestore "npm --prefix test/firestore_rules test"
  */
+const { describe, it, before, after } = require('node:test');
 const {
   initializeTestEnvironment,
   assertSucceeds,

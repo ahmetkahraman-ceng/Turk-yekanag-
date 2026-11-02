@@ -344,5 +344,79 @@
   "matchingOwnerConfirmDonationButton": "Confirm Donation (Completed)",
   "matchingOffersClosedNotice": "The requester indicated enough donors have arrived; new offers are closed.",
   "notificationsMarkAllRead": "Mark All as Read",
-  "notificationsFilterUnreadOnly": "Unread Only"
+  "notificationsFilterUnreadOnly": "Unread Only",
+  "donationStatusEligibleNowTitle": "You Appear Eligible to Donate Now",
+  "donationStatusWaitingTitle": "Waiting Period Until Next Donation",
+  "donationCountdownDaysHours": "Remaining: {days} days ({hours} hours)",
+  "@donationCountdownDaysHours": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      },
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "donationNextEligibleDateLabel": "Next eligible date: {dateText}",
+  "@donationNextEligibleDateLabel": {
+    "placeholders": {
+      "dateText": {
+        "type": "String"
+      }
+    }
+  },
+  "donationAutoPausedNotice": "Your 'Available to donate' status was automatically paused until your waiting period ends.",
+  "donationAutoResumedNotice": "Your 'Available to donate' status resumes automatically once the waiting period ends.",
+  "donationReminderToggleTitle": "'You can donate again' reminder",
+  "donationReminderToggleSubtitle": "Sends a local notification when your waiting period ends",
+  "donationReminderScheduledSnack": "Reminder notification scheduled.",
+  "donationAddToCalendarButton": "Add to Calendar",
+  "donationCalendarEventTitle": "Blood Donation Eligibility Day (Türkiye Kan Ağı)",
+  "donationCalendarEventDesc": "Your waiting period has ended. You may donate at Kızılay or a blood center.",
+  "donationCalendarAddedSnack": "Calendar event created.",
+  "donationReminderNotifTitle": "You Can Donate Again",
+  "donationReminderNotifBody": "The waiting period since your last donation is complete. You can donate blood if you feel well.",
+  "donationAddManualButton": "Add Manual Donation",
+  "donationAddSheetTitle": "Add Past Donation Record",
+  "donationPlaceLabel": "Donation Place (Blood Center / Hospital)",
+  "donationPlaceHint": "e.g. Kızılay Çankaya Blood Center",
+  "donationDateLabel": "Donation Date",
+  "donationSelectDateButton": "Select Date",
+  "donationProductTypeLabel": "Donated Product Type",
+  "donationSourceManualBadge": "Manual Entry",
+  "donationSourceRequestBadge": "Request Flow (Confirmed)",
+  "donationDeleteManualTooltip": "Delete manual donation record",
+  "donationValidationPlaceRequired": "Please enter the donation place.",
+  "donationValidationFutureDate": "Future donation dates cannot be added.",
+  "donationHistorySectionTitle": "My Donation History",
+  "donationQuickSurveyButton": "Eligibility Pre-Check Survey",
+  "donationQuickTipsButton": "Pre & Post Donation Tips",
+  "donationSurveyTitle": "Donation Eligibility Pre-Check Survey",
+  "donationSurveyDisclaimer": "IMPORTANT NOTICE: This survey does not make a final medical decision and is for preliminary guidance only. The decision belongs to healthcare staff at the blood center. Must be verified with current Kızılay and Ministry of Health rules.",
+  "donationSurveyAnswerYes": "Yes",
+  "donationSurveyAnswerNo": "No",
+  "donationSurveyAnswerUnsure": "Not Sure",
+  "donationSurveyEvaluateButton": "View Pre-Check Result",
+  "donationSurveyIncompleteError": "Please answer all questions.",
+  "donationSurveyOutcomeEligibleTitle": "Looks Eligible",
+  "donationSurveyOutcomeEligibleBody": "Based on your answers, there is no obvious barrier. Final decision belongs to the physician and healthcare staff at the blood center.",
+  "donationSurveyOutcomeUnsureTitle": "Not Sure (Consult Staff)",
+  "donationSurveyOutcomeUnsureBody": "Some answers require further evaluation. Please consult the physician at the blood center.",
+  "donationSurveyOutcomeIneligibleTitle": "Looks Ineligible (Possible Temporary Deferral)",
+  "donationSurveyOutcomeIneligibleBody": "At least one answer may require temporary or permanent deferral. The decision belongs to healthcare staff at the blood center.",
+  "donationSurveySavedSnack": "Your pre-check result was saved under your private health data.",
+  "donationTipsTitle": "Pre & Post Donation Tips",
+  "donationTipsMedicalNote": "This information is for general guidance; must be verified with current Kızılay and Ministry of Health rules.",
+  "donationTipsBeforeTitle": "Before Donation",
+  "donationTipsBefore1": "Drink plenty of water and eat a light, low-fat meal before donating; do not donate on an empty stomach.",
+  "donationTipsBefore2": "Be well rested and avoid alcohol for 24 hours prior to donating.",
+  "donationTipsBefore3": "Bring an official ID and inform the healthcare staff about any medications you take.",
+  "donationTipsAfterTitle": "After Donation",
+  "donationTipsAfter1": "Rest for at least 10-15 minutes after donating and enjoy the refreshments provided.",
+  "donationTipsAfter2": "Drink extra fluids for the next 24 hours and avoid lifting heavy objects with the donation arm.",
+  "donationTipsAfter3": "Avoid smoking for the first few hours; if you feel dizzy, lie down and elevate your legs.",
+  "donationKvkkConsentRequiredTitle": "Health Data Explicit Consent Required",
+  "donationKvkkConsentRequiredBody": "Your donation history and health survey answers are sensitive personal data under KVKK. Explicit consent is required to continue.",
+  "donationKvkkGrantConsentButton": "Grant Explicit Consent & Continue"
 }

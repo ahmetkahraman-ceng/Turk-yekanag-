@@ -836,4 +836,205 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notificationsFilterUnreadOnly => 'Unread Only';
+
+  @override
+  String get donationStatusEligibleNowTitle =>
+      'You Appear Eligible to Donate Now';
+
+  @override
+  String get donationStatusWaitingTitle => 'Waiting Period Until Next Donation';
+
+  @override
+  String donationCountdownDaysHours(int days, int hours) {
+    return 'Remaining: $days days ($hours hours)';
+  }
+
+  @override
+  String donationNextEligibleDateLabel(String dateText) {
+    return 'Next eligible date: $dateText';
+  }
+
+  @override
+  String get donationAutoPausedNotice =>
+      'Your \'Available to donate\' status was automatically paused until your waiting period ends.';
+
+  @override
+  String get donationAutoResumedNotice =>
+      'Your \'Available to donate\' status resumes automatically once the waiting period ends.';
+
+  @override
+  String get donationReminderToggleTitle => '\'You can donate again\' reminder';
+
+  @override
+  String get donationReminderToggleSubtitle =>
+      'Sends a local notification when your waiting period ends';
+
+  @override
+  String get donationReminderScheduledSnack =>
+      'Reminder notification scheduled.';
+
+  @override
+  String get donationAddToCalendarButton => 'Add to Calendar';
+
+  @override
+  String get donationCalendarEventTitle =>
+      'Blood Donation Eligibility Day (Türkiye Kan Ağı)';
+
+  @override
+  String get donationCalendarEventDesc =>
+      'Your waiting period has ended. You may donate at Kızılay or a blood center.';
+
+  @override
+  String get donationCalendarAddedSnack => 'Calendar event created.';
+
+  @override
+  String get donationReminderNotifTitle => 'You Can Donate Again';
+
+  @override
+  String get donationReminderNotifBody =>
+      'The waiting period since your last donation is complete. You can donate blood if you feel well.';
+
+  @override
+  String get donationAddManualButton => 'Add Manual Donation';
+
+  @override
+  String get donationAddSheetTitle => 'Add Past Donation Record';
+
+  @override
+  String get donationPlaceLabel => 'Donation Place (Blood Center / Hospital)';
+
+  @override
+  String get donationPlaceHint => 'e.g. Kızılay Çankaya Blood Center';
+
+  @override
+  String get donationDateLabel => 'Donation Date';
+
+  @override
+  String get donationSelectDateButton => 'Select Date';
+
+  @override
+  String get donationProductTypeLabel => 'Donated Product Type';
+
+  @override
+  String get donationSourceManualBadge => 'Manual Entry';
+
+  @override
+  String get donationSourceRequestBadge => 'Request Flow (Confirmed)';
+
+  @override
+  String get donationDeleteManualTooltip => 'Delete manual donation record';
+
+  @override
+  String get donationValidationPlaceRequired =>
+      'Please enter the donation place.';
+
+  @override
+  String get donationValidationFutureDate =>
+      'Future donation dates cannot be added.';
+
+  @override
+  String get donationHistorySectionTitle => 'My Donation History';
+
+  @override
+  String get donationQuickSurveyButton => 'Eligibility Pre-Check Survey';
+
+  @override
+  String get donationQuickTipsButton => 'Pre & Post Donation Tips';
+
+  @override
+  String get donationSurveyTitle => 'Donation Eligibility Pre-Check Survey';
+
+  @override
+  String get donationSurveyDisclaimer =>
+      'IMPORTANT NOTICE: This survey does not make a final medical decision and is for preliminary guidance only. The decision belongs to healthcare staff at the blood center. Must be verified with current Kızılay and Ministry of Health rules.';
+
+  @override
+  String get donationSurveyAnswerYes => 'Yes';
+
+  @override
+  String get donationSurveyAnswerNo => 'No';
+
+  @override
+  String get donationSurveyAnswerUnsure => 'Not Sure';
+
+  @override
+  String get donationSurveyEvaluateButton => 'View Pre-Check Result';
+
+  @override
+  String get donationSurveyIncompleteError => 'Please answer all questions.';
+
+  @override
+  String get donationSurveyOutcomeEligibleTitle => 'Looks Eligible';
+
+  @override
+  String get donationSurveyOutcomeEligibleBody =>
+      'Based on your answers, there is no obvious barrier. Final decision belongs to the physician and healthcare staff at the blood center.';
+
+  @override
+  String get donationSurveyOutcomeUnsureTitle => 'Not Sure (Consult Staff)';
+
+  @override
+  String get donationSurveyOutcomeUnsureBody =>
+      'Some answers require further evaluation. Please consult the physician at the blood center.';
+
+  @override
+  String get donationSurveyOutcomeIneligibleTitle =>
+      'Looks Ineligible (Possible Temporary Deferral)';
+
+  @override
+  String get donationSurveyOutcomeIneligibleBody =>
+      'At least one answer may require temporary or permanent deferral. The decision belongs to healthcare staff at the blood center.';
+
+  @override
+  String get donationSurveySavedSnack =>
+      'Your pre-check result was saved under your private health data.';
+
+  @override
+  String get donationTipsTitle => 'Pre & Post Donation Tips';
+
+  @override
+  String get donationTipsMedicalNote =>
+      'This information is for general guidance; must be verified with current Kızılay and Ministry of Health rules.';
+
+  @override
+  String get donationTipsBeforeTitle => 'Before Donation';
+
+  @override
+  String get donationTipsBefore1 =>
+      'Drink plenty of water and eat a light, low-fat meal before donating; do not donate on an empty stomach.';
+
+  @override
+  String get donationTipsBefore2 =>
+      'Be well rested and avoid alcohol for 24 hours prior to donating.';
+
+  @override
+  String get donationTipsBefore3 =>
+      'Bring an official ID and inform the healthcare staff about any medications you take.';
+
+  @override
+  String get donationTipsAfterTitle => 'After Donation';
+
+  @override
+  String get donationTipsAfter1 =>
+      'Rest for at least 10-15 minutes after donating and enjoy the refreshments provided.';
+
+  @override
+  String get donationTipsAfter2 =>
+      'Drink extra fluids for the next 24 hours and avoid lifting heavy objects with the donation arm.';
+
+  @override
+  String get donationTipsAfter3 =>
+      'Avoid smoking for the first few hours; if you feel dizzy, lie down and elevate your legs.';
+
+  @override
+  String get donationKvkkConsentRequiredTitle =>
+      'Health Data Explicit Consent Required';
+
+  @override
+  String get donationKvkkConsentRequiredBody =>
+      'Your donation history and health survey answers are sensitive personal data under KVKK. Explicit consent is required to continue.';
+
+  @override
+  String get donationKvkkGrantConsentButton =>
+      'Grant Explicit Consent & Continue';
 }

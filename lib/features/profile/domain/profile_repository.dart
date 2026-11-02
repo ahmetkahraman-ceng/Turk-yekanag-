@@ -40,6 +40,8 @@ abstract class ProfileRepository {
     required KvkkConsentRecord consent,
   });
 
+  Future<Result<KvkkConsentRecord?>> getKvkkConsent(String uid);
+
   /// Kullanıcının tüm verilerini (public, sensitive, consents, preferences) biçimlendirilmiş JSON metni olarak dışa aktarır.
   Future<Result<String>> exportUserDataJson(String uid);
 

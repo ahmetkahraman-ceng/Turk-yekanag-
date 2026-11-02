@@ -1,0 +1,70 @@
+{
+  "version": "1.0.0",
+  "note": "Kızılay ve Sağlık Bakanlığı güncel kurallarıyla doğrulanmalıdır. Bu anket yalnızca ön bilgilendirme amaçlıdır; kesin tıbbi karar kan merkezindeki sağlık personelindedir.",
+  "questions": [
+    {
+      "id": "active_illness",
+      "category": "illness",
+      "yesOutcome": "looks_ineligible",
+      "text": {
+        "tr": "Son 14 gün içinde ateşli hastalık, aktif enfeksiyon veya ciddi bir rahatsızlık geçirdiniz mi?",
+        "en": "Have you had a febrile illness, active infection, or serious medical condition in the last 14 days?"
+      }
+    },
+    {
+      "id": "medication_use",
+      "category": "medication",
+      "yesOutcome": "unsure",
+      "text": {
+        "tr": "Şu anda düzenli ilaç, antibiyotik veya kan sulandırıcı kullanıyor musunuz?",
+        "en": "Are you currently taking regular medication, antibiotics, or blood thinners?"
+      }
+    },
+    {
+      "id": "tattoo_piercing",
+      "category": "tattoo_piercing",
+      "yesOutcome": "looks_ineligible",
+      "text": {
+        "tr": "Son 12 ay içinde dövme, piercing, akupunktur veya kalıcı makyaj yaptırdınız mı?",
+        "en": "Have you had a tattoo, piercing, acupuncture, or permanent makeup in the last 12 months?"
+      }
+    },
+    {
+      "id": "recent_surgery",
+      "category": "surgery",
+      "yesOutcome": "looks_ineligible",
+      "text": {
+        "tr": "Son 12 ay içinde önemli bir ameliyat, endoskopi veya kan transfüzyonu geçirdiniz mi?",
+        "en": "Have you had major surgery, endoscopy, or a blood transfusion in the last 12 months?"
+      }
+    },
+    {
+      "id": "pregnancy_breastfeeding",
+      "category": "pregnancy",
+      "yesOutcome": "looks_ineligible",
+      "genders": ["female", "unspecified"],
+      "text": {
+        "tr": "Şu anda hamile misiniz, emziriyor musunuz veya son 12 ay içinde doğum/düşük yaptınız mı?",
+        "en": "Are you currently pregnant, breastfeeding, or have you given birth or had a miscarriage in the last 12 months?"
+      }
+    },
+    {
+      "id": "recent_travel",
+      "category": "travel",
+      "yesOutcome": "unsure",
+      "text": {
+        "tr": "Son 12 ay içinde sıtma veya bulaşıcı hastalık riski taşıyan bir bölgeye/ülkeye seyahat ettiniz mi?",
+        "en": "Have you traveled to a region or country with malaria or infectious disease risk in the last 12 months?"
+      }
+    },
+    {
+      "id": "recent_vaccine",
+      "category": "vaccine",
+      "yesOutcome": "unsure",
+      "text": {
+        "tr": "Son 4 hafta içinde herhangi bir aşı oldunuz mu veya diş tedavisi gördünüz mü?",
+        "en": "Have you received any vaccine or undergone dental treatment in the last 4 weeks?"
+      }
+    }
+  ]
+}

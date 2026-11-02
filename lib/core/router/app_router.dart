@@ -9,6 +9,8 @@ import 'package:turkiye_kan_agi/core/services/app_version_service.dart';
 import 'package:turkiye_kan_agi/features/auth/presentation/login_screen.dart';
 import 'package:turkiye_kan_agi/features/auth/presentation/otp_verification_screen.dart';
 import 'package:turkiye_kan_agi/features/donation/presentation/donation_screen.dart';
+import 'package:turkiye_kan_agi/features/donation/presentation/donation_tips_screen.dart';
+import 'package:turkiye_kan_agi/features/donation/presentation/eligibility_survey_screen.dart';
 import 'package:turkiye_kan_agi/features/force_update/presentation/force_update_screen.dart';
 import 'package:turkiye_kan_agi/features/map/presentation/map_screen.dart';
 import 'package:turkiye_kan_agi/features/notifications/presentation/notifications_screen.dart';
@@ -167,6 +169,19 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: AppRoutes.donation,
                 builder: (context, state) => const DonationScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'survey',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (context, state) =>
+                        const EligibilitySurveyScreen(),
+                  ),
+                  GoRoute(
+                    path: 'tips',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (context, state) => const DonationTipsScreen(),
+                  ),
+                ],
               ),
             ],
           ),

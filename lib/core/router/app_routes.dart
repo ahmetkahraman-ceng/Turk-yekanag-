@@ -15,6 +15,8 @@ abstract final class AppRoutes {
   static const String createRequest = '/requests/create';
   static const String map = '/map';
   static const String donation = '/donation';
+  static const String donationSurvey = '/donation/survey';
+  static const String donationTips = '/donation/tips';
   static const String notifications = '/notifications';
   static const String profile = '/profile';
 }

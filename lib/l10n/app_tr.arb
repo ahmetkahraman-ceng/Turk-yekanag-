@@ -344,5 +344,79 @@
   "matchingOwnerConfirmDonationButton": "Bağışı Onayla (Tamamlandı)",
   "matchingOffersClosedNotice": "Talep sahibi yeterli bağışçıya ulaşıldığını belirttiği için yeni teklif alımı kapatılmıştır.",
   "notificationsMarkAllRead": "Tümünü Okundu İşaretle",
-  "notificationsFilterUnreadOnly": "Yalnızca Okunmamışlar"
+  "notificationsFilterUnreadOnly": "Yalnızca Okunmamışlar",
+  "donationStatusEligibleNowTitle": "Şu Anda Bağışa Uygun Görünüyorsunuz",
+  "donationStatusWaitingTitle": "Sonraki Bağış İçin Bekleme Süresindesiniz",
+  "donationCountdownDaysHours": "Kalan süre: {days} gün ({hours} saat)",
+  "@donationCountdownDaysHours": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      },
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "donationNextEligibleDateLabel": "Sonraki uygun tarih: {dateText}",
+  "@donationNextEligibleDateLabel": {
+    "placeholders": {
+      "dateText": {
+        "type": "String"
+      }
+    }
+  },
+  "donationAutoPausedNotice": "Bekleme süreniz dolana kadar 'Bağışa uygunum' durumunuz otomatik olarak kapatıldı.",
+  "donationAutoResumedNotice": "Bekleme süreniz tamamlandığında 'Bağışa uygunum' durumunuz otomatik olarak açılır.",
+  "donationReminderToggleTitle": "'Tekrar bağış yapabilirsin' bildirimi",
+  "donationReminderToggleSubtitle": "Bekleme süreniz dolduğunda yerel bildirim gönderilir",
+  "donationReminderScheduledSnack": "Hatırlatma bildirimi planlandı.",
+  "donationAddToCalendarButton": "Takvime Ekle",
+  "donationCalendarEventTitle": "Kan Bağışı Uygunluk Günü (Türkiye Kan Ağı)",
+  "donationCalendarEventDesc": "Bekleme süreniz doldu. Kızılay veya kan merkezinde bağış yapabilirsiniz.",
+  "donationCalendarAddedSnack": "Takvim etkinliği oluşturuldu.",
+  "donationReminderNotifTitle": "Tekrar Bağış Yapabilirsiniz",
+  "donationReminderNotifBody": "Son bağışınızdan sonraki bekleme süreniz tamamlandı. Uygun hissediyorsanız kan bağışında bulunabilirsiniz.",
+  "donationAddManualButton": "Manuel Bağış Ekle",
+  "donationAddSheetTitle": "Geçmiş Bağış Kaydı Ekle",
+  "donationPlaceLabel": "Bağış Yeri (Kan Merkezi / Hastane)",
+  "donationPlaceHint": "Örn: Kızılay Çankaya Kan Bağışı Merkezi",
+  "donationDateLabel": "Bağış Tarihi",
+  "donationSelectDateButton": "Tarih Seç",
+  "donationProductTypeLabel": "Bağışlanan Ürün Tipi",
+  "donationSourceManualBadge": "Manuel Kayıt",
+  "donationSourceRequestBadge": "Talep Akışı (Onaylı)",
+  "donationDeleteManualTooltip": "Manuel bağış kaydını sil",
+  "donationValidationPlaceRequired": "Lütfen bağış yapılan yeri girin.",
+  "donationValidationFutureDate": "Gelecek tarihli bağış kaydı eklenemez.",
+  "donationHistorySectionTitle": "Bağış Geçmişim",
+  "donationQuickSurveyButton": "Uygunluk Ön Kontrol Anketi",
+  "donationQuickTipsButton": "Bağış Öncesi ve Sonrası Öneriler",
+  "donationSurveyTitle": "Bağışa Uygunluk Ön Kontrol Anketi",
+  "donationSurveyDisclaimer": "ÖNEMLİ UYARI: Bu anket kesin tıbbi karar vermez, yalnızca ön bilgilendirme amaçlıdır. Karar kan merkezindeki sağlık personelindedir. Kızılay ve Sağlık Bakanlığı güncel kurallarıyla doğrulanmalıdır.",
+  "donationSurveyAnswerYes": "Evet",
+  "donationSurveyAnswerNo": "Hayır",
+  "donationSurveyAnswerUnsure": "Emin Değilim",
+  "donationSurveyEvaluateButton": "Ön Kontrol Sonucunu Gör",
+  "donationSurveyIncompleteError": "Lütfen tüm soruları yanıtlayın.",
+  "donationSurveyOutcomeEligibleTitle": "Uygun Görünüyor",
+  "donationSurveyOutcomeEligibleBody": "Yanıtlarınıza göre belirgin bir engel görünmüyor. Kesin karar kan merkezindeki hekim ve sağlık personelindedir.",
+  "donationSurveyOutcomeUnsureTitle": "Emin Değilim (Hekime Danışın)",
+  "donationSurveyOutcomeUnsureBody": "Bazı yanıtlarınız ek değerlendirme gerektiriyor. Kan merkezindeki görevli hekime danışmanız önerilir.",
+  "donationSurveyOutcomeIneligibleTitle": "Uygun Görünmüyor (Geçici Erteleme Olabilir)",
+  "donationSurveyOutcomeIneligibleBody": "Yanıtlarınızdan en az biri geçici veya kalıcı erteleme sebebi olabilir. Kesin karar kan merkezindeki sağlık personelindedir.",
+  "donationSurveySavedSnack": "Ön kontrol sonucunuz özel sağlık verileriniz altına kaydedildi.",
+  "donationTipsTitle": "Bağış Öncesi ve Sonrası Öneriler",
+  "donationTipsMedicalNote": "Bu bilgiler genel rehber niteliğindedir; Kızılay ve Sağlık Bakanlığı güncel kurallarıyla doğrulanmalıdır.",
+  "donationTipsBeforeTitle": "Bağış Öncesi Öneriler",
+  "donationTipsBefore1": "Bağıştan önce bol su için ve hafif, yağsız bir öğün tüketin; aç karnına bağışa gitmeyin.",
+  "donationTipsBefore2": "Uykunuzu almış ve dinlenmiş olun; son 24 saatte alkol tüketmeyin.",
+  "donationTipsBefore3": "Resmi kimlik belgenizi yanınıza alın ve kullandığınız ilaçları sağlık personeline bildirin.",
+  "donationTipsAfterTitle": "Bağış Sonrası Öneriler",
+  "donationTipsAfter1": "Bağış sonrasında en az 10-15 dakika dinlenin ve ikram edilen sıvı/gıdaları tüketin.",
+  "donationTipsAfter2": "İlk 24 saat boyunca bol sıvı tüketin; bağış yapılan kolunuzla ağır yük kaldırmayın.",
+  "donationTipsAfter3": "İlk birkaç saat sigara kullanmayın; baş dönmesi hissederseniz hemen uzanıp ayaklarınızı yükseltin.",
+  "donationKvkkConsentRequiredTitle": "Sağlık Verisi Açık Rızası Gerekli",
+  "donationKvkkConsentRequiredBody": "Bağış geçmişi ve sağlık anketi verileriniz KVKK kapsamında özel nitelikli kişisel veridir. Devam etmek için açık rıza vermeniz gerekmektedir.",
+  "donationKvkkGrantConsentButton": "Açık Rıza Ver ve Devam Et"
 }

@@ -20,7 +20,37 @@ service cloud.firestore {
         && !('weightKg' in data)
         && !('birthDate' in data)
         && !('fullName' in data)
-        && !('exactLocation' in data);
+        && !('exactLocation' in data)
+        && !('lastDonationAt' in data)
+        && !('nextEligibleAt' in data)
+        && !('donationHistory' in data)
+        && !('healthSurvey' in data);
+    }
+
+    // KVKK Madde 6: Özel nitelikli sağlık verileri (bağış geçmişi, sağlık anketi)
+    // açık rıza (`private_data/consents.healthDataConsent == true`) olmadan yazılamaz.
+    function hasHealthDataConsent(userId) {
+      return exists(/databases/$(database)/documents/users/$(userId)/private_data/consents)
+        && get(/databases/$(database)/documents/users/$(userId)/private_data/consents).data.healthDataConsent == true;
+    }
+
+    // İstemci yalnızca manuel bağış kaydı (`source == 'manual'`) oluşturabilir;
+    // talep akışı kayıtları (`source == 'request'`) Cloud Function (Admin SDK) tarafından yazılır.
+    function isValidManualDonationRecord(data) {
+      return data.source == 'manual'
+        && data.place is string
+        && data.place.size() > 0
+        && data.place.size() <= 160
+        && data.productType in ['whole_blood', 'erythrocyte', 'platelet', 'plasma']
+        && data.donatedAt is string
+        && data.createdAt is string;
+    }
+
+    function isValidHealthSurveyRecord(data) {
+      return data.outcome in ['looks_eligible', 'unsure', 'looks_ineligible']
+        && data.answers is map
+        && data.questionnaireVersion is string
+        && data.completedAt is string;
     }
 
     // Public kan talebinde hasta yakını telefon numarası veya tam hasta adı bulunamaz.
@@ -41,12 +71,23 @@ service cloud.firestore {
         allow read, write: if isOwner(userId);
       }
 
+      // KVKK Özel Nitelikli Sağlık Verisi: Bağış Geçmişi
       match /donation_history/{donationId} {
-        allow read, write: if isOwner(userId);
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId)
+          && hasHealthDataConsent(userId)
+          && isValidManualDonationRecord(request.resource.data);
+        allow delete: if isOwner(userId)
+          && resource.data.source == 'manual';
       }
 
+      // KVKK Özel Nitelikli Sağlık Verisi: Bağışa Uygunluk Ön Kontrol Anketleri
       match /health_surveys/{surveyId} {
-        allow read, write: if isOwner(userId);
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId)
+          && hasHealthDataConsent(userId)
+          && isValidHealthSurveyRecord(request.resource.data);
+        allow delete: if isOwner(userId);
       }
 
       match /notifications/{notificationId} {

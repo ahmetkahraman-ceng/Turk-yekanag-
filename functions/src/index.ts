@@ -161,16 +161,45 @@ export const onDonationOfferUpdated = onDocumentUpdated(
     const db = admin.firestore();
 
     if (after.status === "confirmed") {
-      await db
-        .collection("users")
-        .doc(donorUid)
+      const reqSnap = await db.collection("blood_requests").doc(requestId).get();
+      const reqData = reqSnap.data() || {};
+      const nowIso = new Date().toISOString();
+      const place =
+        reqData.hospital?.name || reqData.province || "Kan Bağışı Merkezi";
+      const productType = reqData.productType || "whole_blood";
+
+      const userRef = db.collection("users").doc(donorUid);
+      await userRef
         .collection("donation_history")
         .doc(requestId)
         .set({
           requestId,
           donorUid,
-          confirmedAt: new Date().toISOString(),
+          donatedAt: nowIso,
+          confirmedAt: nowIso,
+          place,
+          productType,
+          source: "request",
+          createdAt: nowIso,
         });
+
+      await userRef.set(
+        {
+          isAvailableToDonate: false,
+          updatedAt: nowIso,
+        },
+        { merge: true }
+      );
+      await userRef
+        .collection("private_data")
+        .doc("donation_status")
+        .set(
+          {
+            autoPaused: true,
+            updatedAt: nowIso,
+          },
+          { merge: true }
+        );
     }
   }
 );

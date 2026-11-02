@@ -5,6 +5,8 @@ import 'package:cloud_functions/cloud_functions.dart' hide Result;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:turkiye_kan_agi/core/error/result.dart';
+import 'package:turkiye_kan_agi/features/donation/data/firestore_donation_repository.dart';
+import 'package:turkiye_kan_agi/features/donation/domain/donation_repository.dart';
 import 'package:turkiye_kan_agi/features/onboarding/domain/kvkk_consent_record.dart';
 import 'package:turkiye_kan_agi/features/profile/domain/notification_preferences.dart';
 import 'package:turkiye_kan_agi/features/profile/domain/profile_repository.dart';
@@ -18,13 +20,16 @@ class FirestoreProfileRepository implements ProfileRepository {
     FirebaseFirestore? firestore,
     FirebaseStorage? storage,
     FirebaseFunctions? functions,
+    DonationRepository? donationRepository,
   })  : _firestore = firestore,
         _storage = storage,
-        _functions = functions;
+        _functions = functions,
+        _donationRepository = donationRepository;
 
   final FirebaseFirestore? _firestore;
   final FirebaseStorage? _storage;
   final FirebaseFunctions? _functions;
+  final DonationRepository? _donationRepository;
 
   // Emülatör bağlı olmadığında yerel/önizleme durumu için önbellek
   final Map<String, UserPublicProfile> _publicCache = {};
@@ -154,19 +159,24 @@ class FirestoreProfileRepository implements ProfileRepository {
     return Result.success(photoUrl);
   }
 
+  DocumentReference<Map<String, dynamic>>? _privateDoc(
+    String uid,
+    String docId,
+  ) =>
+      _firestore
+          ?.collection('users')
+          .doc(uid)
+          .collection(privateCollection)
+          .doc(docId);
+
   @override
   Future<Result<NotificationPreferences>> getNotificationPreferences(
     String uid,
   ) async {
-    final fs = _firestore;
-    if (fs != null) {
+    final ref = _privateDoc(uid, notifPrefsDocId);
+    if (ref != null) {
       try {
-        final doc = await fs
-            .collection('users')
-            .doc(uid)
-            .collection(privateCollection)
-            .doc(notifPrefsDocId)
-            .get();
+        final doc = await ref.get();
         if (doc.exists && doc.data() != null) {
           final prefs = NotificationPreferences.fromJson(doc.data()!);
           _prefsCache[uid] = prefs;
@@ -183,17 +193,9 @@ class FirestoreProfileRepository implements ProfileRepository {
     required NotificationPreferences preferences,
   }) async {
     _prefsCache[uid] = preferences;
-    final fs = _firestore;
-    if (fs != null) {
-      try {
-        await fs
-            .collection('users')
-            .doc(uid)
-            .collection(privateCollection)
-            .doc(notifPrefsDocId)
-            .set(preferences.toJson());
-      } catch (_) {}
-    }
+    try {
+      await _privateDoc(uid, notifPrefsDocId)?.set(preferences.toJson());
+    } catch (_) {}
     return const Result.success(null);
   }
 
@@ -203,18 +205,26 @@ class FirestoreProfileRepository implements ProfileRepository {
     required KvkkConsentRecord consent,
   }) async {
     _consentCache[uid] = consent;
-    final fs = _firestore;
-    if (fs != null) {
+    try {
+      await _privateDoc(uid, consentsDocId)?.set(consent.toJson());
+    } catch (_) {}
+    return const Result.success(null);
+  }
+
+  @override
+  Future<Result<KvkkConsentRecord?>> getKvkkConsent(String uid) async {
+    final ref = _privateDoc(uid, consentsDocId);
+    if (ref != null) {
       try {
-        await fs
-            .collection('users')
-            .doc(uid)
-            .collection(privateCollection)
-            .doc(consentsDocId)
-            .set(consent.toJson());
+        final doc = await ref.get();
+        if (doc.exists && doc.data() != null) {
+          final parsed = KvkkConsentRecord.fromJson(doc.data()!);
+          _consentCache[uid] = parsed;
+          return Result.success(parsed);
+        }
       } catch (_) {}
     }
-    return const Result.success(null);
+    return Result.success(_consentCache[uid]);
   }
 
   @override
@@ -231,6 +241,13 @@ class FirestoreProfileRepository implements ProfileRepository {
       success: (d) => d.toJson(),
       failure: (_) => null,
     );
+    final donationRepo = _donationRepository;
+    final donationExport = donationRepo != null
+        ? (await donationRepo.exportDonationData(uid)).when(
+            success: (d) => d,
+            failure: (_) => const <String, dynamic>{},
+          )
+        : const <String, dynamic>{};
 
     final exportPayload = <String, dynamic>{
       'exportedAt': DateTime.now().toUtc().toIso8601String(),
@@ -239,6 +256,7 @@ class FirestoreProfileRepository implements ProfileRepository {
       'sensitiveProfile': sensitiveProfile,
       'kvkkConsent': _consentCache[uid]?.toJson(),
       'notificationPreferences': prefs,
+      ...donationExport,
     };
 
     const encoder = JsonEncoder.withIndent('  ');
@@ -263,5 +281,6 @@ class FirestoreProfileRepository implements ProfileRepository {
 }
 
 final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
-  return FirestoreProfileRepository();
+  final donationRepo = ref.watch(donationRepositoryProvider);
+  return FirestoreProfileRepository(donationRepository: donationRepo);
 });

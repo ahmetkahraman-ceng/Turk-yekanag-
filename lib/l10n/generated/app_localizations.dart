@@ -1574,6 +1574,348 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Yalnızca Okunmamışlar'**
   String get notificationsFilterUnreadOnly;
+
+  /// No description provided for @donationStatusEligibleNowTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şu Anda Bağışa Uygun Görünüyorsunuz'**
+  String get donationStatusEligibleNowTitle;
+
+  /// No description provided for @donationStatusWaitingTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sonraki Bağış İçin Bekleme Süresindesiniz'**
+  String get donationStatusWaitingTitle;
+
+  /// No description provided for @donationCountdownDaysHours.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kalan süre: {days} gün ({hours} saat)'**
+  String donationCountdownDaysHours(int days, int hours);
+
+  /// No description provided for @donationNextEligibleDateLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sonraki uygun tarih: {dateText}'**
+  String donationNextEligibleDateLabel(String dateText);
+
+  /// No description provided for @donationAutoPausedNotice.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bekleme süreniz dolana kadar \'Bağışa uygunum\' durumunuz otomatik olarak kapatıldı.'**
+  String get donationAutoPausedNotice;
+
+  /// No description provided for @donationAutoResumedNotice.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bekleme süreniz tamamlandığında \'Bağışa uygunum\' durumunuz otomatik olarak açılır.'**
+  String get donationAutoResumedNotice;
+
+  /// No description provided for @donationReminderToggleTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'\'Tekrar bağış yapabilirsin\' bildirimi'**
+  String get donationReminderToggleTitle;
+
+  /// No description provided for @donationReminderToggleSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bekleme süreniz dolduğunda yerel bildirim gönderilir'**
+  String get donationReminderToggleSubtitle;
+
+  /// No description provided for @donationReminderScheduledSnack.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hatırlatma bildirimi planlandı.'**
+  String get donationReminderScheduledSnack;
+
+  /// No description provided for @donationAddToCalendarButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Takvime Ekle'**
+  String get donationAddToCalendarButton;
+
+  /// No description provided for @donationCalendarEventTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kan Bağışı Uygunluk Günü (Türkiye Kan Ağı)'**
+  String get donationCalendarEventTitle;
+
+  /// No description provided for @donationCalendarEventDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bekleme süreniz doldu. Kızılay veya kan merkezinde bağış yapabilirsiniz.'**
+  String get donationCalendarEventDesc;
+
+  /// No description provided for @donationCalendarAddedSnack.
+  ///
+  /// In tr, this message translates to:
+  /// **'Takvim etkinliği oluşturuldu.'**
+  String get donationCalendarAddedSnack;
+
+  /// No description provided for @donationReminderNotifTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrar Bağış Yapabilirsiniz'**
+  String get donationReminderNotifTitle;
+
+  /// No description provided for @donationReminderNotifBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son bağışınızdan sonraki bekleme süreniz tamamlandı. Uygun hissediyorsanız kan bağışında bulunabilirsiniz.'**
+  String get donationReminderNotifBody;
+
+  /// No description provided for @donationAddManualButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Manuel Bağış Ekle'**
+  String get donationAddManualButton;
+
+  /// No description provided for @donationAddSheetTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geçmiş Bağış Kaydı Ekle'**
+  String get donationAddSheetTitle;
+
+  /// No description provided for @donationPlaceLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağış Yeri (Kan Merkezi / Hastane)'**
+  String get donationPlaceLabel;
+
+  /// No description provided for @donationPlaceHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Örn: Kızılay Çankaya Kan Bağışı Merkezi'**
+  String get donationPlaceHint;
+
+  /// No description provided for @donationDateLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağış Tarihi'**
+  String get donationDateLabel;
+
+  /// No description provided for @donationSelectDateButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tarih Seç'**
+  String get donationSelectDateButton;
+
+  /// No description provided for @donationProductTypeLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağışlanan Ürün Tipi'**
+  String get donationProductTypeLabel;
+
+  /// No description provided for @donationSourceManualBadge.
+  ///
+  /// In tr, this message translates to:
+  /// **'Manuel Kayıt'**
+  String get donationSourceManualBadge;
+
+  /// No description provided for @donationSourceRequestBadge.
+  ///
+  /// In tr, this message translates to:
+  /// **'Talep Akışı (Onaylı)'**
+  String get donationSourceRequestBadge;
+
+  /// No description provided for @donationDeleteManualTooltip.
+  ///
+  /// In tr, this message translates to:
+  /// **'Manuel bağış kaydını sil'**
+  String get donationDeleteManualTooltip;
+
+  /// No description provided for @donationValidationPlaceRequired.
+  ///
+  /// In tr, this message translates to:
+  /// **'Lütfen bağış yapılan yeri girin.'**
+  String get donationValidationPlaceRequired;
+
+  /// No description provided for @donationValidationFutureDate.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gelecek tarihli bağış kaydı eklenemez.'**
+  String get donationValidationFutureDate;
+
+  /// No description provided for @donationHistorySectionTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağış Geçmişim'**
+  String get donationHistorySectionTitle;
+
+  /// No description provided for @donationQuickSurveyButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uygunluk Ön Kontrol Anketi'**
+  String get donationQuickSurveyButton;
+
+  /// No description provided for @donationQuickTipsButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağış Öncesi ve Sonrası Öneriler'**
+  String get donationQuickTipsButton;
+
+  /// No description provided for @donationSurveyTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağışa Uygunluk Ön Kontrol Anketi'**
+  String get donationSurveyTitle;
+
+  /// No description provided for @donationSurveyDisclaimer.
+  ///
+  /// In tr, this message translates to:
+  /// **'ÖNEMLİ UYARI: Bu anket kesin tıbbi karar vermez, yalnızca ön bilgilendirme amaçlıdır. Karar kan merkezindeki sağlık personelindedir. Kızılay ve Sağlık Bakanlığı güncel kurallarıyla doğrulanmalıdır.'**
+  String get donationSurveyDisclaimer;
+
+  /// No description provided for @donationSurveyAnswerYes.
+  ///
+  /// In tr, this message translates to:
+  /// **'Evet'**
+  String get donationSurveyAnswerYes;
+
+  /// No description provided for @donationSurveyAnswerNo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hayır'**
+  String get donationSurveyAnswerNo;
+
+  /// No description provided for @donationSurveyAnswerUnsure.
+  ///
+  /// In tr, this message translates to:
+  /// **'Emin Değilim'**
+  String get donationSurveyAnswerUnsure;
+
+  /// No description provided for @donationSurveyEvaluateButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ön Kontrol Sonucunu Gör'**
+  String get donationSurveyEvaluateButton;
+
+  /// No description provided for @donationSurveyIncompleteError.
+  ///
+  /// In tr, this message translates to:
+  /// **'Lütfen tüm soruları yanıtlayın.'**
+  String get donationSurveyIncompleteError;
+
+  /// No description provided for @donationSurveyOutcomeEligibleTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uygun Görünüyor'**
+  String get donationSurveyOutcomeEligibleTitle;
+
+  /// No description provided for @donationSurveyOutcomeEligibleBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yanıtlarınıza göre belirgin bir engel görünmüyor. Kesin karar kan merkezindeki hekim ve sağlık personelindedir.'**
+  String get donationSurveyOutcomeEligibleBody;
+
+  /// No description provided for @donationSurveyOutcomeUnsureTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Emin Değilim (Hekime Danışın)'**
+  String get donationSurveyOutcomeUnsureTitle;
+
+  /// No description provided for @donationSurveyOutcomeUnsureBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bazı yanıtlarınız ek değerlendirme gerektiriyor. Kan merkezindeki görevli hekime danışmanız önerilir.'**
+  String get donationSurveyOutcomeUnsureBody;
+
+  /// No description provided for @donationSurveyOutcomeIneligibleTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uygun Görünmüyor (Geçici Erteleme Olabilir)'**
+  String get donationSurveyOutcomeIneligibleTitle;
+
+  /// No description provided for @donationSurveyOutcomeIneligibleBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yanıtlarınızdan en az biri geçici veya kalıcı erteleme sebebi olabilir. Kesin karar kan merkezindeki sağlık personelindedir.'**
+  String get donationSurveyOutcomeIneligibleBody;
+
+  /// No description provided for @donationSurveySavedSnack.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ön kontrol sonucunuz özel sağlık verileriniz altına kaydedildi.'**
+  String get donationSurveySavedSnack;
+
+  /// No description provided for @donationTipsTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağış Öncesi ve Sonrası Öneriler'**
+  String get donationTipsTitle;
+
+  /// No description provided for @donationTipsMedicalNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu bilgiler genel rehber niteliğindedir; Kızılay ve Sağlık Bakanlığı güncel kurallarıyla doğrulanmalıdır.'**
+  String get donationTipsMedicalNote;
+
+  /// No description provided for @donationTipsBeforeTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağış Öncesi Öneriler'**
+  String get donationTipsBeforeTitle;
+
+  /// No description provided for @donationTipsBefore1.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağıştan önce bol su için ve hafif, yağsız bir öğün tüketin; aç karnına bağışa gitmeyin.'**
+  String get donationTipsBefore1;
+
+  /// No description provided for @donationTipsBefore2.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uykunuzu almış ve dinlenmiş olun; son 24 saatte alkol tüketmeyin.'**
+  String get donationTipsBefore2;
+
+  /// No description provided for @donationTipsBefore3.
+  ///
+  /// In tr, this message translates to:
+  /// **'Resmi kimlik belgenizi yanınıza alın ve kullandığınız ilaçları sağlık personeline bildirin.'**
+  String get donationTipsBefore3;
+
+  /// No description provided for @donationTipsAfterTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağış Sonrası Öneriler'**
+  String get donationTipsAfterTitle;
+
+  /// No description provided for @donationTipsAfter1.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağış sonrasında en az 10-15 dakika dinlenin ve ikram edilen sıvı/gıdaları tüketin.'**
+  String get donationTipsAfter1;
+
+  /// No description provided for @donationTipsAfter2.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlk 24 saat boyunca bol sıvı tüketin; bağış yapılan kolunuzla ağır yük kaldırmayın.'**
+  String get donationTipsAfter2;
+
+  /// No description provided for @donationTipsAfter3.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlk birkaç saat sigara kullanmayın; baş dönmesi hissederseniz hemen uzanıp ayaklarınızı yükseltin.'**
+  String get donationTipsAfter3;
+
+  /// No description provided for @donationKvkkConsentRequiredTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sağlık Verisi Açık Rızası Gerekli'**
+  String get donationKvkkConsentRequiredTitle;
+
+  /// No description provided for @donationKvkkConsentRequiredBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağış geçmişi ve sağlık anketi verileriniz KVKK kapsamında özel nitelikli kişisel veridir. Devam etmek için açık rıza vermeniz gerekmektedir.'**
+  String get donationKvkkConsentRequiredBody;
+
+  /// No description provided for @donationKvkkGrantConsentButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Açık Rıza Ver ve Devam Et'**
+  String get donationKvkkGrantConsentButton;
 }
 
 class _AppLocalizationsDelegate

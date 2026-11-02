@@ -2,15 +2,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:turkiye_kan_agi/core/error/app_failure.dart';
 import 'package:turkiye_kan_agi/core/error/result.dart';
+import 'package:turkiye_kan_agi/features/donation/data/firestore_donation_repository.dart';
+import 'package:turkiye_kan_agi/features/donation/domain/donation_repository.dart';
 import 'package:turkiye_kan_agi/features/matching/domain/donation_offer.dart';
 import 'package:turkiye_kan_agi/features/profile/domain/blood_type.dart';
+import 'package:turkiye_kan_agi/features/requests/domain/blood_product_type.dart';
 
 /// Eşleştirme, bağışçı adımları, saat koordinasyonu ve karşılıklı iletişim açma repository'si.
 class FirestoreMatchingRepository {
-  FirestoreMatchingRepository({FirebaseFirestore? firestore})
-      : _firestore = firestore;
+  FirestoreMatchingRepository({
+    FirebaseFirestore? firestore,
+    DonationRepository? donationRepository,
+  })  : _firestore = firestore,
+        _donationRepository = donationRepository;
 
   final FirebaseFirestore? _firestore;
+  final DonationRepository? _donationRepository;
 
   final Map<String, List<DonationOffer>> _offersByRequest =
       <String, List<DonationOffer>>{
@@ -180,6 +187,7 @@ class FirestoreMatchingRepository {
     required String requestId,
     required String donorUid,
     required String hospitalName,
+    BloodProductType productType = BloodProductType.wholeBlood,
   }) async {
     final currentList = List<DonationOffer>.of(
       _offersByRequest[requestId] ?? const <DonationOffer>[],
@@ -197,23 +205,38 @@ class FirestoreMatchingRepository {
     currentList[idx] = updated;
     _offersByRequest[requestId] = currentList;
 
+    final nowUtc = DateTime.now().toUtc();
     final record = <String, dynamic>{
       'requestId': requestId,
       'donorUid': donorUid,
       'hospitalName': hospitalName,
-      'confirmedAt': DateTime.now().toUtc().toIso8601String(),
+      'place': hospitalName,
+      'productType': productType.code,
+      'source': 'request',
+      'donatedAt': nowUtc.toIso8601String(),
+      'confirmedAt': nowUtc.toIso8601String(),
     };
     _confirmedDonationHistory.add(record);
+
+    await _donationRepository?.recordConfirmedRequestDonation(
+      donorUid: donorUid,
+      requestId: requestId,
+      place: hospitalName,
+      productType: productType,
+      donatedAt: nowUtc,
+    );
 
     final fs = _firestore;
     if (fs != null) {
       try {
         await fs
-            .collection('users')
-            .doc(donorUid)
-            .collection('donation_history')
+            .collection('blood_requests')
             .doc(requestId)
-            .set(record);
+            .collection('offers')
+            .doc(donorUid)
+            .update(<String, dynamic>{
+          'status': DonationOfferStatus.confirmed.code,
+        });
       } catch (_) {}
     }
 
@@ -222,5 +245,6 @@ class FirestoreMatchingRepository {
 }
 
 final matchingRepositoryProvider = Provider<FirestoreMatchingRepository>((ref) {
-  return FirestoreMatchingRepository();
+  final donationRepo = ref.watch(donationRepositoryProvider);
+  return FirestoreMatchingRepository(donationRepository: donationRepo);
 });

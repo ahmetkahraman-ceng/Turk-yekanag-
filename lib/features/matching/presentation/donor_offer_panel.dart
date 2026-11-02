@@ -251,6 +251,8 @@ class _DonorOfferPanelState extends ConsumerState<DonorOfferPanel> {
                                         donorUid: offer.donorUid,
                                         hospitalName:
                                             widget.request.hospital.name,
+                                        productType:
+                                            widget.request.productType,
                                       );
                                   await _loadOffers();
                                 },

@@ -832,4 +832,207 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get notificationsFilterUnreadOnly => 'Yalnızca Okunmamışlar';
+
+  @override
+  String get donationStatusEligibleNowTitle =>
+      'Şu Anda Bağışa Uygun Görünüyorsunuz';
+
+  @override
+  String get donationStatusWaitingTitle =>
+      'Sonraki Bağış İçin Bekleme Süresindesiniz';
+
+  @override
+  String donationCountdownDaysHours(int days, int hours) {
+    return 'Kalan süre: $days gün ($hours saat)';
+  }
+
+  @override
+  String donationNextEligibleDateLabel(String dateText) {
+    return 'Sonraki uygun tarih: $dateText';
+  }
+
+  @override
+  String get donationAutoPausedNotice =>
+      'Bekleme süreniz dolana kadar \'Bağışa uygunum\' durumunuz otomatik olarak kapatıldı.';
+
+  @override
+  String get donationAutoResumedNotice =>
+      'Bekleme süreniz tamamlandığında \'Bağışa uygunum\' durumunuz otomatik olarak açılır.';
+
+  @override
+  String get donationReminderToggleTitle =>
+      '\'Tekrar bağış yapabilirsin\' bildirimi';
+
+  @override
+  String get donationReminderToggleSubtitle =>
+      'Bekleme süreniz dolduğunda yerel bildirim gönderilir';
+
+  @override
+  String get donationReminderScheduledSnack =>
+      'Hatırlatma bildirimi planlandı.';
+
+  @override
+  String get donationAddToCalendarButton => 'Takvime Ekle';
+
+  @override
+  String get donationCalendarEventTitle =>
+      'Kan Bağışı Uygunluk Günü (Türkiye Kan Ağı)';
+
+  @override
+  String get donationCalendarEventDesc =>
+      'Bekleme süreniz doldu. Kızılay veya kan merkezinde bağış yapabilirsiniz.';
+
+  @override
+  String get donationCalendarAddedSnack => 'Takvim etkinliği oluşturuldu.';
+
+  @override
+  String get donationReminderNotifTitle => 'Tekrar Bağış Yapabilirsiniz';
+
+  @override
+  String get donationReminderNotifBody =>
+      'Son bağışınızdan sonraki bekleme süreniz tamamlandı. Uygun hissediyorsanız kan bağışında bulunabilirsiniz.';
+
+  @override
+  String get donationAddManualButton => 'Manuel Bağış Ekle';
+
+  @override
+  String get donationAddSheetTitle => 'Geçmiş Bağış Kaydı Ekle';
+
+  @override
+  String get donationPlaceLabel => 'Bağış Yeri (Kan Merkezi / Hastane)';
+
+  @override
+  String get donationPlaceHint => 'Örn: Kızılay Çankaya Kan Bağışı Merkezi';
+
+  @override
+  String get donationDateLabel => 'Bağış Tarihi';
+
+  @override
+  String get donationSelectDateButton => 'Tarih Seç';
+
+  @override
+  String get donationProductTypeLabel => 'Bağışlanan Ürün Tipi';
+
+  @override
+  String get donationSourceManualBadge => 'Manuel Kayıt';
+
+  @override
+  String get donationSourceRequestBadge => 'Talep Akışı (Onaylı)';
+
+  @override
+  String get donationDeleteManualTooltip => 'Manuel bağış kaydını sil';
+
+  @override
+  String get donationValidationPlaceRequired =>
+      'Lütfen bağış yapılan yeri girin.';
+
+  @override
+  String get donationValidationFutureDate =>
+      'Gelecek tarihli bağış kaydı eklenemez.';
+
+  @override
+  String get donationHistorySectionTitle => 'Bağış Geçmişim';
+
+  @override
+  String get donationQuickSurveyButton => 'Uygunluk Ön Kontrol Anketi';
+
+  @override
+  String get donationQuickTipsButton => 'Bağış Öncesi ve Sonrası Öneriler';
+
+  @override
+  String get donationSurveyTitle => 'Bağışa Uygunluk Ön Kontrol Anketi';
+
+  @override
+  String get donationSurveyDisclaimer =>
+      'ÖNEMLİ UYARI: Bu anket kesin tıbbi karar vermez, yalnızca ön bilgilendirme amaçlıdır. Karar kan merkezindeki sağlık personelindedir. Kızılay ve Sağlık Bakanlığı güncel kurallarıyla doğrulanmalıdır.';
+
+  @override
+  String get donationSurveyAnswerYes => 'Evet';
+
+  @override
+  String get donationSurveyAnswerNo => 'Hayır';
+
+  @override
+  String get donationSurveyAnswerUnsure => 'Emin Değilim';
+
+  @override
+  String get donationSurveyEvaluateButton => 'Ön Kontrol Sonucunu Gör';
+
+  @override
+  String get donationSurveyIncompleteError => 'Lütfen tüm soruları yanıtlayın.';
+
+  @override
+  String get donationSurveyOutcomeEligibleTitle => 'Uygun Görünüyor';
+
+  @override
+  String get donationSurveyOutcomeEligibleBody =>
+      'Yanıtlarınıza göre belirgin bir engel görünmüyor. Kesin karar kan merkezindeki hekim ve sağlık personelindedir.';
+
+  @override
+  String get donationSurveyOutcomeUnsureTitle =>
+      'Emin Değilim (Hekime Danışın)';
+
+  @override
+  String get donationSurveyOutcomeUnsureBody =>
+      'Bazı yanıtlarınız ek değerlendirme gerektiriyor. Kan merkezindeki görevli hekime danışmanız önerilir.';
+
+  @override
+  String get donationSurveyOutcomeIneligibleTitle =>
+      'Uygun Görünmüyor (Geçici Erteleme Olabilir)';
+
+  @override
+  String get donationSurveyOutcomeIneligibleBody =>
+      'Yanıtlarınızdan en az biri geçici veya kalıcı erteleme sebebi olabilir. Kesin karar kan merkezindeki sağlık personelindedir.';
+
+  @override
+  String get donationSurveySavedSnack =>
+      'Ön kontrol sonucunuz özel sağlık verileriniz altına kaydedildi.';
+
+  @override
+  String get donationTipsTitle => 'Bağış Öncesi ve Sonrası Öneriler';
+
+  @override
+  String get donationTipsMedicalNote =>
+      'Bu bilgiler genel rehber niteliğindedir; Kızılay ve Sağlık Bakanlığı güncel kurallarıyla doğrulanmalıdır.';
+
+  @override
+  String get donationTipsBeforeTitle => 'Bağış Öncesi Öneriler';
+
+  @override
+  String get donationTipsBefore1 =>
+      'Bağıştan önce bol su için ve hafif, yağsız bir öğün tüketin; aç karnına bağışa gitmeyin.';
+
+  @override
+  String get donationTipsBefore2 =>
+      'Uykunuzu almış ve dinlenmiş olun; son 24 saatte alkol tüketmeyin.';
+
+  @override
+  String get donationTipsBefore3 =>
+      'Resmi kimlik belgenizi yanınıza alın ve kullandığınız ilaçları sağlık personeline bildirin.';
+
+  @override
+  String get donationTipsAfterTitle => 'Bağış Sonrası Öneriler';
+
+  @override
+  String get donationTipsAfter1 =>
+      'Bağış sonrasında en az 10-15 dakika dinlenin ve ikram edilen sıvı/gıdaları tüketin.';
+
+  @override
+  String get donationTipsAfter2 =>
+      'İlk 24 saat boyunca bol sıvı tüketin; bağış yapılan kolunuzla ağır yük kaldırmayın.';
+
+  @override
+  String get donationTipsAfter3 =>
+      'İlk birkaç saat sigara kullanmayın; baş dönmesi hissederseniz hemen uzanıp ayaklarınızı yükseltin.';
+
+  @override
+  String get donationKvkkConsentRequiredTitle =>
+      'Sağlık Verisi Açık Rızası Gerekli';
+
+  @override
+  String get donationKvkkConsentRequiredBody =>
+      'Bağış geçmişi ve sağlık anketi verileriniz KVKK kapsamında özel nitelikli kişisel veridir. Devam etmek için açık rıza vermeniz gerekmektedir.';
+
+  @override
+  String get donationKvkkGrantConsentButton => 'Açık Rıza Ver ve Devam Et';
 }
