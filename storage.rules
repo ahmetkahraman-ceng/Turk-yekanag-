@@ -1,0 +1,30 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    function isModerator() {
+      return request.auth != null && request.auth.token.moderator == true;
+    }
+
+    match /users/{userId}/{allPaths=**} {
+      allow read, write: if isOwner(userId);
+    }
+
+    // Doktor raporu / talep belgesi fotoğrafı:
+    // Yalnızca talep sahibi (`ownerUid` metadata'sı eşleşen) ve moderatör görebilir.
+    match /blood_requests/{requestId}/{fileName} {
+      allow write: if request.auth != null;
+      allow read: if request.auth != null && (
+        isModerator()
+        || resource.metadata.requesterUid == request.auth.uid
+      );
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

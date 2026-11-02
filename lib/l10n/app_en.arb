@@ -1,0 +1,348 @@
+{
+  "@@locale": "en",
+  "appTitle": "Türkiye Blood Network",
+  "appTagline": "Solidarity network connecting voluntary blood donors with people in need",
+  "nonCommercialNotice": "Buying or selling blood for money is strictly prohibited in this app. This is a voluntary solidarity network complementing the Red Crescent (Kızılay).",
+  "splashLoading": "Preparing application...",
+  "navRequests": "Requests",
+  "navRequestsSemantics": "Blood requests tab",
+  "navMap": "Map",
+  "navMapSemantics": "Nearby blood requests map tab",
+  "navDonation": "Donation",
+  "navDonationSemantics": "Blood donation eligibility and history tab",
+  "navNotifications": "Notifications",
+  "navNotificationsSemantics": "Notifications tab",
+  "navProfile": "Profile",
+  "navProfileSemantics": "User profile and settings tab",
+  "requestsTitle": "Blood Requests",
+  "requestsEmptyTitle": "No active blood requests yet",
+  "requestsEmptySubtitle": "Urgent requests matching your blood type in your area will be listed here.",
+  "mapTitle": "Request Map",
+  "mapEmptyTitle": "Map view is being prepared",
+  "mapEmptySubtitle": "For donor privacy, exact locations are never shared; only province, district, and hospital points are displayed.",
+  "donationTitle": "Donation Guide",
+  "donationEmptyTitle": "No donation records found",
+  "donationEmptySubtitle": "You can track your donation intervals here according to Kızılay and Ministry of Health guidelines.",
+  "donationIntervalInfo": "Whole blood donation interval: Male {maleDays} days, Female {femaleDays} days (Must be verified with current Kızılay and Ministry of Health guidelines).",
+  "@donationIntervalInfo": {
+    "placeholders": {
+      "maleDays": {
+        "type": "int"
+      },
+      "femaleDays": {
+        "type": "int"
+      }
+    }
+  },
+  "notificationsTitle": "Notifications",
+  "notificationsEmptyTitle": "No new notifications",
+  "notificationsEmptySubtitle": "Urgent calls matching your blood type and match confirmations appear here.",
+  "profileTitle": "Profile & Privacy Settings",
+  "profileEmptyTitle": "Your profile is not complete yet",
+  "profileEmptySubtitle": "Your blood type and health data are protected with your explicit consent; you can manage account deletion and data export here.",
+  "commonRetry": "Try Again",
+  "commonRetrySemantics": "Retry operation button",
+  "commonLoading": "Loading...",
+  "commonErrorTitle": "Something went wrong",
+  "commonErrorMessage": "An unexpected error occurred during the operation. Please try again.",
+  "networkErrorMessage": "Could not connect to the internet. Please check your connection.",
+  "unauthorizedErrorMessage": "You must be signed in to perform this action.",
+  "notFoundTitle": "Page Not Found (404)",
+  "notFoundMessage": "The page you are looking for does not exist or may have been moved.",
+  "notFoundBackHome": "Back to Home",
+  "offlineBannerMessage": "You are offline. Data will be updated when your internet connection is restored.",
+  "offlineBannerSemantics": "Warning: No internet connection",
+  "forceUpdateTitle": "Update Required",
+  "forceUpdateMessage": "For your safety and uninterrupted service, you must install the latest version ({minVersion}) of the application. Your current version: {currentVersion}.",
+  "@forceUpdateMessage": {
+    "placeholders": {
+      "minVersion": {
+        "type": "String"
+      },
+      "currentVersion": {
+        "type": "String"
+      }
+    }
+  },
+  "forceUpdateAction": "Update from Store",
+  "statePreviewNormal": "Normal",
+  "statePreviewLoading": "Loading",
+  "statePreviewEmpty": "Empty",
+  "statePreviewError": "Error",
+  "themeToggleSemantics": "Toggle theme mode",
+  "commonNext": "Next",
+  "commonBack": "Back",
+  "commonSkip": "Skip",
+  "commonSave": "Save",
+  "commonCancel": "Cancel",
+  "commonClose": "Close",
+  "commonConfirm": "Confirm",
+  "onboardingSlide1Title": "Voluntary Blood Solidarity",
+  "onboardingSlide1Description": "Türkiye Blood Network quickly connects patients in urgent need of blood with nearby compatible voluntary donors. It complements Kızılay and strictly prohibits buying or selling blood.",
+  "onboardingSlide2Title": "How It Works?",
+  "onboardingSlide2Description": "When a blood need arises at a hospital, a request is created. The system only notifies compatible and available donors in nearby districts.",
+  "onboardingSlide3Title": "Your Personal Data is Safe",
+  "onboardingSlide3Description": "Your blood type and health info are strictly private under KVKK. Your phone number is never shared until you tap 'I can help' and both parties confirm.",
+  "onboardingSlide4Title": "Why is Location Permission Needed?",
+  "onboardingSlide4Description": "Your exact location is never shown to others; only province/district level is stored and used to filter urgent calls at the nearest hospital.",
+  "onboardingStartAction": "Continue",
+  "kvkkScreenTitle": "KVKK Disclosure & Explicit Consent",
+  "kvkkLightingTitle": "Summary of KVKK Law No. 6698 Disclosure",
+  "kvkkLightingBody": "As Türkiye Blood Network, we process your special-category personal data such as blood type, weight, and eligibility solely for matching blood requests based on your explicit consent. Your data is never sold and can be permanently deleted anytime.",
+  "kvkkConsentHealthTitle": "Health Data Explicit Consent (Required)",
+  "kvkkConsentHealthSubtitle": "I explicitly consent to the processing of my blood type, weight, birth date, and eligibility data for blood request matching.",
+  "kvkkConsentLocationTitle": "Province/District & Proximity Consent (Required)",
+  "kvkkConsentLocationSubtitle": "Without sharing my exact location, I approve the processing of my province/district and distance info to list nearby hospital requests.",
+  "kvkkConsentNotificationTitle": "Urgent Blood Call Notification Consent (Required)",
+  "kvkkConsentNotificationSubtitle": "I agree to receive push notifications regarding urgent blood requests matching my blood type and match statuses.",
+  "kvkkReadPrivacyPolicy": "Read Privacy Policy",
+  "kvkkReadTermsOfUse": "Read Terms of Use",
+  "kvkkApproveAndContinue": "Give Explicit Consent & Continue",
+  "kvkkAllConsentsRequiredWarning": "Please check all explicit consent boxes to continue.",
+  "privacyPolicyTitle": "Privacy Policy & KVKK Text",
+  "privacyPolicyPlaceholderBody": "1. Data Controller & Purpose:\nTürkiye Blood Network operates to connect voluntary blood donors with people in need.\n\n2. Special Category Personal Data:\nYour blood type, weight, and donation history are processed only with your explicit consent under KVKK Article 6 and are readable only by your account via Firestore security rules.\n\n3. Location & Contact Privacy:\nExact donor location is never stored or shared; only province and district are kept. Phone numbers are shared only after mutual 'I can help' confirmation.\n\n4. Data Subject Rights (Article 11):\nYou can export all your data as JSON or permanently delete your account from the Profile screen.",
+  "termsOfUseTitle": "Terms of Use",
+  "termsOfUsePlaceholderBody": "1. Voluntary Basis & Non-Commercial Rule:\nRequesting or offering blood for money or any material benefit is strictly prohibited.\n\n2. Kızılay & Official Institutions:\nThis app does not replace the Turkish Red Crescent (Kızılay) or Ministry of Health; it facilitates hospital-based voluntary donor routing.\n\n3. Medical Responsibility:\nFinal eligibility decisions belong to the authorized physician at the blood donation center.",
+  "authLoginTitle": "Sign In",
+  "authLoginSubtitle": "Sign in securely with your phone number. Your number is never shared without your approval.",
+  "authPhoneLabel": "Phone Number",
+  "authPhoneHint": "5XX XXX XX XX",
+  "authPhoneInvalidError": "Please enter a valid Türkiye mobile phone number (5XX XXX XX XX).",
+  "authSendOtpButton": "Send Verification Code",
+  "authOrDivider": "or sign in with",
+  "authContinueWithGoogle": "Continue with Google",
+  "authContinueWithApple": "Continue with Apple",
+  "authOtpTitle": "SMS Verification",
+  "authOtpSubtitle": "Enter the 6-digit verification code sent to {phoneNumber}.",
+  "@authOtpSubtitle": {
+    "placeholders": {
+      "phoneNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "authOtpCodeLabel": "6-Digit Verification Code",
+  "authOtpInvalidError": "Please enter the complete 6-digit verification code.",
+  "authVerifyOtpButton": "Verify & Sign In",
+  "authResendCountdown": "Resend code ({seconds}s)",
+  "@authResendCountdown": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "authResendNow": "Resend Code",
+  "wizardTitle": "Profile Setup Wizard",
+  "wizardStepIdentity": "1. Identity & Visibility",
+  "wizardStepMedical": "2. Blood Type & Physical Info",
+  "wizardStepLocation": "3. Province & District",
+  "wizardFullNameLabel": "Full Name",
+  "wizardFullNameRequiredError": "Please enter your full name.",
+  "wizardNicknameLabel": "Nickname (Optional)",
+  "wizardUseNicknameSwitch": "Show my nickname instead of my real name in lists",
+  "wizardBirthDateLabel": "Date of Birth",
+  "wizardBirthDateSelectButton": "Select Birth Date",
+  "wizardAgeValidationError": "Donor age must be between {minAge} and {maxAge} (Kızılay & Ministry of Health guidelines).",
+  "@wizardAgeValidationError": {
+    "placeholders": {
+      "minAge": {
+        "type": "int"
+      },
+      "maxAge": {
+        "type": "int"
+      }
+    }
+  },
+  "wizardGenderLabel": "Gender",
+  "wizardGenderMale": "Male",
+  "wizardGenderFemale": "Female",
+  "wizardGenderUnspecified": "Prefer Not to Say",
+  "wizardWeightLabel": "Weight (kg)",
+  "wizardWeightValidationError": "Minimum weight for voluntary blood donation is {minWeight} kg.",
+  "@wizardWeightValidationError": {
+    "placeholders": {
+      "minWeight": {
+        "type": "int"
+      }
+    }
+  },
+  "wizardBloodTypeLabel": "Your Blood Type",
+  "wizardBloodTypeUnknownOption": "I don't know my blood type",
+  "wizardBloodTypeHowToLearnLink": "How can I learn my blood type?",
+  "wizardProvinceLabel": "Select Province (81 Provinces)",
+  "wizardDistrictLabel": "Select District",
+  "wizardLocationRequiredError": "Please select both province and district.",
+  "wizardSearchHint": "Search province or district...",
+  "wizardCompleteButton": "Save Profile & Start",
+  "unknownBloodGuideTitle": "How Can I Learn My Blood Type?",
+  "unknownBloodGuideIntro": "If you don't know your blood type yet, you can still continue and update your profile once you learn it.",
+  "unknownBloodGuideStep1Title": "1. Turkish Red Crescent (Kızılay) Donation Points",
+  "unknownBloodGuideStep1Body": "Visit the nearest Kızılay blood donation center or mobile unit to learn your blood type free of charge during pre-donation screening.",
+  "unknownBloodGuideStep2Title": "2. Family Health Centers (Family Physician)",
+  "unknownBloodGuideStep2Body": "Apply to your registered Family Physician for a quick ABO and Rh blood group test.",
+  "unknownBloodGuideStep3Title": "3. e-Nabız & Driver's License Records",
+  "unknownBloodGuideStep3Body": "Check the 'My Lab Results' section in your e-Nabız account or your driver's license medical report.",
+  "profileAvailableSwitchTitle": "Available to Donate",
+  "profileAvailableSwitchSubtitle": "When enabled, you receive notifications for nearby compatible blood requests.",
+  "profilePhotoChangeButton": "Select Profile Photo (Optional)",
+  "profileEditButton": "Edit Profile Information",
+  "profileNotificationPrefsButton": "Notification Preferences",
+  "profileThemeTitle": "Theme Mode",
+  "profileThemeSystem": "System",
+  "profileThemeLight": "Light",
+  "profileThemeDark": "Dark",
+  "profileLanguageTitle": "App Language",
+  "profileLanguageTr": "Türkçe",
+  "profileLanguageEn": "English",
+  "profileExportDataButton": "Download My Data (JSON)",
+  "profileExportDataSuccessTitle": "Your Data Export (JSON)",
+  "profileDeleteAccountButton": "Permanently Delete My Account & Data",
+  "profileDeleteConfirmTitle": "Are You Sure You Want to Delete Your Account?",
+  "profileDeleteConfirmBody": "This action cannot be undone. Your KVKK consent records, special-category health data, and profile will be permanently deleted via Cloud Function.",
+  "profileDeleteConfirmAction": "Yes, Delete My Account",
+  "profileSignOutButton": "Sign Out",
+  "notifPrefsTitle": "Notification Preferences",
+  "notifUrgencyTitle": "Minimum Urgency Level",
+  "notifUrgencyAll": "All Requests",
+  "notifUrgencyUrgentOnly": "Urgent & Critical Only",
+  "notifUrgencyCriticalOnly": "Critical (Life-Threatening) Only",
+  "notifRadiusTitle": "Notification Distance Radius",
+  "notifRadiusKm": "{km} km",
+  "@notifRadiusKm": {
+    "placeholders": {
+      "km": {
+        "type": "int"
+      }
+    }
+  },
+  "notifQuietHoursTitle": "Quiet Hours",
+  "notifQuietHoursEnable": "Enable quiet hours (23:00 - 07:00)",
+  "notifQuietHoursAllowCritical": "Receive critical alerts even during quiet hours",
+  "notifPrefsSavedMessage": "Your notification preferences have been saved.",
+  "requestCreateTitle": "Create Blood Request",
+  "requestEditTitle": "Edit Blood Request",
+  "requestStepPatientProduct": "1. Patient & Blood Component",
+  "requestStepHospitalUrgency": "2. Hospital & Urgency",
+  "requestStepContactReport": "3. Contact & Document",
+  "requestPatientInitialsLabel": "Patient Initials Only (e.g., A.Y.)",
+  "requestPatientInitialsHint": "A.Y.",
+  "requestPatientInitialsError": "For privacy, please enter initials only (e.g., A.Y.).",
+  "requestProductTypeLabel": "Blood Product Type",
+  "productWholeBlood": "Whole Blood",
+  "productErythrocyte": "Red Blood Cells (Erythrocyte)",
+  "productPlatelet": "Platelets (Apheresis)",
+  "productPlasma": "Fresh Frozen Plasma",
+  "requestUnitsLabel": "Units Needed",
+  "requestUnitsValue": "{count} Units",
+  "@requestUnitsValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "requestHospitalSelectLabel": "Select Hospital",
+  "requestHospitalSearchHint": "Search hospital, province, or district...",
+  "requestHospitalRequiredError": "Please select a hospital.",
+  "requestDepartmentLabel": "Department / Ward (e.g., ICU, Hematology)",
+  "requestDepartmentRequiredError": "Please enter the department or ward.",
+  "requestUrgencyLabel": "Urgency Level",
+  "urgencyCritical": "Critical (Immediate)",
+  "urgencyToday": "Today",
+  "urgencyThisWeek": "This Week",
+  "requestContactNameLabel": "Relative Name / Initials",
+  "requestContactPhoneLabel": "Relative Phone (Hidden Publicly)",
+  "requestNotesLabel": "Additional Notes (Monetary Requests Prohibited)",
+  "requestMedicalReportButton": "Attach Medical Report / Document (Optional)",
+  "requestMedicalReportAttached": "Medical report attached (Visible only to moderators and you)",
+  "requestProhibitedTextError": "Prohibited monetary or payment terms detected. Blood donation must be strictly voluntary.",
+  "requestLimitActiveError": "You can have at most {maxActive} active requests at a time.",
+  "@requestLimitActiveError": {
+    "placeholders": {
+      "maxActive": {
+        "type": "int"
+      }
+    }
+  },
+  "requestLimitDailyError": "You have reached the daily request limit ({maxDaily}).",
+  "@requestLimitDailyError": {
+    "placeholders": {
+      "maxDaily": {
+        "type": "int"
+      }
+    }
+  },
+  "requestSubmitButton": "Publish Request",
+  "requestSaveChangesButton": "Save Changes",
+  "requestStatusOpen": "Open",
+  "requestStatusFulfilled": "Fulfilled",
+  "requestStatusCancelled": "Cancelled",
+  "requestStatusExpired": "Expired",
+  "requestFilterAll": "All",
+  "requestFilterBloodGroup": "Blood Group",
+  "requestFilterProduct": "Product",
+  "requestFilterUrgency": "Urgency",
+  "requestFilterProvince": "Province",
+  "requestFilterClear": "Clear Filters",
+  "requestLoadMore": "Load More",
+  "requestDetailTitle": "Request Details",
+  "requestOfferCountBadge": "{count} volunteers offered help",
+  "@requestOfferCountBadge": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "requestShareButton": "Share",
+  "requestReportButton": "Report",
+  "requestReportDialogTitle": "Report Request",
+  "requestReportReasonHint": "Report monetary demand or misleading info...",
+  "requestReportSubmittedMessage": "Your report has been sent to moderators.",
+  "requestOwnerActionsTitle": "Request Management",
+  "requestMarkFulfilledButton": "Mark as Fulfilled",
+  "requestExtendExpiryButton": "Extend Expiry (+24h)",
+  "requestCancelButton": "Cancel Request",
+  "requestStopNewOffersSwitch": "Enough donors arrived (Close new offers)",
+  "requestShareCardTitle": "Emergency Blood Request Share Card",
+  "requestShareCopyTextButton": "Copy Share Text & Link",
+  "requestShareCopiedMessage": "Share text and deep link copied to clipboard.",
+  "matchingCanHelpButton": "I Can Help",
+  "matchingCompatibilityIncompatible": "Your blood type ({donorBlood}) is not medically compatible with this request ({recipientBlood} {product}).",
+  "@matchingCompatibilityIncompatible": {
+    "placeholders": {
+      "donorBlood": {
+        "type": "String"
+      },
+      "recipientBlood": {
+        "type": "String"
+      },
+      "product": {
+        "type": "String"
+      }
+    }
+  },
+  "matchingCompatibilityCompatible": "Your blood type is compatible with this request.",
+  "matchingSelectTimeSlotTitle": "Select Estimated Arrival Slot (Coordination)",
+  "matchingTimeSlotNow": "Immediate (Within 1 Hour)",
+  "matchingTimeSlotMorning": "Morning (09:00 - 12:00)",
+  "matchingTimeSlotAfternoon": "Afternoon (12:00 - 17:00)",
+  "matchingTimeSlotEvening": "Evening (17:00 - 21:00)",
+  "matchingOfferPending": "Awaiting Approval (Phones unlock once requester approves)",
+  "matchingOfferApproved": "Approved — Mutual Contact Unlocked",
+  "matchingStepOnTheWay": "On the Way",
+  "matchingStepArrived": "Arrived at Hospital",
+  "matchingStepDonated": "Donated",
+  "matchingStepConfirmed": "Donation Confirmed (Saved to History)",
+  "matchingQuickMsg1": "I am on my way to the hospital.",
+  "matchingQuickMsg2": "I have arrived at the blood center and am registering.",
+  "matchingQuickMsg3": "I completed the donation, wishing a speedy recovery.",
+  "matchingCallButton": "Call",
+  "matchingWhatsAppButton": "WhatsApp",
+  "matchingOwnerApproveDonorButton": "Approve Donor (Unlock Contact)",
+  "matchingOwnerConfirmDonationButton": "Confirm Donation (Completed)",
+  "matchingOffersClosedNotice": "The requester indicated enough donors have arrived; new offers are closed.",
+  "notificationsMarkAllRead": "Mark All as Read",
+  "notificationsFilterUnreadOnly": "Unread Only"
+}

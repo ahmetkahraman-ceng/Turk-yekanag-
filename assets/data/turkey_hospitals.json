@@ -1,0 +1,130 @@
+[
+  {
+    "id": "hosp-ank-bilkent",
+    "name": "Ankara Bilkent Şehir Hastanesi",
+    "province": "Ankara",
+    "district": "Çankaya",
+    "latitude": 39.9008,
+    "longitude": 32.7556
+  },
+  {
+    "id": "hosp-ank-etlik",
+    "name": "Ankara Etlik Şehir Hastanesi",
+    "province": "Ankara",
+    "district": "Yenimahalle",
+    "latitude": 39.9698,
+    "longitude": 32.8384
+  },
+  {
+    "id": "hosp-ank-hacettepe",
+    "name": "Hacettepe Üniversitesi Erişkin Hastanesi",
+    "province": "Ankara",
+    "district": "Altındağ",
+    "latitude": 39.9324,
+    "longitude": 32.8615
+  },
+  {
+    "id": "hosp-ist-cam-sakura",
+    "name": "Başakşehir Çam ve Sakura Şehir Hastanesi",
+    "province": "İstanbul",
+    "district": "Başakşehir",
+    "latitude": 41.1042,
+    "longitude": 28.7753
+  },
+  {
+    "id": "hosp-ist-capa",
+    "name": "İstanbul Üniversitesi İstanbul Tıp Fakültesi (Çapa)",
+    "province": "İstanbul",
+    "district": "Fatih",
+    "latitude": 41.0156,
+    "longitude": 28.9329
+  },
+  {
+    "id": "hosp-ist-cerrahpasa",
+    "name": "İstanbul Üniversitesi-Cerrahpaşa Tıp Fakültesi",
+    "province": "İstanbul",
+    "district": "Fatih",
+    "latitude": 41.0044,
+    "longitude": 28.9403
+  },
+  {
+    "id": "hosp-ist-kartal",
+    "name": "Kartal Dr. Lütfi Kırdar Şehir Hastanesi",
+    "province": "İstanbul",
+    "district": "Kartal",
+    "latitude": 40.9167,
+    "longitude": 29.1886
+  },
+  {
+    "id": "hosp-ist-goztepe",
+    "name": "Prof. Dr. Süleyman Yalçın Şehir Hastanesi (Göztepe)",
+    "province": "İstanbul",
+    "district": "Kadıköy",
+    "latitude": 40.9862,
+    "longitude": 29.0604
+  },
+  {
+    "id": "hosp-izm-bayrakli",
+    "name": "İzmir Şehir Hastanesi",
+    "province": "İzmir",
+    "district": "Bayraklı",
+    "latitude": 38.4728,
+    "longitude": 27.1852
+  },
+  {
+    "id": "hosp-izm-ege",
+    "name": "Ege Üniversitesi Tıp Fakültesi Hastanesi",
+    "province": "İzmir",
+    "district": "Bornova",
+    "latitude": 38.4589,
+    "longitude": 27.2269
+  },
+  {
+    "id": "hosp-izm-dokuz-eylul",
+    "name": "Dokuz Eylül Üniversitesi Araştırma ve Uygulama Hastanesi",
+    "province": "İzmir",
+    "district": "Balçova",
+    "latitude": 38.3939,
+    "longitude": 27.0344
+  },
+  {
+    "id": "hosp-brs-sehir",
+    "name": "Bursa Şehir Hastanesi",
+    "province": "Bursa",
+    "district": "Nilüfer",
+    "latitude": 40.2647,
+    "longitude": 28.8856
+  },
+  {
+    "id": "hosp-ant-sehir",
+    "name": "Antalya Şehir Hastanesi",
+    "province": "Antalya",
+    "district": "Kepez",
+    "latitude": 36.9522,
+    "longitude": 30.6542
+  },
+  {
+    "id": "hosp-adn-sehir",
+    "name": "Adana Şehir Eğitim ve Araştırma Hastanesi",
+    "province": "Adana",
+    "district": "Yüreğir",
+    "latitude": 37.0264,
+    "longitude": 35.3519
+  },
+  {
+    "id": "hosp-kon-sehir",
+    "name": "Konya Şehir Hastanesi",
+    "province": "Konya",
+    "district": "Karatay",
+    "latitude": 37.8547,
+    "longitude": 32.5514
+  },
+  {
+    "id": "hosp-gzt-sehir",
+    "name": "Gaziantep Şehir Hastanesi",
+    "province": "Gaziantep",
+    "district": "Şahinbey",
+    "latitude": 37.0189,
+    "longitude": 37.3392
+  }
+]

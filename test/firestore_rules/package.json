@@ -1,0 +1,12 @@
+{
+  "name": "turkiye-kan-agi-firestore-rules-tests",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "node --test firestore_rules_test.js"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^3.0.4",
+    "firebase": "^11.0.2"
+  }
+}

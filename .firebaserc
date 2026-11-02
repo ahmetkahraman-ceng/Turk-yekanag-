@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "default": "turkiye-kan-agi-dev",
+    "dev": "turkiye-kan-agi-dev",
+    "prod": "turkiye-kan-agi-prod"
+  }
+}

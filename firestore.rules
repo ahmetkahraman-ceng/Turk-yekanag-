@@ -1,0 +1,113 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isModerator() {
+      return isSignedIn() && request.auth.token.moderator == true;
+    }
+
+    // Public profilde KVKK özel nitelikli veri veya telefon/tam konum bulunamaz.
+    function hasNoSensitiveFieldsInPublicDoc(data) {
+      return !('phoneNumber' in data)
+        && !('bloodType' in data)
+        && !('weightKg' in data)
+        && !('birthDate' in data)
+        && !('fullName' in data)
+        && !('exactLocation' in data);
+    }
+
+    // Public kan talebinde hasta yakını telefon numarası veya tam hasta adı bulunamaz.
+    function hasNoPrivateContactInPublicRequest(data) {
+      return !('contactPhone' in data)
+        && !('patientFullName' in data);
+    }
+
+    // Genel (Public) kullanıcı dokümanı
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create, update: if isOwner(userId)
+        && hasNoSensitiveFieldsInPublicDoc(request.resource.data);
+      allow delete: if isOwner(userId);
+
+      // KVKK Özel Nitelikli Kişisel Veriler, Açık Rıza Kaydı ve Bildirim Tercihleri
+      match /private_data/{docId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /donation_history/{donationId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /health_surveys/{surveyId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /notifications/{notificationId} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+
+    // Kan Talepleri Koleksiyonu
+    match /blood_requests/{requestId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn()
+        && request.resource.data.requesterUid == request.auth.uid
+        && hasNoPrivateContactInPublicRequest(request.resource.data);
+      allow update: if isSignedIn()
+        && (resource.data.requesterUid == request.auth.uid || isModerator())
+        && hasNoPrivateContactInPublicRequest(request.resource.data);
+      allow delete: if isSignedIn()
+        && (resource.data.requesterUid == request.auth.uid || isModerator());
+
+      // Hasta yakını gizli iletişim bilgisi: Sadece talep sahibi ve moderatör okuyabilir/yazabilir.
+      match /private_contact/{docId} {
+        allow read, write: if isSignedIn() && (
+          get(/databases/$(database)/documents/blood_requests/$(requestId)).data.requesterUid == request.auth.uid
+          || isModerator()
+        );
+      }
+
+      // Bağışçı yardım teklifleri
+      match /offers/{donorUid} {
+        allow read: if isSignedIn() && (
+          request.auth.uid == donorUid
+          || get(/databases/$(database)/documents/blood_requests/$(requestId)).data.requesterUid == request.auth.uid
+        );
+        allow create, update: if isSignedIn() && (
+          request.auth.uid == donorUid
+          || get(/databases/$(database)/documents/blood_requests/$(requestId)).data.requesterUid == request.auth.uid
+        );
+      }
+
+      // Karşılıklı onay sonrası açılan iletişim numaraları:
+      // Yalnızca ilgili bağışçı ve talep sahibi erişebilir.
+      match /mutual_contacts/{donorUid} {
+        allow read: if isSignedIn() && (
+          request.auth.uid == donorUid
+          || get(/databases/$(database)/documents/blood_requests/$(requestId)).data.requesterUid == request.auth.uid
+        );
+        allow create, update: if isSignedIn()
+          && get(/databases/$(database)/documents/blood_requests/$(requestId)).data.requesterUid == request.auth.uid;
+      }
+    }
+
+    // Şikayet / Raporlama Koleksiyonu
+    match /request_reports/{reportId} {
+      allow create: if isSignedIn()
+        && request.resource.data.reporterUid == request.auth.uid;
+      allow read: if isModerator();
+    }
+
+    // Varsayılan olarak diğer tüm erişimleri kapat
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

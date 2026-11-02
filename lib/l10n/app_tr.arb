@@ -1,0 +1,348 @@
+{
+  "@@locale": "tr",
+  "appTitle": "Türkiye Kan Ağı",
+  "appTagline": "Gönüllü kan bağışçıları ile ihtiyaç sahiplerini buluşturan dayanışma ağı",
+  "nonCommercialNotice": "Bu uygulamada para karşılığı kan alım-satımına kesinlikle izin verilmez. Kızılay'ı tamamlayıcı gönüllü bir dayanışma ağıdır.",
+  "splashLoading": "Uygulama hazırlanıyor...",
+  "navRequests": "Talepler",
+  "navRequestsSemantics": "Kan talepleri sekmesi",
+  "navMap": "Harita",
+  "navMapSemantics": "Yakındaki kan talepleri harita sekmesi",
+  "navDonation": "Bağış",
+  "navDonationSemantics": "Kan bağışı uygunluk ve geçmiş sekmesi",
+  "navNotifications": "Bildirimler",
+  "navNotificationsSemantics": "Bildirimler sekmesi",
+  "navProfile": "Profil",
+  "navProfileSemantics": "Kullanıcı profili ve ayarlar sekmesi",
+  "requestsTitle": "Kan Talepleri",
+  "requestsEmptyTitle": "Henüz aktif kan talebi yok",
+  "requestsEmptySubtitle": "Yakın çevrenizde kan grubunuza uygun acil bir talep oluşturulduğunda burada listelenecektir.",
+  "mapTitle": "Talep Haritası",
+  "mapEmptyTitle": "Harita görünümü hazırlanıyor",
+  "mapEmptySubtitle": "Bağışçı gizliliği gereği tam konumlar asla paylaşılmaz; yalnızca il, ilçe ve hastane noktaları gösterilir.",
+  "donationTitle": "Bağış Rehberi",
+  "donationEmptyTitle": "Bağış kaydınız bulunmuyor",
+  "donationEmptySubtitle": "Kızılay ve Sağlık Bakanlığı kurallarına göre bağış aralıklarınızı buradan takip edebileceksiniz.",
+  "donationIntervalInfo": "Tam kan bağışı aralığı: Erkek {maleDays} gün, Kadın {femaleDays} gün (Kızılay ve Sağlık Bakanlığı güncel kurallarıyla doğrulanmalıdır).",
+  "@donationIntervalInfo": {
+    "placeholders": {
+      "maleDays": {
+        "type": "int"
+      },
+      "femaleDays": {
+        "type": "int"
+      }
+    }
+  },
+  "notificationsTitle": "Bildirimler",
+  "notificationsEmptyTitle": "Yeni bildiriminiz yok",
+  "notificationsEmptySubtitle": "Kan grubunuza uygun acil çağrılar ve eşleşme onayları burada görünür.",
+  "profileTitle": "Profil ve KVKK Ayarları",
+  "profileEmptyTitle": "Profil bilgileriniz henüz tamamlanmadı",
+  "profileEmptySubtitle": "Kan grubu ve sağlık verileriniz açık rızanızla korunur; hesap silme ve veri indirme işlemlerinizi buradan yönetebilirsiniz.",
+  "commonRetry": "Tekrar Dene",
+  "commonRetrySemantics": "İşlemi tekrar dene butonu",
+  "commonLoading": "Yükleniyor...",
+  "commonErrorTitle": "Bir sorun oluştu",
+  "commonErrorMessage": "İşlem sırasında beklenmeyen bir hata meydana geldi. Lütfen tekrar deneyin.",
+  "networkErrorMessage": "İnternet bağlantısı kurulamadı. Lütfen bağlantınızı kontrol edin.",
+  "unauthorizedErrorMessage": "Bu işlem için oturum açmanız gerekiyor.",
+  "notFoundTitle": "Sayfa Bulunamadı (404)",
+  "notFoundMessage": "Aradığınız sayfa mevcut değil veya taşınmış olabilir.",
+  "notFoundBackHome": "Ana Sayfaya Dön",
+  "offlineBannerMessage": "Çevrimdışı moddasınız. İnternet bağlantınız geldiğinde veriler güncellenecektir.",
+  "offlineBannerSemantics": "Uyarı: İnternet bağlantısı yok",
+  "forceUpdateTitle": "Güncelleme Gerekli",
+  "forceUpdateMessage": "Güvenliğiniz ve kesintisiz hizmet için uygulamanın en güncel sürümünü ({minVersion}) yüklemeniz gerekmektedir. Mevcut sürümünüz: {currentVersion}.",
+  "@forceUpdateMessage": {
+    "placeholders": {
+      "minVersion": {
+        "type": "String"
+      },
+      "currentVersion": {
+        "type": "String"
+      }
+    }
+  },
+  "forceUpdateAction": "Mağazadan Güncelle",
+  "statePreviewNormal": "Normal",
+  "statePreviewLoading": "Yükleniyor",
+  "statePreviewEmpty": "Boş",
+  "statePreviewError": "Hata",
+  "themeToggleSemantics": "Tema görünümünü değiştir",
+  "commonNext": "İleri",
+  "commonBack": "Geri",
+  "commonSkip": "Atla",
+  "commonSave": "Kaydet",
+  "commonCancel": "Vazgeç",
+  "commonClose": "Kapat",
+  "commonConfirm": "Onayla",
+  "onboardingSlide1Title": "Gönüllü Kan Dayanışması",
+  "onboardingSlide1Description": "Türkiye Kan Ağı, acil kan ihtiyacı olan hastalarla yakındaki uyumlu gönüllü bağışçıları hızlıca buluşturur. Kızılay'ın yerine geçmez, onu tamamlar ve para karşılığı kan alım-satımına kesinlikle izin vermez.",
+  "onboardingSlide2Title": "Nasıl Çalışır?",
+  "onboardingSlide2Description": "Bir hastanede kan ihtiyacı oluştuğunda talep açılır. Sistem yalnızca kan grubu uyumlu ve yakın ilçedeki müsait bağışçılara bildirim gönderir.",
+  "onboardingSlide3Title": "Kişisel Verileriniz Güvende",
+  "onboardingSlide3Description": "Kan grubunuz ve sağlık bilgileriniz KVKK kapsamında yalnızca sizin erişiminize açıktır. Telefon numaranız, siz 'Yardım edebilirim' deyip onay verene kadar kimseyle paylaşılmaz.",
+  "onboardingSlide4Title": "Konum İzni Neden Gerekli?",
+  "onboardingSlide4Description": "Tam konumunuz başkalarına asla gösterilmez; yalnızca il/ilçe düzeyinde tutulur ve size en yakın hastanedeki acil çağrıları filtrelemek için kullanılır.",
+  "onboardingStartAction": "Devam Et",
+  "kvkkScreenTitle": "KVKK Aydınlatma ve Açık Rıza",
+  "kvkkLightingTitle": "6698 Sayılı KVKK Aydınlatma Metni Özeti",
+  "kvkkLightingBody": "Türkiye Kan Ağı olarak; kan grubu, kilo ve bağış uygunluk durumu gibi özel nitelikli kişisel verilerinizi yalnızca kan ihtiyacı eşleştirmesi amacıyla, açık rızanıza dayanarak işliyoruz. Verileriniz üçüncü taraflara satılmaz ve istediğiniz an hesabınızı silerek tüm verilerinizi kalıcı olarak kaldırabilirsiniz.",
+  "kvkkConsentHealthTitle": "Özel Nitelikli Sağlık Verisi Açık Rızası (Zorunlu)",
+  "kvkkConsentHealthSubtitle": "Kan grubu, kilo, doğum tarihi ve bağış uygunluk bilgilerimin kan talebi eşleştirmesi amacıyla işlenmesine açık rıza veriyorum.",
+  "kvkkConsentLocationTitle": "İl/İlçe ve Yakınlık Verisi Açık Rızası (Zorunlu)",
+  "kvkkConsentLocationSubtitle": "Tam konumum paylaşılmaksızın, yakınımdaki hastane taleplerinin listelenmesi amacıyla il/ilçe ve mesafe bilgimin işlenmesini onaylıyorum.",
+  "kvkkConsentNotificationTitle": "Acil Kan Çağrısı Bildirim Rızası (Zorunlu)",
+  "kvkkConsentNotificationSubtitle": "Kan grubuma uygun acil kan talepleri ve eşleşme durumları hakkında anlık bildirim gönderilmesini kabul ediyorum.",
+  "kvkkReadPrivacyPolicy": "Gizlilik Politikası Metnini Oku",
+  "kvkkReadTermsOfUse": "Kullanım Şartları Metnini Oku",
+  "kvkkApproveAndContinue": "Açık Rıza Ver ve Devam Et",
+  "kvkkAllConsentsRequiredWarning": "Devam edebilmek için lütfen tüm açık rıza kutularını onaylayın.",
+  "privacyPolicyTitle": "Gizlilik Politikası ve KVKK Metni",
+  "privacyPolicyPlaceholderBody": "1. Veri Sorumlusu ve Amaç:\nTürkiye Kan Ağı, gönüllü kan bağışçıları ile ihtiyaç sahiplerini buluşturmak amacıyla faaliyet gösterir.\n\n2. İşlenen Özel Nitelikli Kişisel Veriler:\nKan grubu, kilo ve bağış geçmişi verileriniz 6698 sayılı KVKK Madde 6 kapsamında yalnızca açık rızanız ile işlenir ve Firestore güvenlik kurallarıyla yalnızca sizin hesabınız tarafından okunabilir.\n\n3. Konum ve İletişim Gizliliği:\nBağışçının tam konumu asla kaydedilmez veya paylaşılmaz; yalnızca il ve ilçe bilgisi tutulur. Telefon numaranız sadece 'Yardım edebilirim' onayı sonrasında karşı tarafla paylaşılır.\n\n4. Veri Sahibi Hakları (Madde 11):\nProfil ekranından tüm verilerinizi JSON formatında indirebilir veya 'Hesabımı Sil' adımıyla tüm kayıtlarınızı kalıcı olarak silebilirsiniz.",
+  "termsOfUseTitle": "Kullanım Şartları",
+  "termsOfUsePlaceholderBody": "1. Gönüllülük Esası ve Ücretsizlik:\nUygulama içerisinde kan veya kan bileşenlerinin para ya da herhangi bir maddi menfaat karşılığında talep edilmesi veya teklif edilmesi kesinlikle yasaktır.\n\n2. Kızılay ve Resmi Kurumlar:\nBu uygulama Türk Kızılayı'nın veya Sağlık Bakanlığı'nın yerine geçmez; yalnızca hastane bazlı acil gönüllü yönlendirmesini kolaylaştırır.\n\n3. Tıbbi Sorumluluk:\nBağış uygunluğu konusundaki nihai karar, kan bağışı merkezindeki yetkili hekim ve sağlık personeline aittir.",
+  "authLoginTitle": "Giriş Yap",
+  "authLoginSubtitle": "Telefon numaranız ile güvenli giriş yapın. Numaranız izniniz olmadan kimseyle paylaşılmaz.",
+  "authPhoneLabel": "Telefon Numarası",
+  "authPhoneHint": "5XX XXX XX XX",
+  "authPhoneInvalidError": "Lütfen geçerli bir Türkiye cep telefonu numarası girin (5XX XXX XX XX).",
+  "authSendOtpButton": "Doğrulama Kodu Gönder",
+  "authOrDivider": "veya alternatif giriş",
+  "authContinueWithGoogle": "Google ile Giriş Yap",
+  "authContinueWithApple": "Apple ile Giriş Yap",
+  "authOtpTitle": "SMS Doğrulama",
+  "authOtpSubtitle": "{phoneNumber} numarasına gönderilen 6 haneli doğrulama kodunu girin.",
+  "@authOtpSubtitle": {
+    "placeholders": {
+      "phoneNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "authOtpCodeLabel": "6 Haneli Doğrulama Kodu",
+  "authOtpInvalidError": "Lütfen 6 haneli doğrulama kodunu eksiksiz girin.",
+  "authVerifyOtpButton": "Doğrula ve Giriş Yap",
+  "authResendCountdown": "Yeni kod gönder ({seconds} sn)",
+  "@authResendCountdown": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "authResendNow": "Kodu Tekrar Gönder",
+  "wizardTitle": "Profil Oluşturma Sihirbazı",
+  "wizardStepIdentity": "1. Kimlik ve Görünürlük",
+  "wizardStepMedical": "2. Kan Grubu ve Fiziksel Bilgiler",
+  "wizardStepLocation": "3. İl ve İlçe Seçimi",
+  "wizardFullNameLabel": "Ad Soyad",
+  "wizardFullNameRequiredError": "Lütfen adınızı ve soyadınızı girin.",
+  "wizardNicknameLabel": "Takma Ad (İsteğe Bağlı)",
+  "wizardUseNicknameSwitch": "Listelerde gerçek adım yerine takma adımı göster",
+  "wizardBirthDateLabel": "Doğum Tarihi",
+  "wizardBirthDateSelectButton": "Doğum Tarihi Seçin",
+  "wizardAgeValidationError": "Bağışçı yaşı {minAge} ile {maxAge} arasında olmalıdır (Kızılay ve Sağlık Bakanlığı kuralları).",
+  "@wizardAgeValidationError": {
+    "placeholders": {
+      "minAge": {
+        "type": "int"
+      },
+      "maxAge": {
+        "type": "int"
+      }
+    }
+  },
+  "wizardGenderLabel": "Cinsiyet",
+  "wizardGenderMale": "Erkek",
+  "wizardGenderFemale": "Kadın",
+  "wizardGenderUnspecified": "Belirtmek İstemiyorum",
+  "wizardWeightLabel": "Kilo (kg)",
+  "wizardWeightValidationError": "Gönüllü kan bağışı için minimum kilo {minWeight} kg olmalıdır.",
+  "@wizardWeightValidationError": {
+    "placeholders": {
+      "minWeight": {
+        "type": "int"
+      }
+    }
+  },
+  "wizardBloodTypeLabel": "Kan Grubunuz",
+  "wizardBloodTypeUnknownOption": "Kan grubumu bilmiyorum",
+  "wizardBloodTypeHowToLearnLink": "Kan grubumu nasıl öğrenebilirim?",
+  "wizardProvinceLabel": "İl Seçin (81 İl)",
+  "wizardDistrictLabel": "İlçe Seçin",
+  "wizardLocationRequiredError": "Lütfen il ve ilçe seçiminizi tamamlayın.",
+  "wizardSearchHint": "İl veya ilçe ara...",
+  "wizardCompleteButton": "Profili Kaydet ve Başla",
+  "unknownBloodGuideTitle": "Kan Grubumu Nasıl Öğrenebilirim?",
+  "unknownBloodGuideIntro": "Kan grubunuzu henüz bilmiyorsanız uygulamayı kullanmaya devam edebilir, öğrendiğinizde profilinizden güncelleyebilirsiniz.",
+  "unknownBloodGuideStep1Title": "1. Türk Kızılayı Kan Bağışı Noktaları",
+  "unknownBloodGuideStep1Body": "Size en yakın Kızılay kan bağışı merkezine veya mobil kan bağışı aracına başvurarak ücretsiz kan bağışı ön muayenesinde kan grubunuzu öğrenebilirsiniz.",
+  "unknownBloodGuideStep2Title": "2. Aile Sağlığı Merkezleri (Aile Hekimliği)",
+  "unknownBloodGuideStep2Body": "Kayıtlı olduğunuz Aile Hekiminize başvurarak basit bir kan grubu testi (ABO ve Rh tayini) yaptırabilirsiniz.",
+  "unknownBloodGuideStep3Title": "3. e-Nabız ve Ehliyet Kayıtları",
+  "unknownBloodGuideStep3Body": "Daha önce hastanede kan tahlili yaptırdıysanız e-Nabız hesabınızdaki 'Tahlillerim' bölümünden veya sürücü belgesi sağlık raporunuzdan kan grubunuzu kontrol edebilirsiniz.",
+  "profileAvailableSwitchTitle": "Bağışa Uygunum",
+  "profileAvailableSwitchSubtitle": "Açık olduğunda kan grubunuza uygun yakın talepler için bildirim alırsınız.",
+  "profilePhotoChangeButton": "Profil Fotoğrafı Seç (İsteğe Bağlı)",
+  "profileEditButton": "Profil Bilgilerini Düzenle",
+  "profileNotificationPrefsButton": "Bildirim Tercihleri",
+  "profileThemeTitle": "Tema Görünümü",
+  "profileThemeSystem": "Sistem",
+  "profileThemeLight": "Aydınlık",
+  "profileThemeDark": "Karanlık",
+  "profileLanguageTitle": "Uygulama Dili",
+  "profileLanguageTr": "Türkçe",
+  "profileLanguageEn": "English",
+  "profileExportDataButton": "Verilerimi İndir (JSON)",
+  "profileExportDataSuccessTitle": "Verileriniz Hazır (JSON)",
+  "profileDeleteAccountButton": "Hesabımı ve Verilerimi Kalıcı Olarak Sil",
+  "profileDeleteConfirmTitle": "Hesabınızı Silmek İstediğinize Emin Misiniz?",
+  "profileDeleteConfirmBody": "Bu işlem geri alınamaz. KVKK rıza kayıtlarınız, özel nitelikli sağlık bilgileriniz ve profiliniz Cloud Function aracılığıyla kalıcı olarak silinecektir.",
+  "profileDeleteConfirmAction": "Evet, Hesabımı Sil",
+  "profileSignOutButton": "Oturumu Kapat",
+  "notifPrefsTitle": "Bildirim Tercihleri",
+  "notifUrgencyTitle": "Minimum Aciliyet Seviyesi",
+  "notifUrgencyAll": "Tüm Talepler",
+  "notifUrgencyUrgentOnly": "Yalnızca Acil ve Kritik Talepler",
+  "notifUrgencyCriticalOnly": "Yalnızca Kritik (Hayati) Talepler",
+  "notifRadiusTitle": "Bildirim Mesafe Yarıçapı",
+  "notifRadiusKm": "{km} km",
+  "@notifRadiusKm": {
+    "placeholders": {
+      "km": {
+        "type": "int"
+      }
+    }
+  },
+  "notifQuietHoursTitle": "Sessiz Saatler",
+  "notifQuietHoursEnable": "Sessiz saatleri etkinleştir (23:00 - 07:00)",
+  "notifQuietHoursAllowCritical": "Acil/kritik durumları sessiz saatlerde de bildir",
+  "notifPrefsSavedMessage": "Bildirim tercihleriniz kaydedildi.",
+  "requestCreateTitle": "Kan Talebi Oluştur",
+  "requestEditTitle": "Kan Talebini Düzenle",
+  "requestStepPatientProduct": "1. Hasta ve Kan Bileşeni",
+  "requestStepHospitalUrgency": "2. Hastane ve Aciliyet",
+  "requestStepContactReport": "3. İletişim ve Belge",
+  "requestPatientInitialsLabel": "Hasta Adı Soyadı Baş Harfleri (Örn: A.Y.)",
+  "requestPatientInitialsHint": "A.Y.",
+  "requestPatientInitialsError": "Gizlilik gereği lütfen yalnızca baş harfleri girin (Örn: A.Y.).",
+  "requestProductTypeLabel": "Kan Ürünü Tipi",
+  "productWholeBlood": "Tam Kan",
+  "productErythrocyte": "Eritrosit Süspansiyonu",
+  "productPlatelet": "Trombosit (Aferez)",
+  "productPlasma": "Taze Donmuş Plazma",
+  "requestUnitsLabel": "İhtiyaç Duyulan Ünite Sayısı",
+  "requestUnitsValue": "{count} Ünite",
+  "@requestUnitsValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "requestHospitalSelectLabel": "Hastane Seçin",
+  "requestHospitalSearchHint": "Hastane adı, il veya ilçe ara...",
+  "requestHospitalRequiredError": "Lütfen hastaneyi seçin.",
+  "requestDepartmentLabel": "Servis / Bölüm (Örn: Yoğun Bakım, Hematoloji)",
+  "requestDepartmentRequiredError": "Lütfen servis veya bölüm bilgisini girin.",
+  "requestUrgencyLabel": "Aciliyet Durumu",
+  "urgencyCritical": "Acil (Hemen)",
+  "urgencyToday": "Bugün",
+  "urgencyThisWeek": "Bu Hafta",
+  "requestContactNameLabel": "Hasta Yakını Adı / Baş Harfleri",
+  "requestContactPhoneLabel": "Hasta Yakını Telefonu (Herkese Açık Görünmez)",
+  "requestNotesLabel": "Ek Açıklama (Para/Ücret İfadesi Yasaktır)",
+  "requestMedicalReportButton": "Doktor Raporu / Talep Belgesi Ekle (İsteğe Bağlı)",
+  "requestMedicalReportAttached": "Doktor raporu eklendi (Yalnızca moderatör ve siz görebilirsiniz)",
+  "requestProhibitedTextError": "Metinde para, ücret, IBAN veya maddi karşılık içeren yasaklı ifadeler tespit edildi. Gönüllülük esası gereği bu ifadeler kullanılamaz.",
+  "requestLimitActiveError": "Aynı anda en fazla {maxActive} açık talebiniz olabilir.",
+  "@requestLimitActiveError": {
+    "placeholders": {
+      "maxActive": {
+        "type": "int"
+      }
+    }
+  },
+  "requestLimitDailyError": "Günlük talep oluşturma sınırına ({maxDaily}) ulaştınız.",
+  "@requestLimitDailyError": {
+    "placeholders": {
+      "maxDaily": {
+        "type": "int"
+      }
+    }
+  },
+  "requestSubmitButton": "Talebi Yayınla",
+  "requestSaveChangesButton": "Değişiklikleri Kaydet",
+  "requestStatusOpen": "Açık",
+  "requestStatusFulfilled": "Karşılandı",
+  "requestStatusCancelled": "İptal Edildi",
+  "requestStatusExpired": "Süresi Doldu",
+  "requestFilterAll": "Tümü",
+  "requestFilterBloodGroup": "Kan Grubu",
+  "requestFilterProduct": "Ürün",
+  "requestFilterUrgency": "Aciliyet",
+  "requestFilterProvince": "İl",
+  "requestFilterClear": "Filtreleri Temizle",
+  "requestLoadMore": "Daha Fazla Yükle",
+  "requestDetailTitle": "Talep Detayı",
+  "requestOfferCountBadge": "{count} gönüllü yardım teklif etti",
+  "@requestOfferCountBadge": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "requestShareButton": "Paylaş",
+  "requestReportButton": "Rapor Et",
+  "requestReportDialogTitle": "Talebi Rapor Et",
+  "requestReportReasonHint": "Ücret talebi, yanıltıcı bilgi vb. bildirin...",
+  "requestReportSubmittedMessage": "Bildiriminiz moderasyon ekibine iletildi.",
+  "requestOwnerActionsTitle": "Talep Yönetimi",
+  "requestMarkFulfilledButton": "Karşılandı İşaretle",
+  "requestExtendExpiryButton": "Süreyi Uzat (+24 Saat)",
+  "requestCancelButton": "Talebi İptal Et",
+  "requestStopNewOffersSwitch": "Yeterli kişi geldi (Yeni teklif almayı kapat)",
+  "requestShareCardTitle": "Acil Kan Çağrısı Paylaşım Kartı",
+  "requestShareCopyTextButton": "Hazır Metni ve Linki Kopyala",
+  "requestShareCopiedMessage": "Paylaşım metni ve bağlantı panoya kopyalandı.",
+  "matchingCanHelpButton": "Yardım Edebilirim",
+  "matchingCompatibilityIncompatible": "Kan grubunuz ({donorBlood}) bu talep ({recipientBlood} {product}) ile tıbbi olarak uyumlu görünmüyor.",
+  "@matchingCompatibilityIncompatible": {
+    "placeholders": {
+      "donorBlood": {
+        "type": "String"
+      },
+      "recipientBlood": {
+        "type": "String"
+      },
+      "product": {
+        "type": "String"
+      }
+    }
+  },
+  "matchingCompatibilityCompatible": "Kan grubunuz bu talep ile uyumludur.",
+  "matchingSelectTimeSlotTitle": "Tahmini Geliş Saatinizi Seçin (Koordinasyon)",
+  "matchingTimeSlotNow": "Hemen (0-1 Saat İçinde)",
+  "matchingTimeSlotMorning": "Sabah (09:00 - 12:00)",
+  "matchingTimeSlotAfternoon": "Öğleden Sonra (12:00 - 17:00)",
+  "matchingTimeSlotEvening": "Akşam (17:00 - 21:00)",
+  "matchingOfferPending": "Onay Bekleniyor (Talep sahibi onayladığında telefonlar açılır)",
+  "matchingOfferApproved": "Onaylandı — Karşılıklı İletişim Açık",
+  "matchingStepOnTheWay": "Yoldayım",
+  "matchingStepArrived": "Hastaneye Vardım",
+  "matchingStepDonated": "Bağışı Yaptım",
+  "matchingStepConfirmed": "Bağış Onaylandı (Geçmişe Kaydedildi)",
+  "matchingQuickMsg1": "Yola çıktım, yakında hastanedeyim.",
+  "matchingQuickMsg2": "Kan merkezindeyim, kayıt yaptırıyorum.",
+  "matchingQuickMsg3": "Bağış işlemini tamamladım, geçmiş olsun.",
+  "matchingCallButton": "Ara",
+  "matchingWhatsAppButton": "WhatsApp",
+  "matchingOwnerApproveDonorButton": "Bağışçıyı Onayla (İletişimi Aç)",
+  "matchingOwnerConfirmDonationButton": "Bağışı Onayla (Tamamlandı)",
+  "matchingOffersClosedNotice": "Talep sahibi yeterli bağışçıya ulaşıldığını belirttiği için yeni teklif alımı kapatılmıştır.",
+  "notificationsMarkAllRead": "Tümünü Okundu İşaretle",
+  "notificationsFilterUnreadOnly": "Yalnızca Okunmamışlar"
+}
