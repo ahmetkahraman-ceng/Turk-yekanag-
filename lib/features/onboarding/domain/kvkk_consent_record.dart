@@ -28,6 +28,9 @@ class KvkkConsentRecord {
   final DateTime consentedAt;
   final String policyVersion;
 
+  bool get allMandatoryConsentsGranted =>
+      healthDataConsent && locationConsent;
+
   bool get isFullyApproved =>
       healthDataConsent && locationConsent && notificationConsent;
 

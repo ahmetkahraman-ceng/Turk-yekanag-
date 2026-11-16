@@ -219,6 +219,8 @@ class _RequestsScreenState extends ConsumerState<RequestsScreen> {
                     AppSpacing.xs,
                   ),
                   child: _DonorQuickStatusBanner(
+                    // Mock: son bağış 66 gün önce, tam kan aralığı 90 gün (Remote Config).
+                    remainingDays: 24,
                     onTap: () => context.go(AppRoutes.donation),
                   ),
                 ),
@@ -312,14 +314,27 @@ class _RequestsScreenState extends ConsumerState<RequestsScreen> {
 }
 
 class _DonorQuickStatusBanner extends StatelessWidget {
-  const _DonorQuickStatusBanner({required this.onTap});
+  const _DonorQuickStatusBanner({
+    required this.remainingDays,
+    required this.onTap,
+  });
 
+  /// 0 veya negatifse kullanıcı bağışa uygundur.
+  final int remainingDays;
   final VoidCallback onTap;
+
+  // Görsel ilerleme için referans aralık; tıbbi karar için kullanılmaz.
+  static const int _referenceIntervalDays = 90;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
+    final isEligible = remainingDays <= 0;
+    final progress = isEligible
+        ? 1.0
+        : (1 - remainingDays / _referenceIntervalDays).clamp(0.05, 0.95);
+
     return AppCard(
       onTap: onTap,
       padding: const EdgeInsets.symmetric(
@@ -328,29 +343,22 @@ class _DonorQuickStatusBanner extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const CountdownRing(
-            progress: 1.0,
-            centerText: '✓',
+          CountdownRing(
+            progress: progress,
+            centerText: isEligible ? '✓' : '$remainingDays',
             size: 48,
             strokeWidth: 5,
-            isEligible: true,
+            isEligible: isEligible,
           ),
           const SizedBox(width: AppSpacing.sm),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.donorStatusEligibleCard,
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    color: AppColors.success,
-                  ),
-                ),
-                Text(
-                  l10n.donorStatusWaitingCard(24),
-                  style: theme.textTheme.labelSmall,
-                ),
-              ],
+            child: Text(
+              isEligible
+                  ? l10n.donorStatusEligibleCard
+                  : l10n.donorStatusWaitingCard(remainingDays),
+              style: theme.textTheme.titleSmall?.copyWith(
+                color: isEligible ? AppColors.success : null,
+              ),
             ),
           ),
           const Icon(Icons.chevron_right_rounded),

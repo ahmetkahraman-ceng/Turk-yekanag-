@@ -1,63 +1,87 @@
-# Türkiye Kan Ağı — Uygulama ve Doğrulama Raporu (`RAPOR.md`)
+# Türkiye Kan Ağı — UI Master Prompt Final Raporu (`RAPOR.md`)
 
-## 1. Yapılan İşler Özeti
+## 1. Tasarım Sistemi ve Mimari Özeti
 
-### Alt Aşama A: Bağış Takibi ve Sağlık (`lib/features/donation`)
-1. **Bağış Geçmişi (Manuel ve Talep Akışından Otomatik Ekleme)**
-   - [`DonationRecord`](lib/features/donation/domain/donation_record.dart): Tarih (`donatedAt`), yer (`place`), ürün tipi (`BloodProductType`) ve kaynak (`manual` / `request`) alanlarıyla modellendi.
-   - [`FirestoreDonationRepository`](lib/features/donation/data/firestore_donation_repository.dart): Manuel bağış ekleme (gelecek tarih ve boş yer doğrulamasıyla), manuel kaydı silme ve talep akışında onaylanan (`confirmed`) bağışları otomatik kaydetme işlevleri yazıldı.
-   - [`FirestoreMatchingRepository`](lib/features/matching/data/firestore_matching_repository.dart) ve [`onDonationOfferUpdated`](functions/src/index.ts): Talep sahibi bağışı onayladığında hem istemci önbelleğine hem de Cloud Function üzerinden `users/{donorUid}/donation_history/{requestId}` koleksiyonuna otomatik kayıt düşülür.
-   - [`FirestoreProfileRepository.exportUserDataJson`](lib/features/profile/data/firestore_profile_repository.dart): KVKK "Verilerimi İndir" JSON çıktısına `donationHistory`, `healthSurveys` ve `donationStatus` eklendi.
-2. **Sonraki Bağış Tarihi Hesaplama, Geri Sayım ve Otomatik Uygunluk Güncellemesi**
-   - [`RemoteConfigService`](lib/core/services/remote_config_service.dart) ve [`DonationIntervalPolicy`](lib/features/donation/domain/donation_interval_policy.dart): Tam kan erkek (`whole_blood_interval_days_male`: 90 gün), tam kan kadın (`whole_blood_interval_days_female`: 120 gün), trombosit/aferez (`apheresis_interval_hours`: 48 saat) ve plazma (`plasma_interval_days`: 14 gün) süreleri Remote Config'ten okunur. Kod içinde *"Kızılay ve Sağlık Bakanlığı güncel kurallarıyla doğrulanmalıdır"* yorumu eklendi.
-   - [`NextDonationCalculator`](lib/features/donation/domain/next_donation_calculator.dart): Saf Dart fonksiyonu olarak sonraki uygun bağış tarihini ve kalan gün/saat geri sayımını hesaplar.
-   - [`AvailabilityAutoUpdater`](lib/features/donation/domain/donation_availability_state.dart) ve [`DonationAvailabilitySync`](lib/features/donation/data/donation_availability_sync.dart): Bekleme süresindeyken `"Bağışa uygunum"` (`isAvailableToDonate`) anahtarını otomatik kapatır (`autoPaused = true`), süre dolduğunda tekrar açar.
-3. **Bağışa Uygunluk Ön Kontrol Anketi (Remote Config / JSON)**
-   - [`assets/data/eligibility_survey.json`](assets/data/eligibility_survey.json) ve [`EligibilityQuestionnaireSource`](lib/features/donation/data/eligibility_questionnaire_source.dart): Hastalık, ilaç, dövme/piercing, ameliyat, hamilelik/emzirme, seyahat ve yakın zamanda aşı/diş tedavisi kategorilerinde TR/EN sorular önce Remote Config (`eligibility_survey_json`), boşsa yerel JSON asset üzerinden yüklenir.
-   - [`EligibilitySurveyEvaluator`](lib/features/donation/domain/eligibility_survey.dart) ve [`EligibilitySurveyScreen`](lib/features/donation/presentation/eligibility_survey_screen.dart): Sonucu `"Uygun Görünüyor"`, `"Emin Değilim"` veya `"Uygun Görünmüyor"` olarak hesaplar; kesin tıbbi karar vermez ve *"Karar kan merkezindeki sağlık personelindedir"* uyarısını gösterir.
-4. **Bağış Öncesi ve Sonrası Öneriler Ekranı**
-   - [`DonationTipsScreen`](lib/features/donation/presentation/donation_tips_screen.dart): Bağış öncesi ve sonrası dikkat edilmesi gereken önerileri ve Kızılay/Sağlık Bakanlığı doğrulama notunu içerir.
-5. **Hatırlatıcılar (`flutter_local_notifications` ve Takvime Ekleme)**
-   - [`LocalNotificationReminderService`](lib/features/donation/data/local_notification_reminder_service.dart): Sonraki uygun bağış tarihinde yerel saatte (`donation_reminder_hour`) *"Tekrar Bağış Yapabilirsiniz"* bildirimi planlar.
-   - [`DeviceCalendarExportService`](lib/features/donation/data/local_notification_reminder_service.dart): `add_2_calendar` ile sonraki uygun bağış gününü cihaz takvimine ekler.
-6. **KVKK Özel Nitelikli Sağlık Verisi Güvenliği (`firestore.rules` ve Emulator Testleri)**
-   - [`firestore.rules`](firestore.rules): `users/{userId}/donation_history` ve `users/{userId}/health_surveys` koleksiyonları yalnızca hesap sahibi (`isOwner(userId)`) tarafından okunabilir; yazma işlemi için `private_data/consents.healthDataConsent == true` açık rıza şartı ve şema doğrulaması zorunludur. İstemci `source == 'request'` kaydı sahteleyemez ve silemez.
-   - [`test/firestore_rules/donation_rules_test.js`](test/firestore_rules/donation_rules_test.js): Firestore Emulator üzerinde açık rıza, sahiplik ve talep kaydı bütünlüğü test edildi.
+### Tasarım Değerleri (Token Sınıfları — `lib/core/theme/`)
+- **Renkler ([`AppColors`](lib/core/theme/app_colors.dart))**:
+  - Aydınlık: `primary: #D32F2F`, `primaryDark: #9A0007`, `primaryLight: #FF6659`, `background: #FFF8F6`, `surface: #FFFFFF`, `textPrimary: #2B1B1B`, `textSecondary: #6B5B5B`, `success: #2E7D32`, `warning: #EF6C00`, `info: #1565C0`, `error: #B00020`.
+  - Karanlık: `background: #1A0E0E`, `surface: #261616`, `primary: #EF5350`, `textPrimary: #F5E9E7`.
+- **Tipografi ([`AppTypography`](lib/core/theme/app_typography.dart))**:
+  - Yerel gömülü `assets/fonts/Nunito-Variable.ttf` (offline çalışır). Başlıklar `700-800`, gövde `400-600`, minimum gövde `16sp`.
+- **Boşluk & Köşe Yuvarlaklığı ([`AppSpacing`](lib/core/theme/app_spacing.dart), [`AppRadius`](lib/core/theme/app_radius.dart))**:
+  - Boşluk: `4 / 8 / 12 / 16 / 24 / 32`.
+  - Köşe: Kart `20`, Buton `16`, Çip `999`, Bottom Sheet üst köşe `28`.
+  - Dokunma alanı minimum `48dp`, birincil buton yüksekliği `52dp`.
+- **Hareket ([`AppMotion`](lib/core/theme/app_motion.dart))**:
+  - Süreler `150ms / 250ms / 400ms`, eğriler `Curves.easeOutCubic` ve `Curves.easeInOutCubic`. `MediaQuery.disableAnimations` açıkken animasyonlar devre dışı bırakılır.
 
 ---
 
-## 2. Varsayımlar
+## 2. Aşamalar Bazında Tamamlanan İşler (Aşama 1 – Aşama 9)
 
-1. **Kesilen Kullanıcı Mesajı (A.6 ve Alt Aşama B–E)**:
-   - Gönderilen mesaj `6. Bu veriler özel nitelikli sağlık verisidir: Firestore` ifadesinde kesilmiştir; Alt Aşama B, C, D ve E maddeleri mesajda yer almamaktadır.
-   - **A.6 için varsayım**: `AGENTS.md` içindeki KVKK ve Firestore güvenlik kuralları maddesi doğrultusunda `donation_history` ve `health_surveys` alt koleksiyonlarının yalnızca sahibi tarafından okunabilmesi, açık rıza (`healthDataConsent == true`) olmadan yazılamaması ve emulator testlerinin yazılması olarak tamamlanmıştır.
-   - **Alt Aşama B–E için varsayım**: `AGENTS.md` (*"Bir aşamada sadece o aşamanın kapsamını yap, sonrakini önden yazma"*) kuralı gereği metni bulunmayan B–E alt aşamaları için varsayımsal modül uydurulmamıştır. B–E maddelerinin metni paylaşıldığında kesintisiz olarak uygulanmaya hazırdır.
-2. **Ürün Tipi ve Cinsiyete Göre Bekleme Süreleri**:
-   - Eritrosit süspansiyonu (`erythrocyte`) bağışı, tam kan (`whole_blood`) ile aynı bekleme süresine tabi tutulmuştur.
-   - Kullanıcının cinsiyeti `unspecified` ise ihtiyatlı yaklaşım olarak daha uzun olan kadın tam kan bekleme süresi (varsayılan 120 gün) uygulanır.
-   - Geçmişte birden fazla bağış varsa her birinin `donatedAt + beklemeSüresi` değerleri arasından en ileri tarih (`max`) sonraki uygun bağış tarihi olarak kabul edilir.
-3. **Otomatik Uygunluk Anahtarı Davranışı**:
-   - Kullanıcı `"Bağışa uygunum"` anahtarını kendi isteğiyle kapattıysa (`autoPaused == false`), bekleme süresi dolmuş olsa dahi sistem anahtarı kullanıcı adına zorla açmaz; yalnızca sistemin bekleme süresi nedeniyle otomatik kapattığı (`autoPaused == true`) anahtarlar süre dolunca otomatik açılır.
+### Aşama 1: Altyapı, Bileşen Kitaplığı, Logo, Splash, Ana İskelet, Mock Altyapısı
+- **Marka & Logo**: [`BloodLogo`](lib/core/branding/blood_logo.dart) (`CustomPainter`, kübik bezier damla, dikey gradyan, kalp biçimli 3 düğümlü ağ çizgileri, `size`, `progress`, `monochrome`), `assets/branding/logo.svg` ve `assets/branding/logo_1024.png`.
+- **Ortak Bileşenler (`lib/core/widgets/`)**: [`AppButton`](lib/core/widgets/app_button.dart), [`AppTextField`](lib/core/widgets/app_text_field.dart), [`AppSearchField`](lib/core/widgets/app_text_field.dart), [`AppCard`](lib/core/widgets/app_card.dart), [`AppChip`](lib/core/widgets/app_chip.dart), [`SectionHeader`](lib/core/widgets/section_header.dart), [`BloodTypeBadge`](lib/core/widgets/blood_type_badge.dart), [`UrgencyTag`](lib/core/widgets/status_and_urgency_tags.dart), [`StatusTag`](lib/core/widgets/status_and_urgency_tags.dart), [`VerifiedBadge`](lib/core/widgets/status_and_urgency_tags.dart), [`AppBottomSheet`](lib/core/widgets/app_overlays.dart), [`ConfirmSheet`](lib/core/widgets/app_overlays.dart), [`StepIndicator`](lib/core/widgets/step_and_progress.dart), [`ProgressDots`](lib/core/widgets/step_and_progress.dart), [`SkeletonBox`](lib/core/widgets/skeleton_widgets.dart), [`EmptyState`](lib/core/widgets/empty_state.dart), [`ErrorState`](lib/core/widgets/error_state.dart), [`OfflineBanner`](lib/core/widgets/offline_banner.dart), [`AsyncValueView`](lib/core/widgets/async_value_view.dart), [`SwitchTile`](lib/core/widgets/tiles_and_selection_sheet.dart), [`RadioTile`](lib/core/widgets/tiles_and_selection_sheet.dart), [`SelectionSheet`](lib/core/widgets/tiles_and_selection_sheet.dart), [`CountdownRing`](lib/core/widgets/countdown_ring.dart), [`ConfettiOverlay`](lib/core/widgets/confetti_overlay.dart) ve [`DesignGalleryScreen`](lib/core/widgets/design_gallery_screen.dart) (`/debug/gallery`).
+- **Animasyonlu Splash**: [`SplashScreen`](lib/features/splash/presentation/splash_screen.dart) (~2.6 sn tek `AnimationController`, damla düşüşü, dalga halkası, ağ çizimi, çift kalp atışı, metin kayması, `disableAnimations` desteği).
+- **Ana İskelet & Mock Veri**: [`MainScaffold`](lib/core/router/main_scaffold.dart) (5 sekmeli Material 3 `NavigationBar`, okunmamış bildirim rozeti, sekme koruma) ve [`MockData`](lib/core/mock/mock_data.dart) / [`FakeRequestRepository`](lib/core/mock/fake_repositories.dart) (32 gerçekçi talep, 10 bağış merkezi, 15 bildirim).
+
+### Aşama 2: Onboarding, Giriş, KVKK, Profil Sihirbazı
+- [`OnboardingScreen`](lib/features/onboarding/presentation/onboarding_screen.dart) ve [`OnboardingIllustration`](lib/features/onboarding/presentation/widgets/onboarding_illustrations.dart) (4 slayt `CustomPainter` illüstrasyon, parallax, `ProgressDots`).
+- [`KvkkConsentScreen`](lib/features/onboarding/presentation/kvkk_consent_screen.dart) (zorunlu sağlık & konum rızası onaylanmadan "Devam" pasif).
+- [`LoginScreen`](lib/features/auth/presentation/login_screen.dart) (`+90` sabit, `5XX XXX XX XX` maskeli telefon, Google/Apple giriş butonları) ve [`OtpVerificationScreen`](lib/features/auth/presentation/otp_verification_screen.dart) (6 hane, 45 sn geri sayım, hatalı kodda sallanma animasyonu).
+- [`ProfileSetupWizardScreen`](lib/features/profile/presentation/profile_setup_wizard_screen.dart) (4 adım, 8 kan grubu kartı + "Bilmiyorum", 81 il/ilçe aramalı seçici, konum izni açıklama ve konfeti kutlama ekranı).
+
+### Aşama 3: Talepler, Kart, Detay, Talep Açma Sihirbazı
+- [`RequestsScreen`](lib/features/requests/presentation/requests_screen.dart) (`CustomScrollView` + `SliverAppBar`, `CountdownRing` durum kartı, yatay filtre çipleri, kaydırırken küçülen "Kan İstiyorum" FAB).
+- [`RequestCard`](lib/features/requests/presentation/widgets/request_card.dart), [`RequestFilterSheet`](lib/features/requests/presentation/widgets/request_filter_sheet.dart), [`RequestDetailScreen`](lib/features/requests/presentation/request_detail_screen.dart), [`ShareRequestCardDialog`](lib/features/requests/presentation/share_request_card_dialog.dart) (`RepaintBoundary` + PNG paylaşım kartı) ve [`CreateRequestWizardScreen`](lib/features/requests/presentation/create_request_wizard_screen.dart) (4 adım, para/ücret filtresi, taslak koruma).
+
+### Aşama 4: Bağışçı Akışı, Bildirimler, İletişim, Kutlama
+- [`DonorTrackingScreen`](lib/features/matching/presentation/screens/donor_tracking_screen.dart) (5 adımlı `StepIndicator`, hızlı mesaj çipleri, Ara/WhatsApp/Yol tarifi).
+- [`DonorOfferPanel`](lib/features/matching/presentation/donor_offer_panel.dart), [`ThankYouSheet`](lib/features/matching/presentation/widgets/thank_you_sheet.dart), [`DonationCelebrationScreen`](lib/features/matching/presentation/screens/donation_celebration_screen.dart) (`ConfettiOverlay` + kalp atışı), [`NotificationsScreen`](lib/features/notifications/presentation/notifications_screen.dart) (Bugün/Daha önce gruplu, `Dismissible`, bildirim izni akışı) ve [`UrgentInAppBanner`](lib/features/notifications/presentation/widgets/urgent_in_app_banner.dart).
+
+### Aşama 5: Harita ve Bağış Merkezleri
+- [`MapScreen`](lib/features/map/presentation/map_screen.dart) ve [`MapCanvasAndSheets`](lib/features/map/presentation/widgets/map_canvas_and_sheets.dart) (Talepler/Bağış merkezleri/Kan grubum çipleri, kümeleme, gezici kan bağış aracı "Bugün burada" etiketi, liste/harita geçişi, konum izni kapalı fallback durumu, Google/Yandex/Apple yol tarifi seçici).
+
+### Aşama 6: Bağış Sekmesi, Uygunluk Anketi, Rozetler
+- [`DonationScreen`](lib/features/donation/presentation/donation_screen.dart), [`DonationCountdownCard`](lib/features/donation/presentation/donation_countdown_card.dart), [`BadgeShowcase`](lib/features/donation/presentation/widgets/badge_showcase.dart), [`EligibilitySurveyScreen`](lib/features/donation/presentation/eligibility_survey_screen.dart) ("Karar kan merkezindeki sağlık personelindedir" sabit uyarılı) ve [`DonationTipsScreen`](lib/features/donation/presentation/donation_tips_screen.dart).
+
+### Aşama 7: Profil, Ayarlar, Topluluk, Kurumsal, İçerik
+- [`ProfileScreen`](lib/features/profile/presentation/profile_screen.dart) (Avatar, doğrulama rozeti, uygunluk anahtarı, seyahat modu aktif bandı, tema/dil seçimi, JSON veri indirme, "SİL" yazarak iki adımlı hesap silme).
+- [`CommunitiesScreen`](lib/features/profile/presentation/screens/communities_screen.dart), [`InstitutionsScreen`](lib/features/profile/presentation/screens/institutions_screen.dart), [`BloodCompatibilityMatrixScreen`](lib/features/profile/presentation/screens/blood_compatibility_matrix_screen.dart), [`FaqScreen`](lib/features/profile/presentation/screens/faq_and_guides_screen.dart), [`EmergencyGuideScreen`](lib/features/profile/presentation/screens/faq_and_guides_screen.dart), [`LeaderboardScreen`](lib/features/profile/presentation/screens/leaderboard_invite_about_screens.dart), [`InviteFriendScreen`](lib/features/profile/presentation/screens/leaderboard_invite_about_screens.dart), [`AboutAndFeedbackScreen`](lib/features/profile/presentation/screens/leaderboard_invite_about_screens.dart) ve [`MaintenanceScreen`](lib/features/profile/presentation/screens/leaderboard_invite_about_screens.dart).
+
+### Aşama 8: Admin Web Paneli UI (`/admin`)
+- [`AdminWebScreen`](lib/features/admin/presentation/admin_web_screen.dart) ve [`AdminChartsRow`](lib/features/admin/presentation/widgets/admin_charts.dart) (Rol kontrollü giriş, 8 sekmeli `NavigationRail`, istatistik kartları, `CustomPainter` il bazlı sütun ve 30 gün çizgi grafikleri, rapor kuyruğu Onayla/Reddet/Kısıtla aksiyonları ve `A`/`R` klavye kısayolları).
+
+### Aşama 9: Cila, Hareket, Erişilebilirlik, Performans ve Canlı Emülatör Doğrulaması
+- Android emülatör (`emulator-5554`) üzerinde uygulama derlenip çalıştırıldı; sekmeler (Talepler, Harita, Bağış, Bildirimler, Profil) canlı olarak gezilerek taşma/hata olmadığı doğrulandı.
+- Windows'ta proje klasör adındaki Türkçe karakter (`turkiye-kan-agı`) nedeniyle Android `aapt` aracının APK manifest'ini okuyamaması sorunu `subst K:` sürücü eşlemesi ve `gradle.properties` / `android/build.gradle.kts` (`compileSdk 36` + `kotlin.incremental=false`) yapılandırmasıyla çözüldü.
 
 ---
 
-## 3. Test ve Analiz Sonuçları
+## 3. Analiz ve Test Sonuçları
 
-- **Statik Analiz (`dart analyze --fatal-infos`)**: `No issues found!` (0 hata, 0 uyarı)
-- **Birim ve Widget Testleri (`flutter test`)**: Tüm testler (`donation_domain_and_sync_test.dart`, `donation_screens_widget_test.dart` ve önceki aşama testleri dahil) başarılı.
-- **Firestore Güvenlik Kuralları Emulator Testleri (`firebase emulators:exec --only firestore "npm --prefix test/firestore_rules test"`)**: 2 suite, 7 test (`firestore_rules_test.js` + `donation_rules_test.js`) tamamı başarılı (`pass 7, fail 0`).
+- **`dart analyze --fatal-infos`**: `No issues found!` (0 hata, 0 uyarı, 0 bilgi).
+- **`flutter test`**: **52/52 test başarılı (`All tests passed!`)**.
+  - [`core_widgets_test.dart`](test/core/widgets/core_widgets_test.dart)
+  - [`onboarding_and_kvkk_test.dart`](test/features/onboarding/onboarding_and_kvkk_test.dart)
+  - [`profile_and_wizard_test.dart`](test/features/profile/profile_and_wizard_test.dart)
+  - [`prohibited_content_and_requests_test.dart`](test/features/requests/prohibited_content_and_requests_test.dart)
+  - [`blood_compatibility_and_eligibility_test.dart`](test/features/matching/blood_compatibility_and_eligibility_test.dart)
+  - [`donation_domain_and_sync_test.dart`](test/features/donation/donation_domain_and_sync_test.dart)
+  - [`donation_screens_widget_test.dart`](test/features/donation/donation_screens_widget_test.dart)
+  - [`navigation_and_force_update_test.dart`](test/navigation_and_force_update_test.dart)
+  - [`ui_master_all_stages_test.dart`](test/features/ui_master_all_stages_test.dart)
 
 ---
 
-## 4. TODO Listesi ve Manuel Yapılması Gereken İşler
+## 4. Varsayımlar, Bilinen Kusurlar ve TODO Listesi
 
-### TODO Listesi
-- Kullanıcı mesajında kesilen **Alt Aşama B, C, D, E** gereksinim metinleri paylaşıldığında ilgili alt aşamalar uygulanacaktır (mevcut kodda çözülmemiş hata veya yarım bırakılmış TODO bulunmamaktadır).
+### Varsayımlar
+1. Harita ekranında Google Maps API anahtarı bulunmayan ortamlarda çökme olmaması için etkileşimli `CustomPainter` tabanlı harita tuvali, pin kümeleme ve gezici kan bağışı aracı katmanı varsayılan olarak aktif çalışır.
+2. Gönüllü Onur Tablosu (`LeaderboardScreen`) yarış algısı yaratmamak adına varsayılan olarak kapalı (`opt-in = false`) gelir; kullanıcı açıkça onayladığında listelenir.
 
-### Manuel Yapılması Gereken İşler (Canlı Ortam / Prod Hazırlığı)
-1. **Firebase Console & Remote Config**:
-   - Canlı Firebase projesinde (`turkiye-kan-agi-prod`) Remote Config parametrelerini (`whole_blood_interval_days_male`, `whole_blood_interval_days_female`, `apheresis_interval_hours`, `plasma_interval_days`, `eligibility_survey_json`, `donation_reminder_hour`) Kızılay ve Sağlık Bakanlığı güncel rehberlerine göre doğrulayarak yayınlayın.
-2. **Android / iOS Bildirim ve Takvim İzinleri**:
-   - Android 13+ için `POST_NOTIFICATIONS` ve iOS için yerel bildirim/takvim izin metinlerini (`Info.plist` içinde `NSCalendarsUsageDescription`) mağaza gönderimi öncesinde doğrulayın.
-3. **Cloud Functions & Kuralların Dağıtımı**:
-   - `firebase deploy --only firestore:rules,storage:rules,functions` komutu ile güncellenen güvenlik kurallarını ve `onDonationOfferUpdated` fonksiyonunu canlı ortama dağıtın.
+### Bilinen Kusurlar / Ortam Notları
+- Windows üzerinde proje dizin yolunda ASCII dışı karakter (`ı`) bulunduğunda Android SDK `aapt.exe` aracı `Illegal byte sequence` hatası vermektedir. `subst K: "C:\Users\MSI\Documents\antigravity\turkiye-kan-agı"` ile `K:\` üzerinden çalıştırıldığında sorunsuz derlenip emülatöre yüklenmektedir.
+
+### TODO Listesi (Sonraki Backend Entegrasyon Görevleri İçin)
+- Canlı Firebase projesinde (`turkiye-kan-agi-prod`) gerçek API anahtarlarının ve Google Maps Android/iOS API anahtarlarının `.env` / manifest dosyalarına tanımlanması.

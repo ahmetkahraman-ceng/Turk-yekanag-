@@ -93,7 +93,10 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.warning_amber_rounded, color: AppColors.warning),
+                  const Icon(
+                    Icons.warning_amber_rounded,
+                    color: AppColors.warning,
+                  ),
                   const SizedBox(width: AppSpacing.xs),
                   Expanded(
                     child: Text(
@@ -135,36 +138,61 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                       title: l10n.notificationsEmptyTitle,
                       subtitle: l10n.notificationsEmptySubtitle,
                     )
-                  : ListView(
+                  : ListView.builder(
                       padding: const EdgeInsets.all(AppSpacing.md),
-                      children: [
-                        if (todayList.isNotEmpty) ...[
-                          SectionHeader(title: l10n.notificationsGroupToday),
-                          for (final item in todayList)
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                bottom: AppSpacing.sm,
-                              ),
-                              child: _NotificationRowTile(item: item),
-                            ),
-                        ],
-                        if (earlierList.isNotEmpty) ...[
-                          SectionHeader(title: l10n.notificationsGroupEarlier),
-                          for (final item in earlierList)
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                bottom: AppSpacing.sm,
-                              ),
-                              child: _NotificationRowTile(item: item),
-                            ),
-                        ],
-                      ],
+                      itemCount: _buildSectionItems(
+                        todayList,
+                        earlierList,
+                        l10n.notificationsGroupToday,
+                        l10n.notificationsGroupEarlier,
+                      ).length,
+                      itemBuilder: (context, index) {
+                        final entries = _buildSectionItems(
+                          todayList,
+                          earlierList,
+                          l10n.notificationsGroupToday,
+                          l10n.notificationsGroupEarlier,
+                        );
+                        return entries[index];
+                      },
                     ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  List<Widget> _buildSectionItems(
+    List<AppNotification> todayList,
+    List<AppNotification> earlierList,
+    String todayTitle,
+    String earlierTitle,
+  ) {
+    final items = <Widget>[];
+    if (todayList.isNotEmpty) {
+      items.add(SectionHeader(title: todayTitle));
+      for (final item in todayList) {
+        items.add(
+          Padding(
+            padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+            child: _NotificationRowTile(item: item),
+          ),
+        );
+      }
+    }
+    if (earlierList.isNotEmpty) {
+      items.add(SectionHeader(title: earlierTitle));
+      for (final item in earlierList) {
+        items.add(
+          Padding(
+            padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+            child: _NotificationRowTile(item: item),
+          ),
+        );
+      }
+    }
+    return items;
   }
 }
 

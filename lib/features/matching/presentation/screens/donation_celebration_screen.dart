@@ -16,7 +16,7 @@ import 'package:turkiye_kan_agi/core/widgets/confetti_overlay.dart';
 /// Kutlama ekranı:
 /// Tam ekran, kalp atışı animasyonlu damla, ConfettiOverlay,
 /// "Bir hayata dokundun", kazanılan rozet kartı, "Paylaş" ve "Kapat", haptic.
-/// disableAnimations açıksa statik.
+/// `disableAnimations` açıkken statik çalışır.
 class DonationCelebrationScreen extends StatefulWidget {
   const DonationCelebrationScreen({super.key});
 
@@ -34,17 +34,21 @@ class _DonationCelebrationScreenState extends State<DonationCelebrationScreen>
     super.initState();
     _pulseController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 900),
+      duration: const Duration(milliseconds: 800),
       lowerBound: 1.0,
       upperBound: 1.08,
     );
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      HapticFeedback.mediumImpact();
-      if (!AppMotion.isAnimationsDisabled(context)) {
-        _pulseController.repeat(reverse: true);
-      }
-    });
+    HapticFeedback.mediumImpact();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (AppMotion.isAnimationsDisabled(context)) {
+      _pulseController.stop();
+    } else if (!_pulseController.isAnimating) {
+      _pulseController.repeat(reverse: true);
+    }
   }
 
   @override
@@ -63,86 +67,88 @@ class _DonationCelebrationScreenState extends State<DonationCelebrationScreen>
       body: ConfettiOverlay(
         child: SafeArea(
           child: ResponsiveConstrainedBox(
-            padding: const EdgeInsets.all(AppSpacing.xl),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Spacer(),
-                Center(
-                  child: disableAnim
-                      ? const BloodLogo(size: 112)
-                      : ScaleTransition(
-                          scale: _pulseController,
-                          child: const BloodLogo(size: 112),
-                        ),
-                ),
-                const SizedBox(height: AppSpacing.xl),
-                Text(
-                  l10n.celebrationTitle,
-                  style: theme.textTheme.headlineLarge,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                Text(
-                  l10n.celebrationSubtitle,
-                  style: theme.textTheme.bodyLarge,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: AppSpacing.xl),
-                AppCard(
-                  backgroundColor: theme.colorScheme.primaryContainer,
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.workspace_premium_rounded,
-                        size: 40,
-                        color: AppColors.primary,
-                      ),
-                      const SizedBox(width: AppSpacing.md),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              l10n.celebrationBadgeEarned,
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                color: theme.colorScheme.onPrimaryContainer,
-                              ),
-                            ),
-                            Text(
-                              l10n.donationLivesSavedSubtitle,
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: theme.colorScheme.onPrimaryContainer,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(AppSpacing.lg),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: AppSpacing.md),
+                  Center(
+                    child: disableAnim
+                        ? const BloodLogo(size: 96)
+                        : ScaleTransition(
+                            scale: _pulseController,
+                            child: const BloodLogo(size: 96),
+                          ),
                   ),
-                ),
-                const Spacer(),
-                AppButton(
-                  key: const Key('celebration_share_button'),
-                  label: l10n.requestShareButton,
-                  icon: Icons.share_rounded,
-                  enableHaptic: true,
-                  onPressed: () {
-                    AppSnackbar.show(
-                      context,
-                      message: l10n.requestShareCopiedMessage,
-                    );
-                  },
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                AppButton(
-                  key: const Key('celebration_close_button'),
-                  label: l10n.commonClose,
-                  variant: AppButtonVariant.secondary,
-                  onPressed: () => context.go(AppRoutes.donation),
-                ),
-              ],
+                  const SizedBox(height: AppSpacing.lg),
+                  Text(
+                    l10n.celebrationTitle,
+                    style: theme.textTheme.headlineLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  Text(
+                    l10n.celebrationSubtitle,
+                    style: theme.textTheme.bodyLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: AppSpacing.lg),
+                  AppCard(
+                    backgroundColor: theme.colorScheme.primaryContainer,
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.workspace_premium_rounded,
+                          size: 40,
+                          color: AppColors.primary,
+                        ),
+                        const SizedBox(width: AppSpacing.md),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                l10n.celebrationBadgeEarned,
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  color: theme.colorScheme.onPrimaryContainer,
+                                ),
+                              ),
+                              Text(
+                                l10n.donationLivesSavedSubtitle,
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: theme.colorScheme.onPrimaryContainer,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.xl),
+                  AppButton(
+                    key: const Key('celebration_share_button'),
+                    label: l10n.requestShareButton,
+                    icon: Icons.share_rounded,
+                    enableHaptic: true,
+                    onPressed: () {
+                      AppSnackbar.show(
+                        context,
+                        message: l10n.requestShareCopiedMessage,
+                      );
+                    },
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  AppButton(
+                    key: const Key('celebration_close_button'),
+                    label: l10n.commonClose,
+                    variant: AppButtonVariant.secondary,
+                    onPressed: () => context.go(AppRoutes.donation),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

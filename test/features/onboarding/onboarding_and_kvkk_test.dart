@@ -4,22 +4,24 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:turkiye_kan_agi/core/network/connectivity_service.dart';
 import 'package:turkiye_kan_agi/features/auth/presentation/login_screen.dart';
 import 'package:turkiye_kan_agi/features/auth/presentation/otp_verification_screen.dart';
+import 'package:turkiye_kan_agi/features/onboarding/domain/kvkk_consent_record.dart';
 import 'package:turkiye_kan_agi/features/onboarding/presentation/kvkk_consent_screen.dart';
 import 'package:turkiye_kan_agi/features/onboarding/presentation/onboarding_screen.dart';
+import 'package:turkiye_kan_agi/features/onboarding/presentation/onboarding_state_provider.dart';
 
 import '../../helpers/test_app_wrapper.dart';
 
 class _OnlineConnectivityService implements ConnectivityService {
   @override
-  Future<bool> checkIsConnected() async => true;
+  Stream<bool> get onConnectivityChanged => Stream<bool>.value(true);
 
   @override
-  Stream<bool> get onConnectivityChanged => const Stream<bool>.empty();
+  Future<bool> checkIsConnected() async => true;
 }
 
 void main() {
   group('Aşama 2: Onboarding, KVKK, Giriş ve OTP Testleri', () {
-    testWidgets('OnboardingScreen 4 slayt içerir ve İleri/Başla ile geçiş yapar', (
+    testWidgets('OnboardingScreen 4 slaytı gösterir ve ileri geçiş yapar', (
       tester,
     ) async {
       await tester.pumpWidget(
@@ -34,8 +36,9 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      // 1. Slayt
       expect(find.text('Bir damla, bir umut'), findsOneWidget);
+      expect(find.text('Atla'), findsOneWidget);
+      expect(find.text('İleri'), findsOneWidget);
 
       // 2. Slayta geç
       await tester.tap(find.text('İleri'));
@@ -74,7 +77,10 @@ void main() {
         );
         await tester.pumpAndSettle();
 
-        final buttonFinder = find.widgetWithText(ElevatedButton, 'Devam');
+        final buttonFinder = find.descendant(
+          of: find.byKey(const Key('kvkk_continue_button')),
+          matching: find.byType(ElevatedButton),
+        );
         expect(tester.widget<ElevatedButton>(buttonFinder).onPressed, isNull);
 
         // 1. Zorunlu Sağlık Verisi rızasını işaretle
@@ -122,20 +128,21 @@ void main() {
         );
         await tester.pumpAndSettle();
 
-        expect(find.text('Kod Gönder'), findsOneWidget);
-        await tester.enterText(
-          find.byKey(const Key('phone_input_field')),
-          '5321112233',
-        );
-        await tester.pump();
-        expect(find.text('532 111 22 33'), findsOneWidget);
+        final phoneField = find.byKey(const Key('phone_input_field'));
+        expect(phoneField, findsOneWidget);
 
+        await tester.enterText(phoneField, '5321234567');
+        await tester.pump();
+
+        expect(find.text('532 123 45 67'), findsOneWidget);
+
+        // OTP ekranını kontrol et
         await tester.pumpWidget(
           buildTestableWidget(
             const OtpVerificationScreen(
               args: OtpRouteArgs(
-                phoneNumber: '+905321112233',
-                verificationId: 'test-ver-id',
+                phoneNumber: '+905321234567',
+                verificationId: 'test-verif-id',
               ),
             ),
             overrides: [
@@ -146,8 +153,27 @@ void main() {
           ),
         );
         await tester.pump();
-        expect(find.textContaining('45 sn'), findsOneWidget);
+
+        expect(find.text('Kodu tekrar gönder (45 sn)'), findsOneWidget);
       },
     );
+
+    test('KvkkConsentNotifier onay kaydını policyVersion ile oluşturur', () {
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
+
+      expect(container.read(kvkkConsentProvider), isNull);
+
+      final fixedTime = DateTime.utc(2026, 3, 21, 12);
+      container
+          .read(kvkkConsentProvider.notifier)
+          .approveAll(timestamp: fixedTime);
+
+      final record = container.read(kvkkConsentProvider);
+      expect(record, isNotNull);
+      expect(record!.allMandatoryConsentsGranted, isTrue);
+      expect(record.policyVersion, KvkkConsentRecord.currentPolicyVersion);
+      expect(record.toJson()['consentedAt'], fixedTime.toIso8601String());
+    });
   });
 }

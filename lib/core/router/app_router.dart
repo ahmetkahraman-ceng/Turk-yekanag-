@@ -7,6 +7,7 @@ import 'package:turkiye_kan_agi/core/router/main_scaffold.dart';
 import 'package:turkiye_kan_agi/core/router/not_found_screen.dart';
 import 'package:turkiye_kan_agi/core/services/app_version_service.dart';
 import 'package:turkiye_kan_agi/core/widgets/design_gallery_screen.dart';
+import 'package:turkiye_kan_agi/features/admin/presentation/admin_web_screen.dart';
 import 'package:turkiye_kan_agi/features/auth/presentation/login_screen.dart';
 import 'package:turkiye_kan_agi/features/auth/presentation/otp_verification_screen.dart';
 import 'package:turkiye_kan_agi/features/donation/presentation/donation_screen.dart';
@@ -23,6 +24,11 @@ import 'package:turkiye_kan_agi/features/onboarding/presentation/onboarding_scre
 import 'package:turkiye_kan_agi/features/profile/presentation/notification_preferences_screen.dart';
 import 'package:turkiye_kan_agi/features/profile/presentation/profile_screen.dart';
 import 'package:turkiye_kan_agi/features/profile/presentation/profile_setup_wizard_screen.dart';
+import 'package:turkiye_kan_agi/features/profile/presentation/screens/blood_compatibility_matrix_screen.dart';
+import 'package:turkiye_kan_agi/features/profile/presentation/screens/communities_screen.dart';
+import 'package:turkiye_kan_agi/features/profile/presentation/screens/faq_and_guides_screen.dart';
+import 'package:turkiye_kan_agi/features/profile/presentation/screens/institutions_screen.dart';
+import 'package:turkiye_kan_agi/features/profile/presentation/screens/leaderboard_invite_about_screens.dart';
 import 'package:turkiye_kan_agi/features/profile/presentation/unknown_blood_type_info_screen.dart';
 import 'package:turkiye_kan_agi/features/requests/domain/blood_request.dart';
 import 'package:turkiye_kan_agi/features/requests/presentation/create_request_wizard_screen.dart';
@@ -43,6 +49,7 @@ const Set<String> _publicAuthRoutes = <String>{
   AppRoutes.unknownBloodTypeGuide,
   AppRoutes.designGallery,
   AppRoutes.admin,
+  AppRoutes.maintenance,
 };
 
 /// Auth guard, Force Update guard, Deep Link (`/requests/:requestId`) ve 404 destekli GoRouter sağlayıcısı.
@@ -147,6 +154,46 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.celebration,
         builder: (context, state) => const DonationCelebrationScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.communities,
+        builder: (context, state) => const CommunitiesScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.institutions,
+        builder: (context, state) => const InstitutionsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.bloodMatrix,
+        builder: (context, state) => const BloodCompatibilityMatrixScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.faq,
+        builder: (context, state) => const FaqScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.emergencyGuide,
+        builder: (context, state) => const EmergencyGuideScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.leaderboard,
+        builder: (context, state) => const LeaderboardScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.invite,
+        builder: (context, state) => const InviteFriendScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.about,
+        builder: (context, state) => const AboutAndFeedbackScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.maintenance,
+        builder: (context, state) => const MaintenanceScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.admin,
+        builder: (context, state) => const AdminWebScreen(),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {

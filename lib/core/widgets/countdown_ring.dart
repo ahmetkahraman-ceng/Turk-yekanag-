@@ -54,31 +54,34 @@ class CountdownRing extends StatelessWidget {
           },
           child: Center(
             child: Padding(
-              padding: EdgeInsets.all(strokeWidth + 6),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (isEligible)
-                    const Icon(
-                      Icons.check_circle_rounded,
-                      color: AppColors.success,
-                      size: 24,
-                    ),
-                  Text(
-                    centerText,
-                    textAlign: TextAlign.center,
-                    style: (size >= 110
-                            ? Theme.of(context).textTheme.titleMedium
-                            : Theme.of(context).textTheme.labelMedium)
-                        ?.copyWith(fontWeight: FontWeight.w800),
-                  ),
-                  if (subtitleText != null)
+              padding: EdgeInsets.all(strokeWidth + 4),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (isEligible)
+                      const Icon(
+                        Icons.check_circle_rounded,
+                        color: AppColors.success,
+                        size: 20,
+                      ),
                     Text(
-                      subtitleText!,
+                      centerText,
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.labelSmall,
+                      style: (size >= 110
+                              ? Theme.of(context).textTheme.titleMedium
+                              : Theme.of(context).textTheme.labelMedium)
+                          ?.copyWith(fontWeight: FontWeight.w800),
                     ),
-                ],
+                    if (subtitleText != null)
+                      Text(
+                        subtitleText!,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.labelSmall,
+                      ),
+                  ],
+                ),
               ),
             ),
           ),
