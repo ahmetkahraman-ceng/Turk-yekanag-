@@ -3,12 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:turkiye_kan_agi/core/l10n/l10n_extension.dart';
 import 'package:turkiye_kan_agi/core/router/app_routes.dart';
+import 'package:turkiye_kan_agi/core/theme/app_motion.dart';
 import 'package:turkiye_kan_agi/core/theme/app_spacing.dart';
+import 'package:turkiye_kan_agi/core/widgets/app_button.dart';
+import 'package:turkiye_kan_agi/core/widgets/async_value_view.dart';
 import 'package:turkiye_kan_agi/core/widgets/offline_banner.dart';
-import 'package:turkiye_kan_agi/core/widgets/primary_button.dart';
+import 'package:turkiye_kan_agi/core/widgets/step_and_progress.dart';
 import 'package:turkiye_kan_agi/features/onboarding/presentation/onboarding_state_provider.dart';
+import 'package:turkiye_kan_agi/features/onboarding/presentation/widgets/onboarding_illustrations.dart';
 
 /// 4 slaytlık uygulama tanıtım (Onboarding) ekranı.
+/// CustomPainter illüstrasyonlar, hafif parallax, ProgressDots, Atla ve İleri/Başla.
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -19,10 +24,26 @@ class OnboardingScreen extends ConsumerStatefulWidget {
 class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final PageController _pageController = PageController();
   int _currentIndex = 0;
+  double _pageOffset = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (!mounted || !_pageController.hasClients) return;
+    setState(() {
+      _pageOffset = _pageController.page ?? _currentIndex.toDouble();
+    });
+  }
 
   @override
   void dispose() {
-    _pageController.dispose();
+    _pageController
+      ..removeListener(_onScroll)
+      ..dispose();
     super.dispose();
   }
 
@@ -38,24 +59,24 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
     final slides = <_OnboardingSlideData>[
       _OnboardingSlideData(
-        icon: Icons.volunteer_activism_rounded,
-        title: l10n.onboardingSlide1Title,
-        description: l10n.onboardingSlide1Description,
+        illustration: OnboardingIllustrationType.drop,
+        title: l10n.onboardingV2Slide1Title,
+        description: l10n.onboardingV2Slide1Body,
       ),
       _OnboardingSlideData(
-        icon: Icons.hub_rounded,
-        title: l10n.onboardingSlide2Title,
-        description: l10n.onboardingSlide2Description,
+        illustration: OnboardingIllustrationType.mapPin,
+        title: l10n.onboardingV2Slide2Title,
+        description: l10n.onboardingV2Slide2Body,
       ),
       _OnboardingSlideData(
-        icon: Icons.shield_outlined,
-        title: l10n.onboardingSlide3Title,
-        description: l10n.onboardingSlide3Description,
+        illustration: OnboardingIllustrationType.handshake,
+        title: l10n.onboardingV2Slide3Title,
+        description: l10n.onboardingV2Slide3Body,
       ),
       _OnboardingSlideData(
-        icon: Icons.location_city_rounded,
-        title: l10n.onboardingSlide4Title,
-        description: l10n.onboardingSlide4Description,
+        illustration: OnboardingIllustrationType.shield,
+        title: l10n.onboardingV2Slide4Title,
+        description: l10n.onboardingV2Slide4Body,
       ),
     ];
 
@@ -67,6 +88,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         actions: [
           if (!isLastSlide)
             TextButton(
+              key: const Key('onboarding_skip_button'),
               onPressed: _completeOnboarding,
               child: Text(l10n.commonSkip),
             ),
@@ -76,84 +98,83 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         children: [
           const OfflineBanner(),
           Expanded(
-            child: PageView.builder(
-              controller: _pageController,
-              itemCount: slides.length,
-              onPageChanged: (index) {
-                setState(() => _currentIndex = index);
-              },
-              itemBuilder: (context, index) {
-                final slide = slides[index];
-                return Padding(
-                  padding: const EdgeInsets.all(AppSpacing.xl),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        slide.icon,
-                        size: 96,
-                        color: theme.colorScheme.primary,
-                      ),
-                      const SizedBox(height: AppSpacing.xl),
-                      Text(
-                        slide.title,
-                        style: theme.textTheme.headlineMedium,
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: AppSpacing.md),
-                      Text(
-                        slide.description,
-                        style: theme.textTheme.bodyLarge,
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                );
-              },
+            child: ResponsiveConstrainedBox(
+              child: PageView.builder(
+                controller: _pageController,
+                itemCount: slides.length,
+                onPageChanged: (index) => setState(() => _currentIndex = index),
+                itemBuilder: (context, index) {
+                  final slide = slides[index];
+                  final delta = (index - _pageOffset).clamp(-1.0, 1.0);
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.xl,
+                      vertical: AppSpacing.md,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        OnboardingIllustration(
+                          type: slide.illustration,
+                          parallaxOffset: delta,
+                        ),
+                        const SizedBox(height: AppSpacing.xl),
+                        Text(
+                          slide.title,
+                          style: theme.textTheme.headlineMedium,
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: AppSpacing.md),
+                        Text(
+                          slide.description,
+                          style: theme.textTheme.bodyLarge,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(AppSpacing.lg),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(
-                    slides.length,
-                    (index) => Container(
-                      width: _currentIndex == index ? 24 : 10,
-                      height: 10,
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.xxs,
-                      ),
-                      decoration: BoxDecoration(
-                        color: _currentIndex == index
-                            ? theme.colorScheme.primary
-                            : theme.colorScheme.surfaceContainerHighest,
-                        borderRadius: BorderRadius.circular(
-                          AppSpacing.radiusSm,
-                        ),
-                      ),
-                    ),
+          SafeArea(
+            top: false,
+            child: ResponsiveConstrainedBox(
+              padding: const EdgeInsets.all(AppSpacing.lg),
+              child: Column(
+                children: [
+                  ProgressDots(
+                    count: slides.length,
+                    currentIndex: _currentIndex,
                   ),
-                ),
-                const SizedBox(height: AppSpacing.lg),
-                PrimaryButton(
-                  label: isLastSlide
-                      ? l10n.onboardingStartAction
-                      : l10n.commonNext,
-                  onPressed: () {
-                    if (isLastSlide) {
-                      _completeOnboarding();
-                    } else {
-                      _pageController.nextPage(
-                        duration: const Duration(milliseconds: 250),
-                        curve: Curves.easeInOut,
-                      );
-                    }
-                  },
-                ),
-              ],
+                  const SizedBox(height: AppSpacing.lg),
+                  AppButton(
+                    key: const Key('onboarding_primary_button'),
+                    label: isLastSlide
+                        ? l10n.onboardingStartButton
+                        : l10n.commonNext,
+                    enableHaptic: true,
+                    onPressed: () {
+                      if (isLastSlide) {
+                        _completeOnboarding();
+                      } else {
+                        final dur = AppMotion.resolveDuration(
+                          context,
+                          AppMotion.normal,
+                        );
+                        if (dur == Duration.zero) {
+                          _pageController.jumpToPage(_currentIndex + 1);
+                        } else {
+                          _pageController.nextPage(
+                            duration: dur,
+                            curve: AppMotion.inOutCurve,
+                          );
+                        }
+                      }
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -164,12 +185,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
 class _OnboardingSlideData {
   const _OnboardingSlideData({
-    required this.icon,
+    required this.illustration,
     required this.title,
     required this.description,
   });
 
-  final IconData icon;
+  final OnboardingIllustrationType illustration;
   final String title;
   final String description;
 }

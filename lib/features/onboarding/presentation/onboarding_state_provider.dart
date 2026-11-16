@@ -32,6 +32,21 @@ class KvkkConsentNotifier extends Notifier<KvkkConsentRecord?> {
     );
   }
 
+  void approveConsents({
+    required bool healthDataConsent,
+    required bool locationConsent,
+    required bool notificationConsent,
+    DateTime? timestamp,
+  }) {
+    state = KvkkConsentRecord(
+      healthDataConsent: healthDataConsent,
+      locationConsent: locationConsent,
+      notificationConsent: notificationConsent,
+      consentedAt: timestamp ?? DateTime.now().toUtc(),
+      policyVersion: KvkkConsentRecord.currentPolicyVersion,
+    );
+  }
+
   void setRecord(KvkkConsentRecord? record) {
     state = record;
   }

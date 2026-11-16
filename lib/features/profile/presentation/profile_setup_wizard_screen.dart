@@ -6,19 +6,28 @@ import 'package:turkiye_kan_agi/core/router/app_routes.dart';
 import 'package:turkiye_kan_agi/core/router/auth_guard_provider.dart';
 import 'package:turkiye_kan_agi/core/services/remote_config_service.dart';
 import 'package:turkiye_kan_agi/core/theme/app_spacing.dart';
+import 'package:turkiye_kan_agi/core/widgets/app_button.dart';
+import 'package:turkiye_kan_agi/core/widgets/app_card.dart';
+import 'package:turkiye_kan_agi/core/widgets/app_overlays.dart';
 import 'package:turkiye_kan_agi/core/widgets/app_text_field.dart';
+import 'package:turkiye_kan_agi/core/widgets/async_value_view.dart';
+import 'package:turkiye_kan_agi/core/widgets/blood_type_badge.dart';
 import 'package:turkiye_kan_agi/core/widgets/offline_banner.dart';
-import 'package:turkiye_kan_agi/core/widgets/primary_button.dart';
+import 'package:turkiye_kan_agi/core/widgets/step_and_progress.dart';
+import 'package:turkiye_kan_agi/core/widgets/tiles_and_selection_sheet.dart';
 import 'package:turkiye_kan_agi/features/onboarding/presentation/onboarding_state_provider.dart';
 import 'package:turkiye_kan_agi/features/profile/data/firestore_profile_repository.dart';
 import 'package:turkiye_kan_agi/features/profile/domain/blood_type.dart';
 import 'package:turkiye_kan_agi/features/profile/domain/turkey_location_data.dart';
 import 'package:turkiye_kan_agi/features/profile/domain/user_public_profile.dart';
 import 'package:turkiye_kan_agi/features/profile/domain/user_sensitive_profile.dart';
-import 'package:turkiye_kan_agi/features/profile/presentation/province_district_picker_dialog.dart';
+import 'package:turkiye_kan_agi/features/profile/presentation/widgets/profile_wizard_dialogs.dart';
 
-/// Profil oluşturma ve düzenleme sihirbazı (Ad, Takma Ad, Doğum Tarihi, Cinsiyet, Kilo, Kan Grubu, 81 İl/İlçe).
-/// Tıbbi uygunluk sınırları (yaş, kilo) Remote Config üzerinden okunur.
+enum _WizardStage { form, locationPermission, celebration }
+
+/// Profil oluşturma sihirbazı (4 adım: StepIndicator, Ad/Takma ad,
+/// 8 Kan Grubu kartı + Bilmiyorum + bilgi sheet'i, Doğum tarihi/Cinsiyet/Kilo,
+/// İl/İlçe SelectionSheet; sonunda Konum izni açıklaması ve Hazırsın kutlaması).
 /// Kızılay ve Sağlık Bakanlığı güncel kurallarıyla doğrulanmalıdır.
 class ProfileSetupWizardScreen extends ConsumerStatefulWidget {
   const ProfileSetupWizardScreen({super.key});
@@ -36,6 +45,8 @@ class _ProfileSetupWizardScreenState
     text: '70',
   );
 
+  int _currentStep = 0;
+  _WizardStage _stage = _WizardStage.form;
   bool _useNickname = false;
   DateTime _birthDate = DateTime(1995, 6, 15);
   UserGender _gender = UserGender.unspecified;
@@ -66,31 +77,75 @@ class _ProfileSetupWizardScreenState
   }
 
   Future<void> _selectProvince(List<TurkeyProvince> provinces) async {
-    final selected = await SearchableStringPickerDialog.show(
-      context,
-      title: context.l10n.wizardProvinceLabel,
+    final l10n = context.l10n;
+    final selected = await SelectionSheet.show<String>(
+      context: context,
+      title: l10n.wizardProvinceLabel,
+      searchHint: l10n.wizardSearchHint,
       items: provinces.map((p) => p.name).toList(growable: false),
+      labelBuilder: (s) => s,
+      selectedItem: _selectedProvince,
     );
     if (selected != null && selected != _selectedProvince) {
       setState(() {
         _selectedProvince = selected;
         _selectedDistrict = null;
+        _currentStep = 3;
       });
     }
   }
 
   Future<void> _selectDistrict(List<TurkeyProvince> provinces) async {
     if (_selectedProvince == null) return;
-    final provinceObj = provinces
-        .where((p) => p.name == _selectedProvince)
-        .firstOrNull;
+    final l10n = context.l10n;
+    final provinceObj =
+        provinces.where((p) => p.name == _selectedProvince).firstOrNull;
     if (provinceObj == null) return;
-    final selected = await SearchableStringPickerDialog.show(
-      context,
-      title: context.l10n.wizardDistrictLabel,
+    final selected = await SelectionSheet.show<String>(
+      context: context,
+      title: l10n.wizardDistrictLabel,
+      searchHint: l10n.wizardSearchHint,
       items: provinceObj.districts,
+      labelBuilder: (s) => s,
+      selectedItem: _selectedDistrict,
     );
-    if (selected != null) setState(() => _selectedDistrict = selected);
+    if (selected != null) {
+      setState(() {
+        _selectedDistrict = selected;
+        _currentStep = 3;
+      });
+    }
+  }
+
+  void _showUnknownBloodInfoSheet() {
+    final l10n = context.l10n;
+    AppBottomSheet.show<void>(
+      context: context,
+      builder: (ctx) => Padding(
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              l10n.unknownBloodGuideTitle,
+              style: Theme.of(ctx).textTheme.titleLarge,
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            Text(l10n.unknownBloodGuideIntro),
+            const SizedBox(height: AppSpacing.sm),
+            Text('• ${l10n.unknownBloodGuideStep1Title}'),
+            Text('• ${l10n.unknownBloodGuideStep2Title}'),
+            Text('• ${l10n.unknownBloodGuideStep3Title}'),
+            const SizedBox(height: AppSpacing.md),
+            AppButton(
+              label: l10n.commonClose,
+              onPressed: () => Navigator.of(ctx).pop(),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Future<void> _onSaveProfile() async {
@@ -100,33 +155,41 @@ class _ProfileSetupWizardScreenState
     final fullName = _fullNameController.text.trim();
 
     if (fullName.isEmpty) {
-      setState(() => _errorMessage = l10n.wizardFullNameRequiredError);
+      setState(() {
+        _currentStep = 0;
+        _errorMessage = l10n.wizardFullNameRequiredError;
+      });
       return;
     }
 
     final age = DateTime.now().year - _birthDate.year;
     if (age < remoteConfig.minDonorAge || age > remoteConfig.maxDonorAge) {
-      setState(
-        () => _errorMessage = l10n.wizardAgeValidationError(
+      setState(() {
+        _currentStep = 2;
+        _errorMessage = l10n.wizardAgeValidationError(
           remoteConfig.minDonorAge,
           remoteConfig.maxDonorAge,
-        ),
-      );
+        );
+      });
       return;
     }
 
     final weight = int.tryParse(_weightController.text.trim()) ?? 0;
     if (weight < remoteConfig.minDonorWeightKg) {
-      setState(
-        () => _errorMessage = l10n.wizardWeightValidationError(
+      setState(() {
+        _currentStep = 2;
+        _errorMessage = l10n.wizardWeightValidationError(
           remoteConfig.minDonorWeightKg,
-        ),
-      );
+        );
+      });
       return;
     }
 
     if (_selectedProvince == null || _selectedDistrict == null) {
-      setState(() => _errorMessage = l10n.wizardLocationRequiredError);
+      setState(() {
+        _currentStep = 3;
+        _errorMessage = l10n.wizardLocationRequiredError;
+      });
       return;
     }
 
@@ -169,7 +232,13 @@ class _ProfileSetupWizardScreenState
         );
 
     if (!mounted) return;
-    setState(() => _isSaving = false);
+    setState(() {
+      _isSaving = false;
+      _stage = _WizardStage.locationPermission;
+    });
+  }
+
+  void _finishWizard() {
     ref.read(profileCompletedStateProvider.notifier).state = true;
     context.go(AppRoutes.requests);
   }
@@ -181,139 +250,228 @@ class _ProfileSetupWizardScreenState
     final provincesAsync = ref.watch(turkeyProvincesProvider);
     final provinces = provincesAsync.valueOrNull ?? const <TurkeyProvince>[];
 
+    if (_stage == _WizardStage.locationPermission) {
+      return Scaffold(
+        appBar: AppBar(title: Text(l10n.wizardTitle)),
+        body: ResponsiveConstrainedBox(
+          child: LocationPermissionExplainerView(
+            onAllowLocation: () =>
+                setState(() => _stage = _WizardStage.celebration),
+            onSkipLocation: () =>
+                setState(() => _stage = _WizardStage.celebration),
+          ),
+        ),
+      );
+    }
+
+    if (_stage == _WizardStage.celebration) {
+      return Scaffold(
+        appBar: AppBar(title: Text(l10n.wizardTitle)),
+        body: ResponsiveConstrainedBox(
+          child: ProfileReadyCelebrationView(onFinish: _finishWizard),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(title: Text(l10n.wizardTitle)),
       body: Column(
         children: [
           const OfflineBanner(),
+          ResponsiveConstrainedBox(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.md,
+              AppSpacing.sm,
+              AppSpacing.md,
+              0,
+            ),
+            child: StepIndicator(
+              totalSteps: 4,
+              currentStep: _currentStep,
+              labels: [
+                l10n.wizardStep1Title,
+                l10n.wizardStep2Title,
+                l10n.wizardStep3Title,
+                l10n.wizardStep4Title,
+              ],
+            ),
+          ),
           Expanded(
-            child: ListView(
-              padding: const EdgeInsets.all(AppSpacing.md),
-              children: [
-                Text(l10n.wizardStepIdentity, style: theme.textTheme.titleLarge),
-                const SizedBox(height: AppSpacing.sm),
-                AppTextField(
-                  key: const Key('wizard_full_name_field'),
-                  controller: _fullNameController,
-                  labelText: l10n.wizardFullNameLabel,
-                  prefixIcon: Icons.person_outline_rounded,
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                AppTextField(
-                  key: const Key('wizard_nickname_field'),
-                  controller: _nicknameController,
-                  labelText: l10n.wizardNicknameLabel,
-                  prefixIcon: Icons.badge_outlined,
-                ),
-                SwitchListTile(
-                  value: _useNickname,
-                  onChanged: (val) => setState(() => _useNickname = val),
-                  title: Text(l10n.wizardUseNicknameSwitch),
-                ),
-                ListTile(
-                  key: const Key('wizard_birth_date_tile'),
-                  contentPadding: EdgeInsets.zero,
-                  leading: const Icon(Icons.cake_outlined),
-                  title: Text(l10n.wizardBirthDateLabel),
-                  subtitle: Text(
-                    '${_birthDate.day}.${_birthDate.month}.${_birthDate.year}',
+            child: ResponsiveConstrainedBox(
+              child: ListView(
+                padding: const EdgeInsets.all(AppSpacing.md),
+                children: [
+                  Text(l10n.wizardStep1Title, style: theme.textTheme.titleLarge),
+                  const SizedBox(height: AppSpacing.sm),
+                  AppTextField(
+                    key: const Key('wizard_full_name_field'),
+                    controller: _fullNameController,
+                    labelText: l10n.wizardFullNameLabel,
+                    prefixIcon: Icons.person_outline_rounded,
+                    onChanged: (_) => setState(() => _currentStep = 0),
                   ),
-                  trailing: TextButton(
-                    onPressed: _selectBirthDate,
-                    child: Text(l10n.wizardBirthDateSelectButton),
+                  const SizedBox(height: AppSpacing.sm),
+                  AppTextField(
+                    key: const Key('wizard_nickname_field'),
+                    controller: _nicknameController,
+                    labelText: l10n.wizardNicknameLabel,
+                    prefixIcon: Icons.badge_outlined,
                   ),
-                ),
-                const Divider(height: AppSpacing.xl),
-                Text(l10n.wizardStepMedical, style: theme.textTheme.titleLarge),
-                const SizedBox(height: AppSpacing.sm),
-                DropdownButtonFormField<UserGender>(
-                  initialValue: _gender,
-                  decoration: InputDecoration(labelText: l10n.wizardGenderLabel),
-                  items: [
-                    DropdownMenuItem(value: UserGender.male, child: Text(l10n.wizardGenderMale)),
-                    DropdownMenuItem(value: UserGender.female, child: Text(l10n.wizardGenderFemale)),
-                    DropdownMenuItem(value: UserGender.unspecified, child: Text(l10n.wizardGenderUnspecified)),
-                  ],
-                  onChanged: (val) {
-                    if (val != null) setState(() => _gender = val);
-                  },
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                AppTextField(
-                  key: const Key('wizard_weight_field'),
-                  controller: _weightController,
-                  labelText: l10n.wizardWeightLabel,
-                  keyboardType: TextInputType.number,
-                  prefixIcon: Icons.monitor_weight_outlined,
-                ),
-                const SizedBox(height: AppSpacing.md),
-                Text(l10n.wizardBloodTypeLabel, style: theme.textTheme.titleMedium),
-                const SizedBox(height: AppSpacing.xs),
-                Wrap(
-                  spacing: AppSpacing.xs,
-                  runSpacing: AppSpacing.xs,
-                  children: [
-                    for (final type in BloodType.knownTypes)
+                  SwitchTile(
+                    title: l10n.wizardUseNicknameSwitch,
+                    value: _useNickname,
+                    onChanged: (val) => setState(() => _useNickname = val),
+                  ),
+                  const Divider(height: AppSpacing.xl),
+                  Text(l10n.wizardStep2Title, style: theme.textTheme.titleLarge),
+                  const SizedBox(height: AppSpacing.xs),
+                  GridView.count(
+                    crossAxisCount: 4,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    mainAxisSpacing: AppSpacing.xs,
+                    crossAxisSpacing: AppSpacing.xs,
+                    children: [
+                      for (final type in BloodType.knownValues)
+                        AppCard(
+                          padding: const EdgeInsets.all(AppSpacing.xs),
+                          borderColor: _bloodType == type
+                              ? theme.colorScheme.primary
+                              : null,
+                          onTap: () => setState(() {
+                            _bloodType = type;
+                            _currentStep = 1;
+                          }),
+                          child: Center(
+                            child: BloodTypeBadge(
+                              bloodType: type,
+                              size: BloodBadgeSize.s,
+                              isSelected: _bloodType == type,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  Wrap(
+                    spacing: AppSpacing.xs,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
                       ChoiceChip(
-                        label: Text(type.code),
-                        selected: _bloodType == type,
-                        onSelected: (_) => setState(() => _bloodType = type),
+                        key: const Key('blood_type_unknown_chip'),
+                        label: Text(l10n.wizardBloodTypeUnknownOption),
+                        selected: _bloodType == BloodType.unknown,
+                        onSelected: (_) => setState(() {
+                          _bloodType = BloodType.unknown;
+                          _currentStep = 1;
+                        }),
                       ),
-                    ChoiceChip(
-                      key: const Key('blood_type_unknown_chip'),
-                      label: Text(l10n.wizardBloodTypeUnknownOption),
-                      selected: _bloodType == BloodType.unknown,
-                      onSelected: (_) => setState(() => _bloodType = BloodType.unknown),
+                      TextButton.icon(
+                        onPressed: _showUnknownBloodInfoSheet,
+                        icon: const Icon(Icons.help_outline_rounded),
+                        label: Text(l10n.wizardBloodTypeHowToLearnLink),
+                      ),
+                    ],
+                  ),
+                  const Divider(height: AppSpacing.xl),
+                  Text(l10n.wizardStep3Title, style: theme.textTheme.titleLarge),
+                  const SizedBox(height: AppSpacing.sm),
+                  ListTile(
+                    key: const Key('wizard_birth_date_tile'),
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.cake_outlined),
+                    title: Text(l10n.wizardBirthDateLabel),
+                    subtitle: Text(
+                      '${_birthDate.day}.${_birthDate.month}.${_birthDate.year}',
+                    ),
+                    trailing: TextButton(
+                      onPressed: _selectBirthDate,
+                      child: Text(l10n.wizardBirthDateSelectButton),
+                    ),
+                  ),
+                  DropdownButtonFormField<UserGender>(
+                    initialValue: _gender,
+                    decoration: InputDecoration(
+                      labelText: l10n.wizardGenderLabel,
+                    ),
+                    items: [
+                      DropdownMenuItem(
+                        value: UserGender.male,
+                        child: Text(l10n.wizardGenderMale),
+                      ),
+                      DropdownMenuItem(
+                        value: UserGender.female,
+                        child: Text(l10n.wizardGenderFemale),
+                      ),
+                      DropdownMenuItem(
+                        value: UserGender.unspecified,
+                        child: Text(l10n.wizardGenderUnspecified),
+                      ),
+                    ],
+                    onChanged: (val) {
+                      if (val != null) {
+                        setState(() {
+                          _gender = val;
+                          _currentStep = 2;
+                        });
+                      }
+                    },
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  AppTextField.number(
+                    key: const Key('wizard_weight_field'),
+                    controller: _weightController,
+                    labelText: l10n.wizardWeightLabel,
+                    prefixIcon: Icons.monitor_weight_outlined,
+                    onChanged: (_) => setState(() => _currentStep = 2),
+                  ),
+                  const Divider(height: AppSpacing.xl),
+                  Text(l10n.wizardStep4Title, style: theme.textTheme.titleLarge),
+                  const SizedBox(height: AppSpacing.sm),
+                  AppCard(
+                    padding: EdgeInsets.zero,
+                    child: ListTile(
+                      key: const Key('select_province_tile'),
+                      title: Text(_selectedProvince ?? l10n.wizardProvinceLabel),
+                      trailing: const Icon(Icons.search_rounded),
+                      onTap: () => _selectProvince(provinces),
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  AppCard(
+                    padding: EdgeInsets.zero,
+                    child: ListTile(
+                      key: const Key('select_district_tile'),
+                      enabled: _selectedProvince != null,
+                      title: Text(_selectedDistrict ?? l10n.wizardDistrictLabel),
+                      trailing: const Icon(Icons.search_rounded),
+                      onTap: () => _selectDistrict(provinces),
+                    ),
+                  ),
+                  if (_errorMessage != null) ...[
+                    const SizedBox(height: AppSpacing.md),
+                    Text(
+                      _errorMessage!,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.error,
+                      ),
                     ),
                   ],
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: TextButton.icon(
-                    onPressed: () => context.push(AppRoutes.unknownBloodTypeGuide),
-                    icon: const Icon(Icons.help_outline_rounded),
-                    label: Text(l10n.wizardBloodTypeHowToLearnLink),
-                  ),
-                ),
-                const Divider(height: AppSpacing.xl),
-                Text(l10n.wizardStepLocation, style: theme.textTheme.titleLarge),
-                const SizedBox(height: AppSpacing.sm),
-                ListTile(
-                  key: const Key('select_province_tile'),
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(color: theme.colorScheme.outline),
-                    borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-                  ),
-                  title: Text(_selectedProvince ?? l10n.wizardProvinceLabel),
-                  trailing: const Icon(Icons.search_rounded),
-                  onTap: () => _selectProvince(provinces),
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                ListTile(
-                  key: const Key('select_district_tile'),
-                  enabled: _selectedProvince != null,
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(color: theme.colorScheme.outline),
-                    borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-                  ),
-                  title: Text(_selectedDistrict ?? l10n.wizardDistrictLabel),
-                  trailing: const Icon(Icons.search_rounded),
-                  onTap: () => _selectDistrict(provinces),
-                ),
-                if (_errorMessage != null) ...[
-                  const SizedBox(height: AppSpacing.md),
-                  Text(
-                    _errorMessage!,
-                    style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.error),
-                  ),
                 ],
-                const SizedBox(height: AppSpacing.lg),
-                PrimaryButton(
-                  label: l10n.wizardCompleteButton,
-                  isLoading: _isSaving,
-                  onPressed: _onSaveProfile,
-                ),
-              ],
+              ),
+            ),
+          ),
+          SafeArea(
+            top: false,
+            child: ResponsiveConstrainedBox(
+              padding: const EdgeInsets.all(AppSpacing.md),
+              child: AppButton(
+                key: const Key('wizard_complete_button'),
+                label: l10n.wizardCompleteButton,
+                isLoading: _isSaving,
+                enableHaptic: true,
+                onPressed: _onSaveProfile,
+              ),
             ),
           ),
         ],

@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// SMS OTP yeniden gönderme geri sayım sayacı (varsayılan 60 saniye).
+/// SMS OTP yeniden gönderme geri sayım sayacı (varsayılan 45 saniye).
 class OtpTimerNotifier extends AutoDisposeNotifier<int> {
   Timer? _timer;
 
-  static const int defaultDurationSeconds = 60;
+  static const int defaultDurationSeconds = 45;
 
   @override
   int build() {

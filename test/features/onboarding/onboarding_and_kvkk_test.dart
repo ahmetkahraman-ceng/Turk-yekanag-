@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:turkiye_kan_agi/core/network/connectivity_service.dart';
+import 'package:turkiye_kan_agi/features/auth/presentation/login_screen.dart';
+import 'package:turkiye_kan_agi/features/auth/presentation/otp_verification_screen.dart';
 import 'package:turkiye_kan_agi/features/onboarding/presentation/kvkk_consent_screen.dart';
 import 'package:turkiye_kan_agi/features/onboarding/presentation/onboarding_screen.dart';
 
@@ -16,8 +18,8 @@ class _OnlineConnectivityService implements ConnectivityService {
 }
 
 void main() {
-  group('Onboarding ve KVKK Açık Rıza Testleri', () {
-    testWidgets('OnboardingScreen 4 slayt içerir ve İleri ile geçiş yapar', (
+  group('Aşama 2: Onboarding, KVKK, Giriş ve OTP Testleri', () {
+    testWidgets('OnboardingScreen 4 slayt içerir ve İleri/Başla ile geçiş yapar', (
       tester,
     ) async {
       await tester.pumpWidget(
@@ -33,27 +35,27 @@ void main() {
       await tester.pumpAndSettle();
 
       // 1. Slayt
-      expect(find.text('Gönüllü Kan Dayanışması'), findsOneWidget);
+      expect(find.text('Bir damla, bir umut'), findsOneWidget);
 
       // 2. Slayta geç
       await tester.tap(find.text('İleri'));
       await tester.pumpAndSettle();
-      expect(find.text('Nasıl Çalışır?'), findsOneWidget);
+      expect(find.text('Yakınındaki ihtiyacı gör'), findsOneWidget);
 
       // 3. Slayta geç
       await tester.tap(find.text('İleri'));
       await tester.pumpAndSettle();
-      expect(find.text('Kişisel Verileriniz Güvende'), findsOneWidget);
+      expect(find.text('Tek dokunuşla yardım et'), findsOneWidget);
 
       // 4. Slayta geç
       await tester.tap(find.text('İleri'));
       await tester.pumpAndSettle();
-      expect(find.text('Konum İzni Neden Gerekli?'), findsOneWidget);
-      expect(find.text('Devam Et'), findsOneWidget);
+      expect(find.text('Verin güvende'), findsOneWidget);
+      expect(find.text('Başla'), findsOneWidget);
     });
 
     testWidgets(
-      'KvkkConsentScreen 3 ayrı açık rıza kutusu onaylanmadan devam butonunu etkinleştirmez',
+      'KvkkConsentScreen zorunlu açık rıza kutuları onaylanmadan devam butonunu etkinleştirmez',
       (tester) async {
         final container = ProviderContainer(
           overrides: [
@@ -72,13 +74,10 @@ void main() {
         );
         await tester.pumpAndSettle();
 
-        final buttonFinder = find.widgetWithText(
-          ElevatedButton,
-          'Açık Rıza Ver ve Devam Et',
-        );
+        final buttonFinder = find.widgetWithText(ElevatedButton, 'Devam');
         expect(tester.widget<ElevatedButton>(buttonFinder).onPressed, isNull);
 
-        // 3 onay kutusunu sırayla işaretle
+        // 1. Zorunlu Sağlık Verisi rızasını işaretle
         final healthCb = find.byKey(const Key('consent_health_checkbox'));
         await tester.ensureVisible(healthCb);
         await tester.pumpAndSettle();
@@ -86,23 +85,60 @@ void main() {
         await tester.pump();
         expect(tester.widget<ElevatedButton>(buttonFinder).onPressed, isNull);
 
+        // 2. Zorunlu Konum rızasını işaretle -> artık Devam aktif olmalı
         final locCb = find.byKey(const Key('consent_location_checkbox'));
         await tester.ensureVisible(locCb);
         await tester.pumpAndSettle();
         await tester.tap(locCb);
-        await tester.pump();
-        expect(tester.widget<ElevatedButton>(buttonFinder).onPressed, isNull);
-
-        final notifCb = find.byKey(const Key('consent_notification_checkbox'));
-        await tester.ensureVisible(notifCb);
-        await tester.pumpAndSettle();
-        await tester.tap(notifCb);
         await tester.pump();
 
         expect(
           tester.widget<ElevatedButton>(buttonFinder).onPressed,
           isNotNull,
         );
+      },
+    );
+
+    testWidgets(
+      'LoginScreen telefon numarasını maskeler ve OtpVerificationScreen 45 sn geri sayım gösterir',
+      (tester) async {
+        await tester.pumpWidget(
+          buildTestableWidget(
+            const LoginScreen(),
+            overrides: [
+              connectivityServiceProvider.overrideWithValue(
+                _OnlineConnectivityService(),
+              ),
+            ],
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        expect(find.text('Kod Gönder'), findsOneWidget);
+        await tester.enterText(
+          find.byKey(const Key('phone_input_field')),
+          '5321112233',
+        );
+        await tester.pump();
+        expect(find.text('532 111 22 33'), findsOneWidget);
+
+        await tester.pumpWidget(
+          buildTestableWidget(
+            const OtpVerificationScreen(
+              args: OtpRouteArgs(
+                phoneNumber: '+905321112233',
+                verificationId: 'test-ver-id',
+              ),
+            ),
+            overrides: [
+              connectivityServiceProvider.overrideWithValue(
+                _OnlineConnectivityService(),
+              ),
+            ],
+          ),
+        );
+        await tester.pump();
+        expect(find.textContaining('45 sn'), findsOneWidget);
       },
     );
   });
