@@ -217,9 +217,11 @@ class _RequestDetailScreenState extends ConsumerState<RequestDetailScreen> {
             _ClosedStatusBanner(status: req.status),
           Expanded(
             child: ResponsiveConstrainedBox(
-              child: ListView(
+              child: SingleChildScrollView(
                 padding: const EdgeInsets.all(AppSpacing.md),
-                children: [
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
                   AppCard(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -274,8 +276,10 @@ class _RequestDetailScreenState extends ConsumerState<RequestDetailScreen> {
                         const SizedBox(height: AppSpacing.md),
                         const LinearProgressIndicator(value: 0.65),
                         const SizedBox(height: AppSpacing.sm),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        Wrap(
+                          spacing: AppSpacing.xs,
+                          runSpacing: AppSpacing.xs,
+                          crossAxisAlignment: WrapCrossAlignment.center,
                           children: [
                             Chip(
                               avatar: const Icon(
@@ -336,7 +340,8 @@ class _RequestDetailScreenState extends ConsumerState<RequestDetailScreen> {
                       onUpdated: (u) => setState(() => _request = u),
                     ),
                   ],
-                ],
+                  ],
+                ),
               ),
             ),
           ),

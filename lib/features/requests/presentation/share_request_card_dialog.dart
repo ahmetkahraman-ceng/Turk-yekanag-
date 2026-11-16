@@ -98,10 +98,12 @@ class _ShareRequestCardDialogState extends State<ShareRequestCardDialog> {
 
     return AlertDialog(
       title: Text(l10n.requestShareCardTitle),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
+      content: SizedBox(
+        width: 340,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
             RepaintBoundary(
               key: const Key('share_visual_card_boundary'),
               child: RepaintBoundary(
@@ -218,6 +220,7 @@ class _ShareRequestCardDialogState extends State<ShareRequestCardDialog> {
               },
             ),
           ],
+        ),
         ),
       ),
       actions: [
