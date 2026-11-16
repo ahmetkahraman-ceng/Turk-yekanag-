@@ -9,9 +9,12 @@ import 'package:turkiye_kan_agi/core/theme/app_spacing.dart';
 import 'package:turkiye_kan_agi/core/widgets/app_button.dart';
 import 'package:turkiye_kan_agi/core/widgets/app_card.dart';
 import 'package:turkiye_kan_agi/core/widgets/app_overlays.dart';
+import 'package:turkiye_kan_agi/features/map/presentation/widgets/real_map_tile_canvas.dart';
 import 'package:turkiye_kan_agi/features/requests/domain/blood_request.dart';
-import 'package:turkiye_kan_agi/features/requests/domain/request_urgency.dart';
 import 'package:turkiye_kan_agi/features/requests/presentation/widgets/request_card.dart';
+
+export 'package:turkiye_kan_agi/features/map/presentation/widgets/real_map_tile_canvas.dart'
+    show RealMapController, RealMapTileCanvas;
 
 /// Yol tarifi seçici Bottom Sheet (Google Maps / Yandex / Apple Maps).
 class DirectionsPickerSheet extends StatelessWidget {
@@ -81,10 +84,10 @@ class DirectionsPickerSheet extends StatelessWidget {
 /// Pin'e dokunulunca gösterilen DraggableScrollableSheet özet kartı.
 class MapPinSummarySheet extends StatelessWidget {
   const MapPinSummarySheet({
+    required this.onClose,
     super.key,
     this.request,
     this.center,
-    required this.onClose,
   });
 
   final BloodRequest? request;
@@ -228,8 +231,7 @@ class MapPinSummarySheet extends StatelessWidget {
   }
 }
 
-/// API anahtarı olmadığında veya test ortamında çökmeden çalışan,
-/// karanlık/aydınlık tema, kümeleme, mavi konum noktası ve özel pin destekli etkileşimli harita yüzeyi.
+/// Geriye dönük uyumluluk sarmalayıcısı: gerçek harita karolarını ve koordinatlarını çizen `RealMapTileCanvas` kullanır.
 class InteractiveMapCanvas extends StatelessWidget {
   const InteractiveMapCanvas({
     required this.requests,
@@ -237,200 +239,23 @@ class InteractiveMapCanvas extends StatelessWidget {
     required this.onSelectRequest,
     required this.onSelectCenter,
     super.key,
+    this.controller,
   });
 
   final List<BloodRequest> requests;
   final List<DonationCenter> centers;
   final ValueChanged<BloodRequest> onSelectRequest;
   final ValueChanged<DonationCenter> onSelectCenter;
-
-  Color _pinColorForUrgency(RequestUrgency urgency) {
-    return switch (urgency) {
-      RequestUrgency.critical => AppColors.primary,
-      RequestUrgency.today => AppColors.warning,
-      RequestUrgency.thisWeek => AppColors.neutralTag,
-    };
-  }
+  final RealMapController? controller;
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final visibleReqs = requests.take(6).toList();
-    final visibleCenters = centers.take(4).toList();
-
-    return RepaintBoundary(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final w = constraints.maxWidth;
-          final h = constraints.maxHeight;
-          return Stack(
-            children: [
-              Positioned.fill(
-                child: CustomPaint(
-                  painter: _MapGridPainter(isDark: isDark),
-                ),
-              ),
-              // Kullanıcı mavi konum noktası
-              Positioned(
-                left: w * 0.48,
-                top: h * 0.46,
-                child: Container(
-                  width: 20,
-                  height: 20,
-                  decoration: BoxDecoration(
-                    color: AppColors.info,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 3),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.info.withValues(alpha: 0.4),
-                        blurRadius: 10,
-                        spreadRadius: 4,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              // Kümeleme (Cluster) rozeti
-              if (requests.length > 6)
-                Positioned(
-                  left: w * 0.72,
-                  top: h * 0.22,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.sm,
-                      vertical: AppSpacing.xs,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryDark,
-                      borderRadius: AppRadius.chipBorder,
-                      border: Border.all(color: Colors.white, width: 2),
-                    ),
-                    child: Text(
-                      '+${requests.length - 6}',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ),
-                ),
-              // Talep pin'leri
-              for (var i = 0; i < visibleReqs.length; i++)
-                Positioned(
-                  left: (w * (0.14 + (i * 0.13) % 0.70)).clamp(12, w - 72),
-                  top: (h * (0.18 + ((i * 23) % 55) / 100)).clamp(12, h - 56),
-                  child: GestureDetector(
-                    key: Key('map_request_pin_${visibleReqs[i].id}'),
-                    onTap: () => onSelectRequest(visibleReqs[i]),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.xs,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: _pinColorForUrgency(visibleReqs[i].urgency),
-                        borderRadius: AppRadius.chipBorder,
-                        border: Border.all(color: Colors.white, width: 1.5),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            Icons.bloodtype_rounded,
-                            size: 14,
-                            color: Colors.white,
-                          ),
-                          const SizedBox(width: 2),
-                          Text(
-                            visibleReqs[i].bloodType.code,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w800,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              // Bağış merkezi & Gezici araç pin'leri (Mavi)
-              for (var j = 0; j < visibleCenters.length; j++)
-                Positioned(
-                  left: (w * (0.20 + (j * 0.21) % 0.68)).clamp(12, w - 80),
-                  top: (h * (0.55 + ((j * 17) % 30) / 100)).clamp(12, h - 56),
-                  child: GestureDetector(
-                    key: Key('map_center_pin_${visibleCenters[j].id}'),
-                    onTap: () => onSelectCenter(visibleCenters[j]),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.xs,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.info,
-                        borderRadius: AppRadius.chipBorder,
-                        border: Border.all(color: Colors.white, width: 1.5),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            visibleCenters[j].isMobileUnit
-                                ? Icons.directions_bus_rounded
-                                : Icons.local_hospital_rounded,
-                            size: 14,
-                            color: Colors.white,
-                          ),
-                          if (visibleCenters[j].isMobileUnit) ...[
-                            const SizedBox(width: 3),
-                            Text(
-                              context.l10n.centerMobileUnitBadge,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 11,
-                              ),
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-            ],
-          );
-        },
-      ),
+    return RealMapTileCanvas(
+      requests: requests,
+      centers: centers,
+      onSelectRequest: onSelectRequest,
+      onSelectCenter: onSelectCenter,
+      controller: controller,
     );
-  }
-}
-
-class _MapGridPainter extends CustomPainter {
-  const _MapGridPainter({required this.isDark});
-
-  final bool isDark;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final bg = isDark ? const Color(0xFF1F1616) : const Color(0xFFF3ECE9);
-    canvas.drawRect(Offset.zero & size, Paint()..color = bg);
-
-    final roadPaint = Paint()
-      ..color = isDark ? const Color(0xFF342424) : const Color(0xFFE4D8D4)
-      ..strokeWidth = 2.0;
-
-    for (double x = 0; x < size.width; x += 48) {
-      canvas.drawLine(Offset(x, 0), Offset(x, size.height), roadPaint);
-    }
-    for (double y = 0; y < size.height; y += 48) {
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), roadPaint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant _MapGridPainter oldDelegate) {
-    return oldDelegate.isDark != isDark;
   }
 }

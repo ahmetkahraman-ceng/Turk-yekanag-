@@ -163,6 +163,7 @@ class _RequestsScreenState extends ConsumerState<RequestsScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         key: const Key('create_request_fab'),
+        heroTag: 'requests_create_fab_hero',
         isExtended: _isFabExtended,
         onPressed: () async {
           await context.push('${AppRoutes.requests}/create');

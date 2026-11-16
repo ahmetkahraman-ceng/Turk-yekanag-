@@ -23,8 +23,9 @@ import 'package:turkiye_kan_agi/features/requests/domain/blood_request.dart';
 import 'package:turkiye_kan_agi/features/requests/presentation/widgets/request_card.dart';
 
 /// Harita ve Bağış Merkezleri ekranı (Aşama 5):
-/// - Üstte arama ve filtre çipleri (Talepler, Bağış merkezleri, Kan grubum), "Konumuma git"
-/// - Pin'e dokununca DraggableScrollableSheet özet kart
+/// - Gerçek sokak haritası karoları (OpenStreetMap / CartoDB veya `GOOGLE_MAPS_API_KEY` varsa yerel `GoogleMap`)
+/// - Gerçek hastane ve Kızılay bağış merkezi GPS koordinatları, şehir seçici (Ankara / İstanbul / İzmir)
+/// - Pin'e dokununca kamerayı o noktaya odaklama ve DraggableScrollableSheet özet kartı
 /// - Liste / Harita geçişi ve alt yakın liste
 /// - Konum izni yoksa fallback EmptyState ("Konumu aç", "Listeyi gör")
 /// - Gezici kan bağış aracı için özel ikon ve "Bugün burada" etiketi.
@@ -42,6 +43,7 @@ class MapScreen extends ConsumerStatefulWidget {
 
 class _MapScreenState extends ConsumerState<MapScreen> {
   final TextEditingController _searchController = TextEditingController();
+  final RealMapController _mapController = RealMapController();
   Timer? _debounceTimer;
   List<BloodRequest> _requests = const <BloodRequest>[];
   List<DonationCenter> _centers = const <DonationCenter>[];
@@ -51,8 +53,15 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   bool _isListView = false;
   bool _hasLocationPermission = true;
   String _searchQuery = '';
+  String _selectedCity = 'Ankara';
   BloodRequest? _selectedRequest;
   DonationCenter? _selectedCenter;
+
+  static const Map<String, (double, double)> _cityCoordinates = {
+    'Ankara': (39.9208, 32.8541),
+    'İstanbul': (41.0082, 28.9784),
+    'İzmir': (38.4237, 27.1428),
+  };
 
   @override
   void initState() {
@@ -64,6 +73,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   void dispose() {
     _debounceTimer?.cancel();
     _searchController.dispose();
+    _mapController.dispose();
     super.dispose();
   }
 
@@ -86,8 +96,27 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     _debounceTimer?.cancel();
     _debounceTimer = Timer(const Duration(milliseconds: 180), () {
       if (!mounted) return;
-      setState(() => _searchQuery = value.trim().toLowerCase());
+      final q = value.trim().toLowerCase();
+      setState(() => _searchQuery = q);
+      if (q.contains('istanbul') || q.contains('kadıköy') || q.contains('şişli')) {
+        _focusCity('İstanbul');
+      } else if (q.contains('izmir') || q.contains('konak') || q.contains('bornova')) {
+        _focusCity('İzmir');
+      } else if (q.contains('ankara') || q.contains('çankaya') || q.contains('bilkent')) {
+        _focusCity('Ankara');
+      }
     });
+  }
+
+  void _focusCity(String city) {
+    final coords = _cityCoordinates[city];
+    if (coords == null) return;
+    setState(() => _selectedCity = city);
+    _mapController.moveTo(
+      latitude: coords.$1,
+      longitude: coords.$2,
+      zoom: 11.5,
+    );
   }
 
   List<BloodRequest> get _filteredRequests {
@@ -185,6 +214,16 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                     selected: _onlyMyBlood,
                     onSelected: (v) => setState(() => _onlyMyBlood = v),
                   ),
+                  const SizedBox(width: AppSpacing.sm),
+                  for (final city in _cityCoordinates.keys) ...[
+                    AppChip(
+                      label: city,
+                      icon: Icons.place_outlined,
+                      selected: _selectedCity == city,
+                      onSelected: (_) => _focusCity(city),
+                    ),
+                    const SizedBox(width: AppSpacing.xs),
+                  ],
                 ],
               ),
             ),
@@ -225,16 +264,31 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                                   child: Stack(
                                     children: [
                                       InteractiveMapCanvas(
+                                        controller: _mapController,
                                         requests: reqs,
                                         centers: ctrs,
-                                        onSelectRequest: (r) => setState(() {
-                                          _selectedRequest = r;
-                                          _selectedCenter = null;
-                                        }),
-                                        onSelectCenter: (c) => setState(() {
-                                          _selectedCenter = c;
-                                          _selectedRequest = null;
-                                        }),
+                                        onSelectRequest: (r) {
+                                          _mapController.moveTo(
+                                            latitude: r.hospital.latitude,
+                                            longitude: r.hospital.longitude,
+                                            zoom: 13.5,
+                                          );
+                                          setState(() {
+                                            _selectedRequest = r;
+                                            _selectedCenter = null;
+                                          });
+                                        },
+                                        onSelectCenter: (c) {
+                                          _mapController.moveTo(
+                                            latitude: c.latitude,
+                                            longitude: c.longitude,
+                                            zoom: 13.5,
+                                          );
+                                          setState(() {
+                                            _selectedCenter = c;
+                                            _selectedRequest = null;
+                                          });
+                                        },
                                       ),
                                       Positioned(
                                         right: AppSpacing.md,
@@ -243,8 +297,10 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                                           key: const Key(
                                             'map_my_location_button',
                                           ),
+                                          heroTag: 'map_my_location_fab_hero',
                                           tooltip: l10n.mapMyLocationTooltip,
                                           onPressed: () {
+                                            _focusCity('Ankara');
                                             AppSnackbar.show(
                                               context,
                                               message:
