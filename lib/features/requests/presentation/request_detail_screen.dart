@@ -297,6 +297,16 @@ class _RequestDetailScreenState extends ConsumerState<RequestDetailScreen> {
                     ),
                   ),
                   const SizedBox(height: AppSpacing.md),
+                  DonorOfferPanel(
+                    request: req,
+                    donorBloodType: widget.donorBloodType,
+                    onOffersChanged: () {
+                      setState(() {
+                        _request = req.copyWith(offerCount: req.offerCount + 1);
+                      });
+                    },
+                  ),
+                  const SizedBox(height: AppSpacing.md),
                   AppCard(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -318,16 +328,6 @@ class _RequestDetailScreenState extends ConsumerState<RequestDetailScreen> {
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  DonorOfferPanel(
-                    request: req,
-                    donorBloodType: widget.donorBloodType,
-                    onOffersChanged: () {
-                      setState(() {
-                        _request = req.copyWith(offerCount: req.offerCount + 1);
-                      });
-                    },
                   ),
                   if (isOwner) ...[
                     const SizedBox(height: AppSpacing.md),

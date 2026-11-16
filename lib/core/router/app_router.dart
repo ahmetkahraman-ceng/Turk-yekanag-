@@ -14,6 +14,8 @@ import 'package:turkiye_kan_agi/features/donation/presentation/donation_tips_scr
 import 'package:turkiye_kan_agi/features/donation/presentation/eligibility_survey_screen.dart';
 import 'package:turkiye_kan_agi/features/force_update/presentation/force_update_screen.dart';
 import 'package:turkiye_kan_agi/features/map/presentation/map_screen.dart';
+import 'package:turkiye_kan_agi/features/matching/presentation/screens/donation_celebration_screen.dart';
+import 'package:turkiye_kan_agi/features/matching/presentation/screens/donor_tracking_screen.dart';
 import 'package:turkiye_kan_agi/features/notifications/presentation/notifications_screen.dart';
 import 'package:turkiye_kan_agi/features/onboarding/presentation/kvkk_consent_screen.dart';
 import 'package:turkiye_kan_agi/features/onboarding/presentation/legal_document_screen.dart';
@@ -133,6 +135,18 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.designGallery,
         builder: (context, state) => const DesignGalleryScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.donorTracking,
+        builder: (context, state) {
+          final req = state.extra as BloodRequest?;
+          if (req == null) return const NotFoundScreen();
+          return DonorTrackingScreen(request: req);
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.celebration,
+        builder: (context, state) => const DonationCelebrationScreen(),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {

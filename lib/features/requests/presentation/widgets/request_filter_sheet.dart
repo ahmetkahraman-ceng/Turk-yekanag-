@@ -62,7 +62,8 @@ class RequestFilterSheet extends StatefulWidget {
 class _RequestFilterSheetState extends State<RequestFilterSheet> {
   static const List<double?> _distanceSteps = [3, 10, 25, 50, null];
 
-  late Set<BloodType> _bloodTypes = Set<BloodType>.of(widget.initialBloodTypes);
+  late final Set<BloodType> _bloodTypes =
+      Set<BloodType>.of(widget.initialBloodTypes);
   late BloodProductType? _productType = widget.initialFilter.productType;
   late RequestUrgency? _urgency = widget.initialFilter.urgency;
   late int _distanceStepIndex = _resolveStepIndex(widget.initialDistanceKm);

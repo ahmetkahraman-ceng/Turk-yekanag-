@@ -326,11 +326,14 @@ abstract final class MockData {
           : Duration(days: i - 3, hours: 2);
       return AppNotification(
         id: 'notif-$idx',
-        title: switch (i % 4) {
+        title: switch (i) {
           0 => 'Acil A Rh(+) Eritrosit İhtiyacı',
-          1 => 'Eşleşme Onayı Bilgilendirmesi',
-          2 => 'Teşekkür Mesajı Aldınız',
-          _ => 'Bekleme Süreniz Güncellendi',
+          _ => switch (i % 4) {
+              0 => 'Acil Kan Çağrısı (#$idx)',
+              1 => 'Eşleşme Onayı Bilgilendirmesi',
+              2 => 'Teşekkür Mesajı Aldınız',
+              _ => 'Bekleme Süreniz Güncellendi',
+            },
         },
         body: switch (i % 4) {
           0 =>
