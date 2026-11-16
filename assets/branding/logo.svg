@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="bloodGrad" x1="0.5" y1="0.06" x2="0.5" y2="0.94">
+      <stop offset="0%" stop-color="#FF6659"/>
+      <stop offset="55%" stop-color="#D32F2F"/>
+      <stop offset="100%" stop-color="#9A0007"/>
+    </linearGradient>
+  </defs>
+  <path d="M 512 61.4 C 573.4 204.8, 860.2 471.0, 860.2 665.6 C 860.2 860.2, 706.6 962.6, 512 962.6 C 317.4 962.6, 163.8 860.2, 163.8 665.6 C 163.8 471.0, 450.6 204.8, 512 61.4 Z" fill="url(#bloodGrad)"/>
+  <path d="M 450.6 225.3 C 337.9 389.1, 256.0 532.5, 266.2 655.4 C 297.0 553.0, 368.6 409.6, 471.0 266.2 Z" fill="#FFFFFF" fill-opacity="0.28"/>
+  <path d="M 368.6 573.4 Q 512 501.8 655.4 573.4" fill="none" stroke="#FFFFFF" stroke-opacity="0.88" stroke-width="28" stroke-linecap="round"/>
+  <line x1="368.6" y1="573.4" x2="512" y2="788.5" stroke="#FFFFFF" stroke-opacity="0.88" stroke-width="28" stroke-linecap="round"/>
+  <line x1="655.4" y1="573.4" x2="512" y2="788.5" stroke="#FFFFFF" stroke-opacity="0.88" stroke-width="28" stroke-linecap="round"/>
+  <circle cx="368.6" cy="573.4" r="53" fill="#FFFFFF"/>
+  <circle cx="655.4" cy="573.4" r="53" fill="#FFFFFF"/>
+  <circle cx="512" cy="788.5" r="59" fill="#FFFFFF"/>
+</svg>

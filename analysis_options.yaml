@@ -9,6 +9,8 @@ analyzer:
     - android/**
     - ios/**
     - web/**
+    - functions/**
+    - test/firestore_rules/**
   errors:
     invalid_annotation_target: ignore
 

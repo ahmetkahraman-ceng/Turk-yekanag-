@@ -418,5 +418,271 @@
   "donationTipsAfter3": "Avoid smoking for the first few hours; if you feel dizzy, lie down and elevate your legs.",
   "donationKvkkConsentRequiredTitle": "Health Data Explicit Consent Required",
   "donationKvkkConsentRequiredBody": "Your donation history and health survey answers are sensitive personal data under KVKK. Explicit consent is required to continue.",
-  "donationKvkkGrantConsentButton": "Grant Explicit Consent & Continue"
+  "donationKvkkGrantConsentButton": "Grant Explicit Consent & Continue",
+  "splashSubtitle": "One drop, one hope.",
+  "splashSemantics": "Türkiye Blood Network is loading",
+  "urgencyCriticalShort": "URGENT",
+  "urgencyTodayShort": "Today",
+  "urgencyThisWeekShort": "This week",
+  "statusOpen": "Open",
+  "statusFulfilled": "Fulfilled",
+  "statusCancelled": "Cancelled",
+  "statusExpired": "Expired",
+  "verifiedBadgeLabel": "Verified",
+  "compatibleBadgeLabel": "Compatible",
+  "requestsNoOpenNearYouTitle": "No open requests near you, that is good news.",
+  "requestsNoOpenNearYouSubtitle": "We will notify you immediately when a new urgent blood need arises.",
+  "actionWantBlood": "I Need Blood",
+  "actionCanHelp": "I Can Help",
+  "designGalleryTitle": "Design Gallery (Debug)",
+  "onboardingV2Slide1Title": "One drop, one hope",
+  "onboardingV2Slide1Body": "We quickly connect people in need of blood with nearby voluntary donors.",
+  "onboardingV2Slide2Title": "See needs near you",
+  "onboardingV2Slide2Body": "Track urgent blood requests in your province and district on a single screen.",
+  "onboardingV2Slide3Title": "Help with one tap",
+  "onboardingV2Slide3Body": "If your blood type matches, offer help with a single tap and navigate to the hospital.",
+  "onboardingV2Slide4Title": "Your data is safe",
+  "onboardingV2Slide4Body": "Your phone number and location are protected; shared only with your approval.",
+  "onboardingStartButton": "Start",
+  "kvkkSummaryCardTitle": "Your Data Is Under Your Control",
+  "kvkkSummaryCardBody": "Your health data is stored encrypted, never shared with third parties, and can be deleted anytime.",
+  "kvkkIlluminationLink": "Disclosure Text",
+  "kvkkExplicitConsentLink": "Explicit Consent Text",
+  "kvkkRequiredBadge": "Required",
+  "kvkkOptionalBadge": "Optional",
+  "kvkkContinueButton": "Continue",
+  "authSendCodeShort": "Send Code",
+  "authOrSimple": "or",
+  "authGoogleShort": "Continue with Google",
+  "authAppleShort": "Continue with Apple",
+  "authResendTimer": "Resend code ({seconds}s)",
+  "@authResendTimer": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "authOtpWrongCodeError": "The verification code you entered is incorrect. Please try again.",
+  "authOtpVerifiedSuccess": "Verified!",
+  "wizardStep1Title": "Name & Visibility",
+  "wizardStep2Title": "Your Blood Type",
+  "wizardStep3Title": "Personal Info",
+  "wizardStep4Title": "Province & District",
+  "wizardBloodUnknownCard": "I Don't Know",
+  "locationPermissionTitle": "Why Do We Ask?",
+  "locationPermissionSubtitle": "Your exact location is never shown to others. It is only used to sort urgent blood needs at the nearest hospitals.",
+  "locationPermissionAllowButton": "Enable Location",
+  "locationPermissionSkipButton": "Not Now, continue with province/district",
+  "readyCelebrationTitle": "You Are Ready!",
+  "readyCelebrationSubtitle": "Welcome to the solidarity network. Together we can save lives.",
+  "readyCelebrationAction": "Go to Home",
+  "donorStatusEligibleCard": "Eligible to donate",
+  "donorStatusWaitingCard": "{days} days until next donation",
+  "@donorStatusWaitingCard": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "filterMyBloodGroup": "My blood type",
+  "filterNearMe": "Near me",
+  "filterDistanceTitle": "Distance",
+  "filterDistanceAllCity": "Whole City",
+  "filterApplyButton": "Apply",
+  "filterClearButton": "Clear",
+  "requestRemainingHours": "{hours}h left",
+  "@requestRemainingHours": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "requestRemainingDays": "{days}d left",
+  "@requestRemainingDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "requestDirectionsButton": "Directions",
+  "requestTrustSectionTitle": "Trust & Verification",
+  "requestTrustSectionBody": "This request was created by a phone-verified user. Asking for money or fees is strictly prohibited.",
+  "requestClosedBannerFulfilled": "This blood request has been fulfilled. Thank you to all volunteers.",
+  "requestClosedBannerCancelled": "This blood request was cancelled by the requester.",
+  "requestClosedBannerExpired": "This blood request has expired.",
+  "shareWhatsAppButton": "Share on WhatsApp",
+  "shareImageButton": "Share as Image",
+  "draftSavePromptTitle": "Save draft?",
+  "draftSavePromptBody": "Your entered details can be saved as a draft without losing progress.",
+  "draftKeepButton": "Save Draft",
+  "draftDiscardButton": "Discard & Exit",
+  "requestPublishedSuccessTitle": "Your Request Is Live",
+  "requestPublishedSuccessSubtitle": "Nearby compatible donors are being notified. Share to reach more people faster.",
+  "canHelpConfirmTitle": "Send Help Offer",
+  "canHelpConfirmBody": "The requester will be notified, and contact info will unlock once they approve.",
+  "canHelpEligibilityReminder": "Make sure you haven't consumed alcohol in the last 24 hours, feel well, and have your ID with you.",
+  "donorTrackingTitle": "Donation Tracking",
+  "donorStepOffered": "Offer sent",
+  "donorStepApproved": "Approved",
+  "donorStepOnWay": "On my way",
+  "donorStepArrived": "Arrived",
+  "donorStepDonated": "Donated",
+  "quickMsg15Min": "I'll be there in 15 mins",
+  "quickMsgWhichWard": "Which ward?",
+  "quickMsgArrivedWhere": "I arrived, where are you?",
+  "celebrationTitle": "You touched a life",
+  "celebrationSubtitle": "Heartfelt thanks for your voluntary support.",
+  "celebrationBadgeEarned": "Badge Earned: First Drop of Hope",
+  "thankYouSheetTitle": "Send Thanks to Volunteer",
+  "thankYouChip1": "Thank you so much for being there.",
+  "thankYouChip2": "Your support gave us hope.",
+  "thankYouChip3": "Our warmest wishes are with you.",
+  "thankYouCustomHint": "Your short thank-you note...",
+  "thankYouSendButton": "Send Thanks",
+  "notificationsGroupToday": "Today",
+  "notificationsGroupEarlier": "Earlier",
+  "notificationsMarkAllReadShort": "Mark all as read",
+  "notificationPermissionSheetTitle": "Don't Miss Urgent Calls",
+  "notificationPermissionSheetBody": "We only send notifications for urgent requests near you that match your blood type.",
+  "notificationPermissionAllow": "Allow Notifications",
+  "notificationPermissionDeniedBanner": "Notifications are off. Enable them in settings to see urgent calls.",
+  "notificationOpenSettings": "Open Settings",
+  "urgentHeadsUpTitle": "URGENT Compatible Request Nearby!",
+  "urgentHeadsUpAction": "View",
+  "mapFilterRequests": "Requests",
+  "mapFilterCenters": "Donation centers",
+  "mapFilterMyBlood": "My blood type",
+  "mapMyLocationTooltip": "Go to my location",
+  "mapToggleList": "List",
+  "mapToggleMap": "Map",
+  "mapNearbyListTitle": "Nearby Points",
+  "centerOpenNow": "Open Now",
+  "centerClosedNow": "Closed",
+  "centerMobileUnitBadge": "Here today",
+  "centerMobileUnitTitle": "Mobile Blood Donation Unit",
+  "mapNoLocationTitle": "Location permission is off",
+  "mapNoLocationSubtitle": "Enable location to see nearby hospitals and donation centers on the map, or browse the list.",
+  "mapOpenLocationButton": "Enable location",
+  "mapViewListButton": "View list",
+  "directionsSheetTitle": "Choose Navigation App",
+  "directionsGoogleMaps": "Google Maps",
+  "directionsYandexNavi": "Yandex Navigation",
+  "directionsAppleMaps": "Apple Maps",
+  "donationDaysRemaining": "{days} days left",
+  "@donationDaysRemaining": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "donationEligibleBadge": "Eligible to donate",
+  "donationLastDate": "Last donation: {date}",
+  "@donationLastDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "donationLivesSavedTitle": "You saved lives",
+  "donationLivesSavedSubtitle": "Each whole blood donation can bring hope to up to 3 people (Kızılay info note).",
+  "donationAmIEligibleTitle": "Am I eligible?",
+  "donationAmIEligibleSubtitle": "Take a quick 1-minute pre-check survey",
+  "donationAddButtonShort": "Add Donation",
+  "donationEmptyReadyTitle": "Ready to make your first donation?",
+  "badgesSectionTitle": "Badge Showcase",
+  "badgeFirstDrop": "First Drop",
+  "badgeFirstDropHint": "Complete your first voluntary blood donation",
+  "badgeRegularHero": "Regular Volunteer",
+  "badgeRegularHeroHint": "Donate blood regularly 3 times",
+  "badgeEmergencyResponder": "Emergency Hero",
+  "badgeEmergencyResponderHint": "Respond to an urgent request on the same day",
+  "badgeApheresisStar": "Apheresis Star",
+  "badgeApheresisStarHint": "Make a platelet/apheresis donation",
+  "badgeCommunityBuilder": "Solidarity Ambassador",
+  "badgeCommunityBuilderHint": "Invite 3 friends to the network",
+  "surveyStaffDecisionNotice": "The decision belongs to healthcare staff at the blood center.",
+  "profileVerifiedPhone": "Phone Verified",
+  "profileSectionMyInfo": "My Information",
+  "profileSectionNotifPrefs": "Notification preferences",
+  "profileSectionLocationTravel": "Location & travel mode",
+  "profileSectionCommunities": "My Communities",
+  "profileSectionInvite": "Invite a friend",
+  "profileSectionAppearance": "Appearance",
+  "profileSectionPrivacyData": "Privacy & data",
+  "profileSectionHelpFaq": "Help & FAQ",
+  "profileSectionAbout": "About",
+  "travelModeTitle": "Travel Mode",
+  "travelModeSubtitle": "Temporarily see requests for another city while traveling",
+  "travelModeActiveBanner": "Travel Mode Active: {city} ({dateRange})",
+  "@travelModeActiveBanner": {
+    "placeholders": {
+      "city": {
+        "type": "String"
+      },
+      "dateRange": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteAccountTypeConfirmHint": "Type SİL to confirm",
+  "deleteAccountTypeConfirmWord": "SİL",
+  "communitiesTitle": "Communities & Rare Blood Network",
+  "communityJoinButton": "Join",
+  "communityLeaveButton": "Leave",
+  "rareBloodNetworkTitle": "Rare Blood Network (Rh Negative)",
+  "rareBloodNetworkSubtitle": "Join the dedicated solidarity network for rare Rh(-) blood groups.",
+  "institutionTitle": "Institutional Account & Campaigns",
+  "institutionApplyTab": "Application",
+  "institutionCampaignsTab": "Campaigns",
+  "institutionPendingBanner": "Your institutional application is under review (Pending Approval)",
+  "institutionVerifiedBadge": "Verified Institution",
+  "campaignJoinButton": "I'm Joining",
+  "bloodMatrixTitle": "Blood Type Compatibility Matrix",
+  "bloodMatrixCanGiveTo": "Can Donate To",
+  "bloodMatrixCanReceiveFrom": "Can Receive From",
+  "faqTitle": "Frequently Asked Questions & Guide",
+  "mythsAndFactsTab": "Myths & Facts",
+  "emergencyGuideTitle": "I need blood, what should I do?",
+  "leaderboardTitle": "Volunteer Honor Board",
+  "leaderboardOptInWarning": "Volunteering is not a competition; this board is for motivation only and is hidden by default.",
+  "leaderboardEnableButton": "Show Board",
+  "inviteTitle": "Invite a Friend",
+  "inviteSubtitle": "Grow the solidarity network, touch more lives.",
+  "inviteCopyLink": "Copy Invite Link",
+  "inviteCountLabel": "{count} friends joined with your invite",
+  "@inviteCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "aboutTitle": "About & Feedback",
+  "feedbackTitle": "Send Feedback",
+  "maintenanceTitle": "Under Maintenance",
+  "maintenanceMessage": "Our system is currently undergoing brief maintenance. Please try again shortly.",
+  "offlineScreenTitle": "No Internet Connection",
+  "adminTitle": "Türkiye Blood Network — Admin Panel",
+  "adminLoginTitle": "Admin Sign In",
+  "adminNavDashboard": "Dashboard",
+  "adminNavReports": "Reports",
+  "adminNavRequests": "Requests",
+  "adminNavUsers": "Users",
+  "adminNavInstitutions": "Institutions",
+  "adminNavCampaigns": "Campaigns",
+  "adminNavAuditLog": "Audit Log",
+  "adminNavSettings": "Settings",
+  "adminStatOpenRequests": "Open Requests",
+  "adminStatFulfillmentRate": "Fulfillment Rate",
+  "adminStatPendingReports": "Pending Reports",
+  "adminStatNewUsers": "New Users",
+  "adminApproveAction": "Approve",
+  "adminRejectAction": "Reject",
+  "adminRestrictAction": "Restrict"
 }

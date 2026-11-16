@@ -4,16 +4,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:turkiye_kan_agi/core/error/app_failure.dart';
 import 'package:turkiye_kan_agi/core/error/result.dart';
+import 'package:turkiye_kan_agi/core/mock/mock_data.dart';
 import 'package:turkiye_kan_agi/core/services/remote_config_service.dart';
-import 'package:turkiye_kan_agi/features/profile/domain/blood_type.dart';
-import 'package:turkiye_kan_agi/features/requests/domain/blood_product_type.dart';
 import 'package:turkiye_kan_agi/features/requests/domain/blood_request.dart';
 import 'package:turkiye_kan_agi/features/requests/domain/blood_request_filter.dart';
 import 'package:turkiye_kan_agi/features/requests/domain/blood_request_repository.dart';
-import 'package:turkiye_kan_agi/features/requests/domain/hospital.dart';
 import 'package:turkiye_kan_agi/features/requests/domain/prohibited_content_filter.dart';
 import 'package:turkiye_kan_agi/features/requests/domain/request_status.dart';
-import 'package:turkiye_kan_agi/features/requests/domain/request_urgency.dart';
 
 /// Firestore ve Storage tabanlı kan talebi repository uygulaması.
 class FirestoreBloodRequestRepository implements BloodRequestRepository {
@@ -33,55 +30,7 @@ class FirestoreBloodRequestRepository implements BloodRequestRepository {
   final List<BloodRequest> _memoryStore;
 
   static List<BloodRequest> _defaultSeeds() {
-    final now = DateTime.now().toUtc();
-    return <BloodRequest>[
-      BloodRequest(
-        id: 'req-seed-1',
-        requesterUid: 'seed-owner-1',
-        patientInitials: 'M.K.',
-        bloodType: BloodType.aPos,
-        productType: BloodProductType.erythrocyte,
-        unitsNeeded: 2,
-        hospital: const Hospital(
-          id: 'hosp-ank-bilkent',
-          name: 'Ankara Bilkent Şehir Hastanesi',
-          province: 'Ankara',
-          district: 'Çankaya',
-          latitude: 39.9008,
-          longitude: 32.7556,
-        ),
-        department: 'Genel Yoğun Bakım',
-        urgency: RequestUrgency.critical,
-        status: RequestStatus.open,
-        createdAt: now.subtract(const Duration(hours: 1)),
-        expiresAt: now.add(const Duration(hours: 23)),
-        notes: 'Ameliyat hazırlığı için acil eritrosit süspansiyonu ihtiyacı.',
-        offerCount: 1,
-      ),
-      BloodRequest(
-        id: 'req-seed-2',
-        requesterUid: 'seed-owner-2',
-        patientInitials: 'S.Y.',
-        bloodType: BloodType.oNeg,
-        productType: BloodProductType.platelet,
-        unitsNeeded: 1,
-        hospital: const Hospital(
-          id: 'hosp-ist-capa',
-          name: 'İstanbul Üniversitesi İstanbul Tıp Fakültesi (Çapa)',
-          province: 'İstanbul',
-          district: 'Fatih',
-          latitude: 41.0156,
-          longitude: 28.9329,
-        ),
-        department: 'Erişkin Hematoloji Servisi',
-        urgency: RequestUrgency.today,
-        status: RequestStatus.open,
-        createdAt: now.subtract(const Duration(hours: 3)),
-        expiresAt: now.add(const Duration(hours: 45)),
-        notes: 'Aferez trombosit ihtiyacı bulunmaktadır.',
-        offerCount: 2,
-      ),
-    ];
+    return MockData.requests;
   }
 
   @override

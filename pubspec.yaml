@@ -59,6 +59,27 @@ dev_dependencies:
   freezed: ^2.5.7
   json_serializable: ^6.9.0
 
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/branding/logo_1024.png"
+  adaptive_icon_background: "#FFF8F6"
+  adaptive_icon_foreground: "assets/branding/logo_1024.png"
+  remove_alpha_ios: true
+
+flutter_native_splash:
+  color: "#FFF8F6"
+  color_dark: "#1A0E0E"
+  image: "assets/branding/logo_1024.png"
+  image_dark: "assets/branding/logo_1024.png"
+  android_12:
+    color: "#FFF8F6"
+    color_dark: "#1A0E0E"
+    image: "assets/branding/logo_1024.png"
+    image_dark: "assets/branding/logo_1024.png"
+    icon_background_color: "#FFF8F6"
+    icon_background_color_dark: "#1A0E0E"
+
 flutter:
   uses-material-design: true
   generate: true
@@ -66,3 +87,18 @@ flutter:
     - assets/data/turkey_provinces_districts.json
     - assets/data/turkey_hospitals.json
     - assets/data/eligibility_survey.json
+    - assets/branding/logo.svg
+    - assets/branding/logo_1024.png
+  fonts:
+    - family: Nunito
+      fonts:
+        - asset: assets/fonts/Nunito-Variable.ttf
+          weight: 400
+        - asset: assets/fonts/Nunito-Variable.ttf
+          weight: 500
+        - asset: assets/fonts/Nunito-Variable.ttf
+          weight: 600
+        - asset: assets/fonts/Nunito-Variable.ttf
+          weight: 700
+        - asset: assets/fonts/Nunito-Variable.ttf
+          weight: 800

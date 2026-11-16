@@ -15,8 +15,18 @@ enum BloodType {
 
   bool get isKnown => this != BloodType.unknown;
 
-  static List<BloodType> get knownTypes =>
-      values.where((t) => t.isKnown).toList(growable: false);
+  static const List<BloodType> knownValues = [
+    aPos,
+    aNeg,
+    bPos,
+    bNeg,
+    abPos,
+    abNeg,
+    oPos,
+    oNeg,
+  ];
+
+  static List<BloodType> get knownTypes => knownValues;
 
   static BloodType fromCode(String? code) {
     for (final value in values) {

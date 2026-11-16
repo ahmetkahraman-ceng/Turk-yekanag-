@@ -6,6 +6,7 @@ import 'package:turkiye_kan_agi/core/router/auth_guard_provider.dart';
 import 'package:turkiye_kan_agi/core/router/main_scaffold.dart';
 import 'package:turkiye_kan_agi/core/router/not_found_screen.dart';
 import 'package:turkiye_kan_agi/core/services/app_version_service.dart';
+import 'package:turkiye_kan_agi/core/widgets/design_gallery_screen.dart';
 import 'package:turkiye_kan_agi/features/auth/presentation/login_screen.dart';
 import 'package:turkiye_kan_agi/features/auth/presentation/otp_verification_screen.dart';
 import 'package:turkiye_kan_agi/features/donation/presentation/donation_screen.dart';
@@ -38,6 +39,8 @@ const Set<String> _publicAuthRoutes = <String>{
   AppRoutes.login,
   AppRoutes.otpVerification,
   AppRoutes.unknownBloodTypeGuide,
+  AppRoutes.designGallery,
+  AppRoutes.admin,
 };
 
 /// Auth guard, Force Update guard, Deep Link (`/requests/:requestId`) ve 404 destekli GoRouter sağlayıcısı.
@@ -126,6 +129,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.notificationPreferences,
         builder: (context, state) => const NotificationPreferencesScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.designGallery,
+        builder: (context, state) => const DesignGalleryScreen(),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {

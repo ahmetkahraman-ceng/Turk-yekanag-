@@ -19,4 +19,17 @@ abstract final class AppRoutes {
   static const String donationTips = '/donation/tips';
   static const String notifications = '/notifications';
   static const String profile = '/profile';
+  static const String designGallery = '/debug/gallery';
+  static const String donorTracking = '/donor-tracking';
+  static const String celebration = '/celebration';
+  static const String communities = '/communities';
+  static const String institutions = '/institutions';
+  static const String bloodMatrix = '/blood-matrix';
+  static const String faq = '/faq';
+  static const String emergencyGuide = '/emergency-guide';
+  static const String leaderboard = '/leaderboard';
+  static const String invite = '/invite';
+  static const String about = '/about';
+  static const String maintenance = '/maintenance';
+  static const String admin = '/admin';
 }

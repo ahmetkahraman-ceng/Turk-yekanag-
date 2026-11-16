@@ -418,5 +418,271 @@
   "donationTipsAfter3": "İlk birkaç saat sigara kullanmayın; baş dönmesi hissederseniz hemen uzanıp ayaklarınızı yükseltin.",
   "donationKvkkConsentRequiredTitle": "Sağlık Verisi Açık Rızası Gerekli",
   "donationKvkkConsentRequiredBody": "Bağış geçmişi ve sağlık anketi verileriniz KVKK kapsamında özel nitelikli kişisel veridir. Devam etmek için açık rıza vermeniz gerekmektedir.",
-  "donationKvkkGrantConsentButton": "Açık Rıza Ver ve Devam Et"
+  "donationKvkkGrantConsentButton": "Açık Rıza Ver ve Devam Et",
+  "splashSubtitle": "Bir damla, bir umut.",
+  "splashSemantics": "Türkiye Kan Ağı yükleniyor",
+  "urgencyCriticalShort": "ACİL",
+  "urgencyTodayShort": "Bugün",
+  "urgencyThisWeekShort": "Bu hafta",
+  "statusOpen": "Açık",
+  "statusFulfilled": "Karşılandı",
+  "statusCancelled": "İptal",
+  "statusExpired": "Süresi doldu",
+  "verifiedBadgeLabel": "Doğrulanmış",
+  "compatibleBadgeLabel": "Uyumlusun",
+  "requestsNoOpenNearYouTitle": "Çevrende açık talep yok, bu iyi haber.",
+  "requestsNoOpenNearYouSubtitle": "Yeni bir acil kan ihtiyacı oluştuğunda seni hemen bilgilendireceğiz.",
+  "actionWantBlood": "Kan İstiyorum",
+  "actionCanHelp": "Yardım Edebilirim",
+  "designGalleryTitle": "Tasarım Galerisi (Debug)",
+  "onboardingV2Slide1Title": "Bir damla, bir umut",
+  "onboardingV2Slide1Body": "Kan ihtiyacı olanlarla yakınındaki gönüllü bağışçıları hızla buluşturuyoruz.",
+  "onboardingV2Slide2Title": "Yakınındaki ihtiyacı gör",
+  "onboardingV2Slide2Body": "Bulunduğun il ve ilçedeki acil kan taleplerini tek ekranda takip et.",
+  "onboardingV2Slide3Title": "Tek dokunuşla yardım et",
+  "onboardingV2Slide3Body": "Kan grubun uyumluysa tek dokunuşla yardım teklif et ve hastaneye yönlen.",
+  "onboardingV2Slide4Title": "Verin güvende",
+  "onboardingV2Slide4Body": "Telefon numaran ve konumun korunur; yalnızca senin onayınla paylaşılır.",
+  "onboardingStartButton": "Başla",
+  "kvkkSummaryCardTitle": "Verileriniz Sizin Kontrolünüzde",
+  "kvkkSummaryCardBody": "Sağlık verileriniz şifreli saklanır, üçüncü kişilerle paylaşılmaz ve istediğiniz an silinebilir.",
+  "kvkkIlluminationLink": "Aydınlatma Metni",
+  "kvkkExplicitConsentLink": "Açık Rıza Metni",
+  "kvkkRequiredBadge": "Zorunlu",
+  "kvkkOptionalBadge": "İsteğe Bağlı",
+  "kvkkContinueButton": "Devam",
+  "authSendCodeShort": "Kod Gönder",
+  "authOrSimple": "veya",
+  "authGoogleShort": "Google ile devam et",
+  "authAppleShort": "Apple ile devam et",
+  "authResendTimer": "Kodu tekrar gönder ({seconds} sn)",
+  "@authResendTimer": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "authOtpWrongCodeError": "Girdiğiniz doğrulama kodu hatalı. Lütfen tekrar deneyin.",
+  "authOtpVerifiedSuccess": "Doğrulandı!",
+  "wizardStep1Title": "Ad ve Görünürlük",
+  "wizardStep2Title": "Kan Grubun",
+  "wizardStep3Title": "Kişisel Bilgiler",
+  "wizardStep4Title": "İl ve İlçe",
+  "wizardBloodUnknownCard": "Bilmiyorum",
+  "locationPermissionTitle": "Neden İstiyoruz?",
+  "locationPermissionSubtitle": "Tam konumun başkalarına asla gösterilmez. Yalnızca sana en yakın hastanedeki acil kan ihtiyaçlarını sıralamak için kullanılır.",
+  "locationPermissionAllowButton": "Konumu Aç",
+  "locationPermissionSkipButton": "Şimdi Değil, il/ilçe ile devam et",
+  "readyCelebrationTitle": "Hazırsın!",
+  "readyCelebrationSubtitle": "Dayanışma ağına hoş geldin. Birlikte hayat kurtarabiliriz.",
+  "readyCelebrationAction": "Ana Ekrana Geç",
+  "donorStatusEligibleCard": "Bağışa uygunsun",
+  "donorStatusWaitingCard": "Sonraki bağışına {days} gün var",
+  "@donorStatusWaitingCard": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "filterMyBloodGroup": "Benim kan grubum",
+  "filterNearMe": "Yakınımda",
+  "filterDistanceTitle": "Mesafe",
+  "filterDistanceAllCity": "Tüm Şehir",
+  "filterApplyButton": "Uygula",
+  "filterClearButton": "Temizle",
+  "requestRemainingHours": "{hours} sa kaldı",
+  "@requestRemainingHours": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "requestRemainingDays": "{days} gün kaldı",
+  "@requestRemainingDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "requestDirectionsButton": "Yol Tarifi",
+  "requestTrustSectionTitle": "Güven ve Doğrulama",
+  "requestTrustSectionBody": "Bu talep telefon doğrulaması yapılmış kullanıcı tarafından oluşturulmuştur. Para veya ücret talep edilmesi kesinlikle yasaktır.",
+  "requestClosedBannerFulfilled": "Bu kan talebi karşılanmıştır. Tüm gönüllülere teşekkür ederiz.",
+  "requestClosedBannerCancelled": "Bu kan talebi talep sahibi tarafından iptal edilmiştir.",
+  "requestClosedBannerExpired": "Bu kan talebinin süresi dolmuştur.",
+  "shareWhatsAppButton": "WhatsApp'ta paylaş",
+  "shareImageButton": "Görsel olarak paylaş",
+  "draftSavePromptTitle": "Taslak kaydedilsin mi?",
+  "draftSavePromptBody": "Girdiğiniz bilgiler silinmeden taslak olarak saklanabilir.",
+  "draftKeepButton": "Taslağı Kaydet",
+  "draftDiscardButton": "Sil ve Çık",
+  "requestPublishedSuccessTitle": "Talebiniz Yayınlandı",
+  "requestPublishedSuccessSubtitle": "Yakındaki uyumlu bağışçılara bildirim gönderiliyor. Daha hızlı ulaşmak için paylaşabilirsiniz.",
+  "canHelpConfirmTitle": "Yardım Teklifi Gönder",
+  "canHelpConfirmBody": "Talep sahibine bildirim gidecek, onaylarsa iletişim açılacak.",
+  "canHelpEligibilityReminder": "Son 24 saatte alkol almadığınızdan, kendinizi iyi hissettiğinizden ve kimliğinizin yanınızda olduğundan emin olun.",
+  "donorTrackingTitle": "Bağış Takibi",
+  "donorStepOffered": "Teklif gönderildi",
+  "donorStepApproved": "Onaylandı",
+  "donorStepOnWay": "Yoldayım",
+  "donorStepArrived": "Vardım",
+  "donorStepDonated": "Bağış yaptım",
+  "quickMsg15Min": "15 dakikada oradayım",
+  "quickMsgWhichWard": "Hangi servis?",
+  "quickMsgArrivedWhere": "Geldim, neredesiniz?",
+  "celebrationTitle": "Bir hayata dokundun",
+  "celebrationSubtitle": "Gönüllü desteğin için yürekten teşekkürler.",
+  "celebrationBadgeEarned": "Kazanılan Rozet: İlk Umut Damlası",
+  "thankYouSheetTitle": "Gönüllüye Teşekkür Gönder",
+  "thankYouChip1": "İyi ki varsınız, çok teşekkür ederiz.",
+  "thankYouChip2": "Desteğiniz bize umut oldu.",
+  "thankYouChip3": "Dualarımız sizinle, sağ olun.",
+  "thankYouCustomHint": "Kısa teşekkür mesajınız...",
+  "thankYouSendButton": "Teşekkür Gönder",
+  "notificationsGroupToday": "Bugün",
+  "notificationsGroupEarlier": "Daha önce",
+  "notificationsMarkAllReadShort": "Hepsini okundu yap",
+  "notificationPermissionSheetTitle": "Acil Çağrıları Kaçırma",
+  "notificationPermissionSheetBody": "Yalnızca kan grubuna uygun ve yakınındaki acil talepler için bildirim göndeririz.",
+  "notificationPermissionAllow": "Bildirimlere İzin Ver",
+  "notificationPermissionDeniedBanner": "Bildirimler kapalı. Acil çağrıları görmek için ayarlardan açabilirsiniz.",
+  "notificationOpenSettings": "Ayarları Aç",
+  "urgentHeadsUpTitle": "Yakınında ACİL Uyumlu Talep!",
+  "urgentHeadsUpAction": "İncele",
+  "mapFilterRequests": "Talepler",
+  "mapFilterCenters": "Bağış merkezleri",
+  "mapFilterMyBlood": "Kan grubum",
+  "mapMyLocationTooltip": "Konumuma git",
+  "mapToggleList": "Liste",
+  "mapToggleMap": "Harita",
+  "mapNearbyListTitle": "Yakındaki Noktalar",
+  "centerOpenNow": "Şimdi Açık",
+  "centerClosedNow": "Kapalı",
+  "centerMobileUnitBadge": "Bugün burada",
+  "centerMobileUnitTitle": "Gezici Kan Bağış Aracı",
+  "mapNoLocationTitle": "Konum izni kapalı",
+  "mapNoLocationSubtitle": "Haritada yakınındaki hastaneleri ve bağış merkezlerini görmek için konumu açabilir veya listeyi inceleyebilirsin.",
+  "mapOpenLocationButton": "Konumu aç",
+  "mapViewListButton": "Listeyi gör",
+  "directionsSheetTitle": "Yol Tarifi Uygulaması Seçin",
+  "directionsGoogleMaps": "Google Maps",
+  "directionsYandexNavi": "Yandex Navigasyon",
+  "directionsAppleMaps": "Apple Haritalar",
+  "donationDaysRemaining": "{days} gün kaldı",
+  "@donationDaysRemaining": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "donationEligibleBadge": "Bağışa uygunsun",
+  "donationLastDate": "Son bağış: {date}",
+  "@donationLastDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "donationLivesSavedTitle": "Hayat kurtardın",
+  "donationLivesSavedSubtitle": "Her tam kan bağışı 3 kişiye kadar umut olabilir (Kızılay bilgilendirme notu).",
+  "donationAmIEligibleTitle": "Uygun muyum?",
+  "donationAmIEligibleSubtitle": "1 dakikada hızlı ön kontrol testi yap",
+  "donationAddButtonShort": "Bağış Ekle",
+  "donationEmptyReadyTitle": "İlk bağışını yapmaya hazır mısın?",
+  "badgesSectionTitle": "Rozet Vitrini",
+  "badgeFirstDrop": "İlk Damla",
+  "badgeFirstDropHint": "İlk gönüllü kan bağışını tamamla",
+  "badgeRegularHero": "Düzenli Gönüllü",
+  "badgeRegularHeroHint": "3 kez düzenli kan bağışı yap",
+  "badgeEmergencyResponder": "Acil Hızır",
+  "badgeEmergencyResponderHint": "Acil bir talebe aynı gün yanıt ver",
+  "badgeApheresisStar": "Aferez Yıldızı",
+  "badgeApheresisStarHint": "Trombosit/aferez bağışında bulun",
+  "badgeCommunityBuilder": "Dayanışma Elçisi",
+  "badgeCommunityBuilderHint": "3 arkadaşını ağa davet et",
+  "surveyStaffDecisionNotice": "Karar kan merkezindeki sağlık personelindedir.",
+  "profileVerifiedPhone": "Telefon Doğrulandı",
+  "profileSectionMyInfo": "Bilgilerim",
+  "profileSectionNotifPrefs": "Bildirim tercihleri",
+  "profileSectionLocationTravel": "Konum ve seyahat modu",
+  "profileSectionCommunities": "Topluluklarım",
+  "profileSectionInvite": "Arkadaşını davet et",
+  "profileSectionAppearance": "Görünüm",
+  "profileSectionPrivacyData": "Gizlilik ve veri",
+  "profileSectionHelpFaq": "Yardım ve SSS",
+  "profileSectionAbout": "Hakkında",
+  "travelModeTitle": "Seyahat Modu",
+  "travelModeSubtitle": "Farklı bir şehirdeyken geçici olarak o şehrin taleplerini gör",
+  "travelModeActiveBanner": "Seyahat Modu Aktif: {city} ({dateRange})",
+  "@travelModeActiveBanner": {
+    "placeholders": {
+      "city": {
+        "type": "String"
+      },
+      "dateRange": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteAccountTypeConfirmHint": "Onaylamak için SİL yazın",
+  "deleteAccountTypeConfirmWord": "SİL",
+  "communitiesTitle": "Topluluklar ve Nadir Kan Ağı",
+  "communityJoinButton": "Katıl",
+  "communityLeaveButton": "Ayrıl",
+  "rareBloodNetworkTitle": "Nadir Kan Ağı (Rh Negatif)",
+  "rareBloodNetworkSubtitle": "Nadir bulunan Rh(-) kan grupları için özel dayanışma ağına katılın.",
+  "institutionTitle": "Kurumsal Hesap ve Kampanyalar",
+  "institutionApplyTab": "Başvuru",
+  "institutionCampaignsTab": "Kampanyalar",
+  "institutionPendingBanner": "Kurum başvurunuz inceleniyor (Onay Bekliyor)",
+  "institutionVerifiedBadge": "Doğrulanmış Kurum",
+  "campaignJoinButton": "Katılıyorum",
+  "bloodMatrixTitle": "Kan Grupları Uyumluluk Matrisi",
+  "bloodMatrixCanGiveTo": "Kime Verebilir?",
+  "bloodMatrixCanReceiveFrom": "Kimden Alabilir?",
+  "faqTitle": "Sıkça Sorulan Sorular ve Rehber",
+  "mythsAndFactsTab": "Efsaneler ve Gerçekler",
+  "emergencyGuideTitle": "Kan lazım, ne yapmalıyım?",
+  "leaderboardTitle": "Gönüllü Onur Tablosu",
+  "leaderboardOptInWarning": "Gönüllülük yarış değildir; bu tablo yalnızca motivasyon amaçlıdır ve varsayılan olarak kapalıdır.",
+  "leaderboardEnableButton": "Tabloyu Göster",
+  "inviteTitle": "Arkadaşını Davet Et",
+  "inviteSubtitle": "Dayanışma ağını büyüt, daha fazla hayata dokun.",
+  "inviteCopyLink": "Davet Linkini Kopyala",
+  "inviteCountLabel": "{count} arkadaşın senin davetinle katıldı",
+  "@inviteCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "aboutTitle": "Hakkında ve Geri Bildirim",
+  "feedbackTitle": "Geri Bildirim Gönder",
+  "maintenanceTitle": "Bakım Çalışması",
+  "maintenanceMessage": "Sistemimiz şu anda kısa süreli bakım çalışmasındadır. Lütfen biraz sonra tekrar deneyin.",
+  "offlineScreenTitle": "İnternet Bağlantısı Yok",
+  "adminTitle": "Türkiye Kan Ağı — Yönetim Paneli",
+  "adminLoginTitle": "Yönetici Girişi",
+  "adminNavDashboard": "Pano",
+  "adminNavReports": "Raporlar",
+  "adminNavRequests": "Talepler",
+  "adminNavUsers": "Kullanıcılar",
+  "adminNavInstitutions": "Kurumlar",
+  "adminNavCampaigns": "Kampanyalar",
+  "adminNavAuditLog": "Denetim Kaydı",
+  "adminNavSettings": "Ayarlar",
+  "adminStatOpenRequests": "Açık Talep",
+  "adminStatFulfillmentRate": "Karşılanma Oranı",
+  "adminStatPendingReports": "Bekleyen Rapor",
+  "adminStatNewUsers": "Yeni Kullanıcı",
+  "adminApproveAction": "Onayla",
+  "adminRejectAction": "Reddet",
+  "adminRestrictAction": "Kısıtla"
 }

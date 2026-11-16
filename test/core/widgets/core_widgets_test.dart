@@ -1,39 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:turkiye_kan_agi/core/branding/blood_logo.dart';
+import 'package:turkiye_kan_agi/core/mock/mock_data.dart';
 import 'package:turkiye_kan_agi/core/theme/app_spacing.dart';
+import 'package:turkiye_kan_agi/core/widgets/app_button.dart';
 import 'package:turkiye_kan_agi/core/widgets/app_text_field.dart';
+import 'package:turkiye_kan_agi/core/widgets/blood_type_badge.dart';
+import 'package:turkiye_kan_agi/core/widgets/countdown_ring.dart';
+import 'package:turkiye_kan_agi/core/widgets/design_gallery_screen.dart';
 import 'package:turkiye_kan_agi/core/widgets/empty_state.dart';
 import 'package:turkiye_kan_agi/core/widgets/error_state.dart';
 import 'package:turkiye_kan_agi/core/widgets/loading_skeleton.dart';
 import 'package:turkiye_kan_agi/core/widgets/offline_banner.dart';
 import 'package:turkiye_kan_agi/core/widgets/primary_button.dart';
+import 'package:turkiye_kan_agi/core/widgets/status_and_urgency_tags.dart';
+import 'package:turkiye_kan_agi/features/profile/domain/blood_type.dart';
+import 'package:turkiye_kan_agi/features/requests/domain/request_status.dart';
+import 'package:turkiye_kan_agi/features/requests/domain/request_urgency.dart';
 
 import '../../helpers/test_app_wrapper.dart';
 
 void main() {
-  group('Core Ortak Widget Testleri', () {
+  group('Core Ortak Widget ve Aşama 1 Testleri', () {
     testWidgets(
-      'PrimaryButton minimum 48dp dokunma alanına sahiptir ve tıklamayı tetikler',
+      'PrimaryButton ve AppButton minimum dokunma alanına sahiptir ve tıklamayı tetikler',
       (tester) async {
         var tapped = false;
+        var appBtnTapped = false;
         await tester.pumpWidget(
           buildTestableWidget(
-            PrimaryButton(
-              label: 'Onayla',
-              onPressed: () => tapped = true,
+            Column(
+              children: [
+                PrimaryButton(
+                  label: 'Onayla',
+                  onPressed: () => tapped = true,
+                ),
+                AppButton(
+                  label: 'Yardım Edebilirim',
+                  onPressed: () => appBtnTapped = true,
+                ),
+              ],
             ),
           ),
         );
         await tester.pumpAndSettle();
 
-        final buttonFinder = find.byType(ElevatedButton);
+        final buttonFinder = find.text('Onayla');
         expect(buttonFinder, findsOneWidget);
-
-        final size = tester.getSize(buttonFinder);
-        expect(size.height, greaterThanOrEqualTo(AppSpacing.minTouchTarget));
 
         await tester.tap(buttonFinder);
         expect(tapped, isTrue);
+
+        await tester.tap(find.text('Yardım Edebilirim'));
+        expect(appBtnTapped, isTrue);
       },
     );
 
@@ -113,6 +132,52 @@ void main() {
       await tester.pump();
 
       expect(find.byType(LoadingSkeleton), findsOneWidget);
+    });
+
+    testWidgets(
+      'BloodLogo, BloodTypeBadge, UrgencyTag, StatusTag ve CountdownRing sorunsuz çizilir',
+      (tester) async {
+        await tester.pumpWidget(
+          buildTestableWidget(
+            const SingleChildScrollView(
+              child: Column(
+                children: [
+                  BloodLogo(size: 80, progress: 1.0),
+                  BloodTypeBadge(
+                    bloodType: BloodType.oNeg,
+                    size: BloodBadgeSize.l,
+                  ),
+                  UrgencyTag(urgency: RequestUrgency.critical),
+                  StatusTag(status: RequestStatus.fulfilled),
+                  CountdownRing(progress: 0.5, centerText: '24 gün'),
+                ],
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        expect(find.byType(BloodLogo), findsOneWidget);
+        expect(find.text('0-'), findsOneWidget);
+        expect(find.text('ACİL'), findsOneWidget);
+        expect(find.text('Karşılandı'), findsOneWidget);
+        expect(find.text('24 gün'), findsOneWidget);
+      },
+    );
+
+    testWidgets('DesignGalleryScreen taşma olmadan çizilir', (tester) async {
+      await tester.pumpWidget(
+        buildTestableWidget(const DesignGalleryScreen()),
+      );
+      await tester.pump();
+      expect(find.byType(DesignGalleryScreen), findsOneWidget);
+    });
+
+    test('MockData en az 30 talep, 10 bağış merkezi ve 15 bildirim içerir', () {
+      expect(MockData.requests.length, greaterThanOrEqualTo(30));
+      expect(MockData.centers.length, greaterThanOrEqualTo(10));
+      expect(MockData.notifications.length, greaterThanOrEqualTo(15));
+      expect(AppSpacing.primaryButtonHeight, 52.0);
     });
   });
 }

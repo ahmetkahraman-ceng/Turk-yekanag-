@@ -26,6 +26,8 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+*.apk
+firestore-debug.log
 untranslated_messages.txt
 
 # Environment & Secrets (NEVER commit secrets)

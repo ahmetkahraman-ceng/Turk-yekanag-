@@ -1035,4 +1035,673 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get donationKvkkGrantConsentButton => 'Açık Rıza Ver ve Devam Et';
+
+  @override
+  String get splashSubtitle => 'Bir damla, bir umut.';
+
+  @override
+  String get splashSemantics => 'Türkiye Kan Ağı yükleniyor';
+
+  @override
+  String get urgencyCriticalShort => 'ACİL';
+
+  @override
+  String get urgencyTodayShort => 'Bugün';
+
+  @override
+  String get urgencyThisWeekShort => 'Bu hafta';
+
+  @override
+  String get statusOpen => 'Açık';
+
+  @override
+  String get statusFulfilled => 'Karşılandı';
+
+  @override
+  String get statusCancelled => 'İptal';
+
+  @override
+  String get statusExpired => 'Süresi doldu';
+
+  @override
+  String get verifiedBadgeLabel => 'Doğrulanmış';
+
+  @override
+  String get compatibleBadgeLabel => 'Uyumlusun';
+
+  @override
+  String get requestsNoOpenNearYouTitle =>
+      'Çevrende açık talep yok, bu iyi haber.';
+
+  @override
+  String get requestsNoOpenNearYouSubtitle =>
+      'Yeni bir acil kan ihtiyacı oluştuğunda seni hemen bilgilendireceğiz.';
+
+  @override
+  String get actionWantBlood => 'Kan İstiyorum';
+
+  @override
+  String get actionCanHelp => 'Yardım Edebilirim';
+
+  @override
+  String get designGalleryTitle => 'Tasarım Galerisi (Debug)';
+
+  @override
+  String get onboardingV2Slide1Title => 'Bir damla, bir umut';
+
+  @override
+  String get onboardingV2Slide1Body =>
+      'Kan ihtiyacı olanlarla yakınındaki gönüllü bağışçıları hızla buluşturuyoruz.';
+
+  @override
+  String get onboardingV2Slide2Title => 'Yakınındaki ihtiyacı gör';
+
+  @override
+  String get onboardingV2Slide2Body =>
+      'Bulunduğun il ve ilçedeki acil kan taleplerini tek ekranda takip et.';
+
+  @override
+  String get onboardingV2Slide3Title => 'Tek dokunuşla yardım et';
+
+  @override
+  String get onboardingV2Slide3Body =>
+      'Kan grubun uyumluysa tek dokunuşla yardım teklif et ve hastaneye yönlen.';
+
+  @override
+  String get onboardingV2Slide4Title => 'Verin güvende';
+
+  @override
+  String get onboardingV2Slide4Body =>
+      'Telefon numaran ve konumun korunur; yalnızca senin onayınla paylaşılır.';
+
+  @override
+  String get onboardingStartButton => 'Başla';
+
+  @override
+  String get kvkkSummaryCardTitle => 'Verileriniz Sizin Kontrolünüzde';
+
+  @override
+  String get kvkkSummaryCardBody =>
+      'Sağlık verileriniz şifreli saklanır, üçüncü kişilerle paylaşılmaz ve istediğiniz an silinebilir.';
+
+  @override
+  String get kvkkIlluminationLink => 'Aydınlatma Metni';
+
+  @override
+  String get kvkkExplicitConsentLink => 'Açık Rıza Metni';
+
+  @override
+  String get kvkkRequiredBadge => 'Zorunlu';
+
+  @override
+  String get kvkkOptionalBadge => 'İsteğe Bağlı';
+
+  @override
+  String get kvkkContinueButton => 'Devam';
+
+  @override
+  String get authSendCodeShort => 'Kod Gönder';
+
+  @override
+  String get authOrSimple => 'veya';
+
+  @override
+  String get authGoogleShort => 'Google ile devam et';
+
+  @override
+  String get authAppleShort => 'Apple ile devam et';
+
+  @override
+  String authResendTimer(int seconds) {
+    return 'Kodu tekrar gönder ($seconds sn)';
+  }
+
+  @override
+  String get authOtpWrongCodeError =>
+      'Girdiğiniz doğrulama kodu hatalı. Lütfen tekrar deneyin.';
+
+  @override
+  String get authOtpVerifiedSuccess => 'Doğrulandı!';
+
+  @override
+  String get wizardStep1Title => 'Ad ve Görünürlük';
+
+  @override
+  String get wizardStep2Title => 'Kan Grubun';
+
+  @override
+  String get wizardStep3Title => 'Kişisel Bilgiler';
+
+  @override
+  String get wizardStep4Title => 'İl ve İlçe';
+
+  @override
+  String get wizardBloodUnknownCard => 'Bilmiyorum';
+
+  @override
+  String get locationPermissionTitle => 'Neden İstiyoruz?';
+
+  @override
+  String get locationPermissionSubtitle =>
+      'Tam konumun başkalarına asla gösterilmez. Yalnızca sana en yakın hastanedeki acil kan ihtiyaçlarını sıralamak için kullanılır.';
+
+  @override
+  String get locationPermissionAllowButton => 'Konumu Aç';
+
+  @override
+  String get locationPermissionSkipButton =>
+      'Şimdi Değil, il/ilçe ile devam et';
+
+  @override
+  String get readyCelebrationTitle => 'Hazırsın!';
+
+  @override
+  String get readyCelebrationSubtitle =>
+      'Dayanışma ağına hoş geldin. Birlikte hayat kurtarabiliriz.';
+
+  @override
+  String get readyCelebrationAction => 'Ana Ekrana Geç';
+
+  @override
+  String get donorStatusEligibleCard => 'Bağışa uygunsun';
+
+  @override
+  String donorStatusWaitingCard(int days) {
+    return 'Sonraki bağışına $days gün var';
+  }
+
+  @override
+  String get filterMyBloodGroup => 'Benim kan grubum';
+
+  @override
+  String get filterNearMe => 'Yakınımda';
+
+  @override
+  String get filterDistanceTitle => 'Mesafe';
+
+  @override
+  String get filterDistanceAllCity => 'Tüm Şehir';
+
+  @override
+  String get filterApplyButton => 'Uygula';
+
+  @override
+  String get filterClearButton => 'Temizle';
+
+  @override
+  String requestRemainingHours(int hours) {
+    return '$hours sa kaldı';
+  }
+
+  @override
+  String requestRemainingDays(int days) {
+    return '$days gün kaldı';
+  }
+
+  @override
+  String get requestDirectionsButton => 'Yol Tarifi';
+
+  @override
+  String get requestTrustSectionTitle => 'Güven ve Doğrulama';
+
+  @override
+  String get requestTrustSectionBody =>
+      'Bu talep telefon doğrulaması yapılmış kullanıcı tarafından oluşturulmuştur. Para veya ücret talep edilmesi kesinlikle yasaktır.';
+
+  @override
+  String get requestClosedBannerFulfilled =>
+      'Bu kan talebi karşılanmıştır. Tüm gönüllülere teşekkür ederiz.';
+
+  @override
+  String get requestClosedBannerCancelled =>
+      'Bu kan talebi talep sahibi tarafından iptal edilmiştir.';
+
+  @override
+  String get requestClosedBannerExpired => 'Bu kan talebinin süresi dolmuştur.';
+
+  @override
+  String get shareWhatsAppButton => 'WhatsApp\'ta paylaş';
+
+  @override
+  String get shareImageButton => 'Görsel olarak paylaş';
+
+  @override
+  String get draftSavePromptTitle => 'Taslak kaydedilsin mi?';
+
+  @override
+  String get draftSavePromptBody =>
+      'Girdiğiniz bilgiler silinmeden taslak olarak saklanabilir.';
+
+  @override
+  String get draftKeepButton => 'Taslağı Kaydet';
+
+  @override
+  String get draftDiscardButton => 'Sil ve Çık';
+
+  @override
+  String get requestPublishedSuccessTitle => 'Talebiniz Yayınlandı';
+
+  @override
+  String get requestPublishedSuccessSubtitle =>
+      'Yakındaki uyumlu bağışçılara bildirim gönderiliyor. Daha hızlı ulaşmak için paylaşabilirsiniz.';
+
+  @override
+  String get canHelpConfirmTitle => 'Yardım Teklifi Gönder';
+
+  @override
+  String get canHelpConfirmBody =>
+      'Talep sahibine bildirim gidecek, onaylarsa iletişim açılacak.';
+
+  @override
+  String get canHelpEligibilityReminder =>
+      'Son 24 saatte alkol almadığınızdan, kendinizi iyi hissettiğinizden ve kimliğinizin yanınızda olduğundan emin olun.';
+
+  @override
+  String get donorTrackingTitle => 'Bağış Takibi';
+
+  @override
+  String get donorStepOffered => 'Teklif gönderildi';
+
+  @override
+  String get donorStepApproved => 'Onaylandı';
+
+  @override
+  String get donorStepOnWay => 'Yoldayım';
+
+  @override
+  String get donorStepArrived => 'Vardım';
+
+  @override
+  String get donorStepDonated => 'Bağış yaptım';
+
+  @override
+  String get quickMsg15Min => '15 dakikada oradayım';
+
+  @override
+  String get quickMsgWhichWard => 'Hangi servis?';
+
+  @override
+  String get quickMsgArrivedWhere => 'Geldim, neredesiniz?';
+
+  @override
+  String get celebrationTitle => 'Bir hayata dokundun';
+
+  @override
+  String get celebrationSubtitle =>
+      'Gönüllü desteğin için yürekten teşekkürler.';
+
+  @override
+  String get celebrationBadgeEarned => 'Kazanılan Rozet: İlk Umut Damlası';
+
+  @override
+  String get thankYouSheetTitle => 'Gönüllüye Teşekkür Gönder';
+
+  @override
+  String get thankYouChip1 => 'İyi ki varsınız, çok teşekkür ederiz.';
+
+  @override
+  String get thankYouChip2 => 'Desteğiniz bize umut oldu.';
+
+  @override
+  String get thankYouChip3 => 'Dualarımız sizinle, sağ olun.';
+
+  @override
+  String get thankYouCustomHint => 'Kısa teşekkür mesajınız...';
+
+  @override
+  String get thankYouSendButton => 'Teşekkür Gönder';
+
+  @override
+  String get notificationsGroupToday => 'Bugün';
+
+  @override
+  String get notificationsGroupEarlier => 'Daha önce';
+
+  @override
+  String get notificationsMarkAllReadShort => 'Hepsini okundu yap';
+
+  @override
+  String get notificationPermissionSheetTitle => 'Acil Çağrıları Kaçırma';
+
+  @override
+  String get notificationPermissionSheetBody =>
+      'Yalnızca kan grubuna uygun ve yakınındaki acil talepler için bildirim göndeririz.';
+
+  @override
+  String get notificationPermissionAllow => 'Bildirimlere İzin Ver';
+
+  @override
+  String get notificationPermissionDeniedBanner =>
+      'Bildirimler kapalı. Acil çağrıları görmek için ayarlardan açabilirsiniz.';
+
+  @override
+  String get notificationOpenSettings => 'Ayarları Aç';
+
+  @override
+  String get urgentHeadsUpTitle => 'Yakınında ACİL Uyumlu Talep!';
+
+  @override
+  String get urgentHeadsUpAction => 'İncele';
+
+  @override
+  String get mapFilterRequests => 'Talepler';
+
+  @override
+  String get mapFilterCenters => 'Bağış merkezleri';
+
+  @override
+  String get mapFilterMyBlood => 'Kan grubum';
+
+  @override
+  String get mapMyLocationTooltip => 'Konumuma git';
+
+  @override
+  String get mapToggleList => 'Liste';
+
+  @override
+  String get mapToggleMap => 'Harita';
+
+  @override
+  String get mapNearbyListTitle => 'Yakındaki Noktalar';
+
+  @override
+  String get centerOpenNow => 'Şimdi Açık';
+
+  @override
+  String get centerClosedNow => 'Kapalı';
+
+  @override
+  String get centerMobileUnitBadge => 'Bugün burada';
+
+  @override
+  String get centerMobileUnitTitle => 'Gezici Kan Bağış Aracı';
+
+  @override
+  String get mapNoLocationTitle => 'Konum izni kapalı';
+
+  @override
+  String get mapNoLocationSubtitle =>
+      'Haritada yakınındaki hastaneleri ve bağış merkezlerini görmek için konumu açabilir veya listeyi inceleyebilirsin.';
+
+  @override
+  String get mapOpenLocationButton => 'Konumu aç';
+
+  @override
+  String get mapViewListButton => 'Listeyi gör';
+
+  @override
+  String get directionsSheetTitle => 'Yol Tarifi Uygulaması Seçin';
+
+  @override
+  String get directionsGoogleMaps => 'Google Maps';
+
+  @override
+  String get directionsYandexNavi => 'Yandex Navigasyon';
+
+  @override
+  String get directionsAppleMaps => 'Apple Haritalar';
+
+  @override
+  String donationDaysRemaining(int days) {
+    return '$days gün kaldı';
+  }
+
+  @override
+  String get donationEligibleBadge => 'Bağışa uygunsun';
+
+  @override
+  String donationLastDate(String date) {
+    return 'Son bağış: $date';
+  }
+
+  @override
+  String get donationLivesSavedTitle => 'Hayat kurtardın';
+
+  @override
+  String get donationLivesSavedSubtitle =>
+      'Her tam kan bağışı 3 kişiye kadar umut olabilir (Kızılay bilgilendirme notu).';
+
+  @override
+  String get donationAmIEligibleTitle => 'Uygun muyum?';
+
+  @override
+  String get donationAmIEligibleSubtitle =>
+      '1 dakikada hızlı ön kontrol testi yap';
+
+  @override
+  String get donationAddButtonShort => 'Bağış Ekle';
+
+  @override
+  String get donationEmptyReadyTitle => 'İlk bağışını yapmaya hazır mısın?';
+
+  @override
+  String get badgesSectionTitle => 'Rozet Vitrini';
+
+  @override
+  String get badgeFirstDrop => 'İlk Damla';
+
+  @override
+  String get badgeFirstDropHint => 'İlk gönüllü kan bağışını tamamla';
+
+  @override
+  String get badgeRegularHero => 'Düzenli Gönüllü';
+
+  @override
+  String get badgeRegularHeroHint => '3 kez düzenli kan bağışı yap';
+
+  @override
+  String get badgeEmergencyResponder => 'Acil Hızır';
+
+  @override
+  String get badgeEmergencyResponderHint =>
+      'Acil bir talebe aynı gün yanıt ver';
+
+  @override
+  String get badgeApheresisStar => 'Aferez Yıldızı';
+
+  @override
+  String get badgeApheresisStarHint => 'Trombosit/aferez bağışında bulun';
+
+  @override
+  String get badgeCommunityBuilder => 'Dayanışma Elçisi';
+
+  @override
+  String get badgeCommunityBuilderHint => '3 arkadaşını ağa davet et';
+
+  @override
+  String get surveyStaffDecisionNotice =>
+      'Karar kan merkezindeki sağlık personelindedir.';
+
+  @override
+  String get profileVerifiedPhone => 'Telefon Doğrulandı';
+
+  @override
+  String get profileSectionMyInfo => 'Bilgilerim';
+
+  @override
+  String get profileSectionNotifPrefs => 'Bildirim tercihleri';
+
+  @override
+  String get profileSectionLocationTravel => 'Konum ve seyahat modu';
+
+  @override
+  String get profileSectionCommunities => 'Topluluklarım';
+
+  @override
+  String get profileSectionInvite => 'Arkadaşını davet et';
+
+  @override
+  String get profileSectionAppearance => 'Görünüm';
+
+  @override
+  String get profileSectionPrivacyData => 'Gizlilik ve veri';
+
+  @override
+  String get profileSectionHelpFaq => 'Yardım ve SSS';
+
+  @override
+  String get profileSectionAbout => 'Hakkında';
+
+  @override
+  String get travelModeTitle => 'Seyahat Modu';
+
+  @override
+  String get travelModeSubtitle =>
+      'Farklı bir şehirdeyken geçici olarak o şehrin taleplerini gör';
+
+  @override
+  String travelModeActiveBanner(String city, String dateRange) {
+    return 'Seyahat Modu Aktif: $city ($dateRange)';
+  }
+
+  @override
+  String get deleteAccountTypeConfirmHint => 'Onaylamak için SİL yazın';
+
+  @override
+  String get deleteAccountTypeConfirmWord => 'SİL';
+
+  @override
+  String get communitiesTitle => 'Topluluklar ve Nadir Kan Ağı';
+
+  @override
+  String get communityJoinButton => 'Katıl';
+
+  @override
+  String get communityLeaveButton => 'Ayrıl';
+
+  @override
+  String get rareBloodNetworkTitle => 'Nadir Kan Ağı (Rh Negatif)';
+
+  @override
+  String get rareBloodNetworkSubtitle =>
+      'Nadir bulunan Rh(-) kan grupları için özel dayanışma ağına katılın.';
+
+  @override
+  String get institutionTitle => 'Kurumsal Hesap ve Kampanyalar';
+
+  @override
+  String get institutionApplyTab => 'Başvuru';
+
+  @override
+  String get institutionCampaignsTab => 'Kampanyalar';
+
+  @override
+  String get institutionPendingBanner =>
+      'Kurum başvurunuz inceleniyor (Onay Bekliyor)';
+
+  @override
+  String get institutionVerifiedBadge => 'Doğrulanmış Kurum';
+
+  @override
+  String get campaignJoinButton => 'Katılıyorum';
+
+  @override
+  String get bloodMatrixTitle => 'Kan Grupları Uyumluluk Matrisi';
+
+  @override
+  String get bloodMatrixCanGiveTo => 'Kime Verebilir?';
+
+  @override
+  String get bloodMatrixCanReceiveFrom => 'Kimden Alabilir?';
+
+  @override
+  String get faqTitle => 'Sıkça Sorulan Sorular ve Rehber';
+
+  @override
+  String get mythsAndFactsTab => 'Efsaneler ve Gerçekler';
+
+  @override
+  String get emergencyGuideTitle => 'Kan lazım, ne yapmalıyım?';
+
+  @override
+  String get leaderboardTitle => 'Gönüllü Onur Tablosu';
+
+  @override
+  String get leaderboardOptInWarning =>
+      'Gönüllülük yarış değildir; bu tablo yalnızca motivasyon amaçlıdır ve varsayılan olarak kapalıdır.';
+
+  @override
+  String get leaderboardEnableButton => 'Tabloyu Göster';
+
+  @override
+  String get inviteTitle => 'Arkadaşını Davet Et';
+
+  @override
+  String get inviteSubtitle =>
+      'Dayanışma ağını büyüt, daha fazla hayata dokun.';
+
+  @override
+  String get inviteCopyLink => 'Davet Linkini Kopyala';
+
+  @override
+  String inviteCountLabel(int count) {
+    return '$count arkadaşın senin davetinle katıldı';
+  }
+
+  @override
+  String get aboutTitle => 'Hakkında ve Geri Bildirim';
+
+  @override
+  String get feedbackTitle => 'Geri Bildirim Gönder';
+
+  @override
+  String get maintenanceTitle => 'Bakım Çalışması';
+
+  @override
+  String get maintenanceMessage =>
+      'Sistemimiz şu anda kısa süreli bakım çalışmasındadır. Lütfen biraz sonra tekrar deneyin.';
+
+  @override
+  String get offlineScreenTitle => 'İnternet Bağlantısı Yok';
+
+  @override
+  String get adminTitle => 'Türkiye Kan Ağı — Yönetim Paneli';
+
+  @override
+  String get adminLoginTitle => 'Yönetici Girişi';
+
+  @override
+  String get adminNavDashboard => 'Pano';
+
+  @override
+  String get adminNavReports => 'Raporlar';
+
+  @override
+  String get adminNavRequests => 'Talepler';
+
+  @override
+  String get adminNavUsers => 'Kullanıcılar';
+
+  @override
+  String get adminNavInstitutions => 'Kurumlar';
+
+  @override
+  String get adminNavCampaigns => 'Kampanyalar';
+
+  @override
+  String get adminNavAuditLog => 'Denetim Kaydı';
+
+  @override
+  String get adminNavSettings => 'Ayarlar';
+
+  @override
+  String get adminStatOpenRequests => 'Açık Talep';
+
+  @override
+  String get adminStatFulfillmentRate => 'Karşılanma Oranı';
+
+  @override
+  String get adminStatPendingReports => 'Bekleyen Rapor';
+
+  @override
+  String get adminStatNewUsers => 'Yeni Kullanıcı';
+
+  @override
+  String get adminApproveAction => 'Onayla';
+
+  @override
+  String get adminRejectAction => 'Reddet';
+
+  @override
+  String get adminRestrictAction => 'Kısıtla';
 }

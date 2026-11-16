@@ -1037,4 +1037,673 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get donationKvkkGrantConsentButton =>
       'Grant Explicit Consent & Continue';
+
+  @override
+  String get splashSubtitle => 'One drop, one hope.';
+
+  @override
+  String get splashSemantics => 'Türkiye Blood Network is loading';
+
+  @override
+  String get urgencyCriticalShort => 'URGENT';
+
+  @override
+  String get urgencyTodayShort => 'Today';
+
+  @override
+  String get urgencyThisWeekShort => 'This week';
+
+  @override
+  String get statusOpen => 'Open';
+
+  @override
+  String get statusFulfilled => 'Fulfilled';
+
+  @override
+  String get statusCancelled => 'Cancelled';
+
+  @override
+  String get statusExpired => 'Expired';
+
+  @override
+  String get verifiedBadgeLabel => 'Verified';
+
+  @override
+  String get compatibleBadgeLabel => 'Compatible';
+
+  @override
+  String get requestsNoOpenNearYouTitle =>
+      'No open requests near you, that is good news.';
+
+  @override
+  String get requestsNoOpenNearYouSubtitle =>
+      'We will notify you immediately when a new urgent blood need arises.';
+
+  @override
+  String get actionWantBlood => 'I Need Blood';
+
+  @override
+  String get actionCanHelp => 'I Can Help';
+
+  @override
+  String get designGalleryTitle => 'Design Gallery (Debug)';
+
+  @override
+  String get onboardingV2Slide1Title => 'One drop, one hope';
+
+  @override
+  String get onboardingV2Slide1Body =>
+      'We quickly connect people in need of blood with nearby voluntary donors.';
+
+  @override
+  String get onboardingV2Slide2Title => 'See needs near you';
+
+  @override
+  String get onboardingV2Slide2Body =>
+      'Track urgent blood requests in your province and district on a single screen.';
+
+  @override
+  String get onboardingV2Slide3Title => 'Help with one tap';
+
+  @override
+  String get onboardingV2Slide3Body =>
+      'If your blood type matches, offer help with a single tap and navigate to the hospital.';
+
+  @override
+  String get onboardingV2Slide4Title => 'Your data is safe';
+
+  @override
+  String get onboardingV2Slide4Body =>
+      'Your phone number and location are protected; shared only with your approval.';
+
+  @override
+  String get onboardingStartButton => 'Start';
+
+  @override
+  String get kvkkSummaryCardTitle => 'Your Data Is Under Your Control';
+
+  @override
+  String get kvkkSummaryCardBody =>
+      'Your health data is stored encrypted, never shared with third parties, and can be deleted anytime.';
+
+  @override
+  String get kvkkIlluminationLink => 'Disclosure Text';
+
+  @override
+  String get kvkkExplicitConsentLink => 'Explicit Consent Text';
+
+  @override
+  String get kvkkRequiredBadge => 'Required';
+
+  @override
+  String get kvkkOptionalBadge => 'Optional';
+
+  @override
+  String get kvkkContinueButton => 'Continue';
+
+  @override
+  String get authSendCodeShort => 'Send Code';
+
+  @override
+  String get authOrSimple => 'or';
+
+  @override
+  String get authGoogleShort => 'Continue with Google';
+
+  @override
+  String get authAppleShort => 'Continue with Apple';
+
+  @override
+  String authResendTimer(int seconds) {
+    return 'Resend code (${seconds}s)';
+  }
+
+  @override
+  String get authOtpWrongCodeError =>
+      'The verification code you entered is incorrect. Please try again.';
+
+  @override
+  String get authOtpVerifiedSuccess => 'Verified!';
+
+  @override
+  String get wizardStep1Title => 'Name & Visibility';
+
+  @override
+  String get wizardStep2Title => 'Your Blood Type';
+
+  @override
+  String get wizardStep3Title => 'Personal Info';
+
+  @override
+  String get wizardStep4Title => 'Province & District';
+
+  @override
+  String get wizardBloodUnknownCard => 'I Don\'t Know';
+
+  @override
+  String get locationPermissionTitle => 'Why Do We Ask?';
+
+  @override
+  String get locationPermissionSubtitle =>
+      'Your exact location is never shown to others. It is only used to sort urgent blood needs at the nearest hospitals.';
+
+  @override
+  String get locationPermissionAllowButton => 'Enable Location';
+
+  @override
+  String get locationPermissionSkipButton =>
+      'Not Now, continue with province/district';
+
+  @override
+  String get readyCelebrationTitle => 'You Are Ready!';
+
+  @override
+  String get readyCelebrationSubtitle =>
+      'Welcome to the solidarity network. Together we can save lives.';
+
+  @override
+  String get readyCelebrationAction => 'Go to Home';
+
+  @override
+  String get donorStatusEligibleCard => 'Eligible to donate';
+
+  @override
+  String donorStatusWaitingCard(int days) {
+    return '$days days until next donation';
+  }
+
+  @override
+  String get filterMyBloodGroup => 'My blood type';
+
+  @override
+  String get filterNearMe => 'Near me';
+
+  @override
+  String get filterDistanceTitle => 'Distance';
+
+  @override
+  String get filterDistanceAllCity => 'Whole City';
+
+  @override
+  String get filterApplyButton => 'Apply';
+
+  @override
+  String get filterClearButton => 'Clear';
+
+  @override
+  String requestRemainingHours(int hours) {
+    return '${hours}h left';
+  }
+
+  @override
+  String requestRemainingDays(int days) {
+    return '${days}d left';
+  }
+
+  @override
+  String get requestDirectionsButton => 'Directions';
+
+  @override
+  String get requestTrustSectionTitle => 'Trust & Verification';
+
+  @override
+  String get requestTrustSectionBody =>
+      'This request was created by a phone-verified user. Asking for money or fees is strictly prohibited.';
+
+  @override
+  String get requestClosedBannerFulfilled =>
+      'This blood request has been fulfilled. Thank you to all volunteers.';
+
+  @override
+  String get requestClosedBannerCancelled =>
+      'This blood request was cancelled by the requester.';
+
+  @override
+  String get requestClosedBannerExpired => 'This blood request has expired.';
+
+  @override
+  String get shareWhatsAppButton => 'Share on WhatsApp';
+
+  @override
+  String get shareImageButton => 'Share as Image';
+
+  @override
+  String get draftSavePromptTitle => 'Save draft?';
+
+  @override
+  String get draftSavePromptBody =>
+      'Your entered details can be saved as a draft without losing progress.';
+
+  @override
+  String get draftKeepButton => 'Save Draft';
+
+  @override
+  String get draftDiscardButton => 'Discard & Exit';
+
+  @override
+  String get requestPublishedSuccessTitle => 'Your Request Is Live';
+
+  @override
+  String get requestPublishedSuccessSubtitle =>
+      'Nearby compatible donors are being notified. Share to reach more people faster.';
+
+  @override
+  String get canHelpConfirmTitle => 'Send Help Offer';
+
+  @override
+  String get canHelpConfirmBody =>
+      'The requester will be notified, and contact info will unlock once they approve.';
+
+  @override
+  String get canHelpEligibilityReminder =>
+      'Make sure you haven\'t consumed alcohol in the last 24 hours, feel well, and have your ID with you.';
+
+  @override
+  String get donorTrackingTitle => 'Donation Tracking';
+
+  @override
+  String get donorStepOffered => 'Offer sent';
+
+  @override
+  String get donorStepApproved => 'Approved';
+
+  @override
+  String get donorStepOnWay => 'On my way';
+
+  @override
+  String get donorStepArrived => 'Arrived';
+
+  @override
+  String get donorStepDonated => 'Donated';
+
+  @override
+  String get quickMsg15Min => 'I\'ll be there in 15 mins';
+
+  @override
+  String get quickMsgWhichWard => 'Which ward?';
+
+  @override
+  String get quickMsgArrivedWhere => 'I arrived, where are you?';
+
+  @override
+  String get celebrationTitle => 'You touched a life';
+
+  @override
+  String get celebrationSubtitle =>
+      'Heartfelt thanks for your voluntary support.';
+
+  @override
+  String get celebrationBadgeEarned => 'Badge Earned: First Drop of Hope';
+
+  @override
+  String get thankYouSheetTitle => 'Send Thanks to Volunteer';
+
+  @override
+  String get thankYouChip1 => 'Thank you so much for being there.';
+
+  @override
+  String get thankYouChip2 => 'Your support gave us hope.';
+
+  @override
+  String get thankYouChip3 => 'Our warmest wishes are with you.';
+
+  @override
+  String get thankYouCustomHint => 'Your short thank-you note...';
+
+  @override
+  String get thankYouSendButton => 'Send Thanks';
+
+  @override
+  String get notificationsGroupToday => 'Today';
+
+  @override
+  String get notificationsGroupEarlier => 'Earlier';
+
+  @override
+  String get notificationsMarkAllReadShort => 'Mark all as read';
+
+  @override
+  String get notificationPermissionSheetTitle => 'Don\'t Miss Urgent Calls';
+
+  @override
+  String get notificationPermissionSheetBody =>
+      'We only send notifications for urgent requests near you that match your blood type.';
+
+  @override
+  String get notificationPermissionAllow => 'Allow Notifications';
+
+  @override
+  String get notificationPermissionDeniedBanner =>
+      'Notifications are off. Enable them in settings to see urgent calls.';
+
+  @override
+  String get notificationOpenSettings => 'Open Settings';
+
+  @override
+  String get urgentHeadsUpTitle => 'URGENT Compatible Request Nearby!';
+
+  @override
+  String get urgentHeadsUpAction => 'View';
+
+  @override
+  String get mapFilterRequests => 'Requests';
+
+  @override
+  String get mapFilterCenters => 'Donation centers';
+
+  @override
+  String get mapFilterMyBlood => 'My blood type';
+
+  @override
+  String get mapMyLocationTooltip => 'Go to my location';
+
+  @override
+  String get mapToggleList => 'List';
+
+  @override
+  String get mapToggleMap => 'Map';
+
+  @override
+  String get mapNearbyListTitle => 'Nearby Points';
+
+  @override
+  String get centerOpenNow => 'Open Now';
+
+  @override
+  String get centerClosedNow => 'Closed';
+
+  @override
+  String get centerMobileUnitBadge => 'Here today';
+
+  @override
+  String get centerMobileUnitTitle => 'Mobile Blood Donation Unit';
+
+  @override
+  String get mapNoLocationTitle => 'Location permission is off';
+
+  @override
+  String get mapNoLocationSubtitle =>
+      'Enable location to see nearby hospitals and donation centers on the map, or browse the list.';
+
+  @override
+  String get mapOpenLocationButton => 'Enable location';
+
+  @override
+  String get mapViewListButton => 'View list';
+
+  @override
+  String get directionsSheetTitle => 'Choose Navigation App';
+
+  @override
+  String get directionsGoogleMaps => 'Google Maps';
+
+  @override
+  String get directionsYandexNavi => 'Yandex Navigation';
+
+  @override
+  String get directionsAppleMaps => 'Apple Maps';
+
+  @override
+  String donationDaysRemaining(int days) {
+    return '$days days left';
+  }
+
+  @override
+  String get donationEligibleBadge => 'Eligible to donate';
+
+  @override
+  String donationLastDate(String date) {
+    return 'Last donation: $date';
+  }
+
+  @override
+  String get donationLivesSavedTitle => 'You saved lives';
+
+  @override
+  String get donationLivesSavedSubtitle =>
+      'Each whole blood donation can bring hope to up to 3 people (Kızılay info note).';
+
+  @override
+  String get donationAmIEligibleTitle => 'Am I eligible?';
+
+  @override
+  String get donationAmIEligibleSubtitle =>
+      'Take a quick 1-minute pre-check survey';
+
+  @override
+  String get donationAddButtonShort => 'Add Donation';
+
+  @override
+  String get donationEmptyReadyTitle => 'Ready to make your first donation?';
+
+  @override
+  String get badgesSectionTitle => 'Badge Showcase';
+
+  @override
+  String get badgeFirstDrop => 'First Drop';
+
+  @override
+  String get badgeFirstDropHint =>
+      'Complete your first voluntary blood donation';
+
+  @override
+  String get badgeRegularHero => 'Regular Volunteer';
+
+  @override
+  String get badgeRegularHeroHint => 'Donate blood regularly 3 times';
+
+  @override
+  String get badgeEmergencyResponder => 'Emergency Hero';
+
+  @override
+  String get badgeEmergencyResponderHint =>
+      'Respond to an urgent request on the same day';
+
+  @override
+  String get badgeApheresisStar => 'Apheresis Star';
+
+  @override
+  String get badgeApheresisStarHint => 'Make a platelet/apheresis donation';
+
+  @override
+  String get badgeCommunityBuilder => 'Solidarity Ambassador';
+
+  @override
+  String get badgeCommunityBuilderHint => 'Invite 3 friends to the network';
+
+  @override
+  String get surveyStaffDecisionNotice =>
+      'The decision belongs to healthcare staff at the blood center.';
+
+  @override
+  String get profileVerifiedPhone => 'Phone Verified';
+
+  @override
+  String get profileSectionMyInfo => 'My Information';
+
+  @override
+  String get profileSectionNotifPrefs => 'Notification preferences';
+
+  @override
+  String get profileSectionLocationTravel => 'Location & travel mode';
+
+  @override
+  String get profileSectionCommunities => 'My Communities';
+
+  @override
+  String get profileSectionInvite => 'Invite a friend';
+
+  @override
+  String get profileSectionAppearance => 'Appearance';
+
+  @override
+  String get profileSectionPrivacyData => 'Privacy & data';
+
+  @override
+  String get profileSectionHelpFaq => 'Help & FAQ';
+
+  @override
+  String get profileSectionAbout => 'About';
+
+  @override
+  String get travelModeTitle => 'Travel Mode';
+
+  @override
+  String get travelModeSubtitle =>
+      'Temporarily see requests for another city while traveling';
+
+  @override
+  String travelModeActiveBanner(String city, String dateRange) {
+    return 'Travel Mode Active: $city ($dateRange)';
+  }
+
+  @override
+  String get deleteAccountTypeConfirmHint => 'Type SİL to confirm';
+
+  @override
+  String get deleteAccountTypeConfirmWord => 'SİL';
+
+  @override
+  String get communitiesTitle => 'Communities & Rare Blood Network';
+
+  @override
+  String get communityJoinButton => 'Join';
+
+  @override
+  String get communityLeaveButton => 'Leave';
+
+  @override
+  String get rareBloodNetworkTitle => 'Rare Blood Network (Rh Negative)';
+
+  @override
+  String get rareBloodNetworkSubtitle =>
+      'Join the dedicated solidarity network for rare Rh(-) blood groups.';
+
+  @override
+  String get institutionTitle => 'Institutional Account & Campaigns';
+
+  @override
+  String get institutionApplyTab => 'Application';
+
+  @override
+  String get institutionCampaignsTab => 'Campaigns';
+
+  @override
+  String get institutionPendingBanner =>
+      'Your institutional application is under review (Pending Approval)';
+
+  @override
+  String get institutionVerifiedBadge => 'Verified Institution';
+
+  @override
+  String get campaignJoinButton => 'I\'m Joining';
+
+  @override
+  String get bloodMatrixTitle => 'Blood Type Compatibility Matrix';
+
+  @override
+  String get bloodMatrixCanGiveTo => 'Can Donate To';
+
+  @override
+  String get bloodMatrixCanReceiveFrom => 'Can Receive From';
+
+  @override
+  String get faqTitle => 'Frequently Asked Questions & Guide';
+
+  @override
+  String get mythsAndFactsTab => 'Myths & Facts';
+
+  @override
+  String get emergencyGuideTitle => 'I need blood, what should I do?';
+
+  @override
+  String get leaderboardTitle => 'Volunteer Honor Board';
+
+  @override
+  String get leaderboardOptInWarning =>
+      'Volunteering is not a competition; this board is for motivation only and is hidden by default.';
+
+  @override
+  String get leaderboardEnableButton => 'Show Board';
+
+  @override
+  String get inviteTitle => 'Invite a Friend';
+
+  @override
+  String get inviteSubtitle => 'Grow the solidarity network, touch more lives.';
+
+  @override
+  String get inviteCopyLink => 'Copy Invite Link';
+
+  @override
+  String inviteCountLabel(int count) {
+    return '$count friends joined with your invite';
+  }
+
+  @override
+  String get aboutTitle => 'About & Feedback';
+
+  @override
+  String get feedbackTitle => 'Send Feedback';
+
+  @override
+  String get maintenanceTitle => 'Under Maintenance';
+
+  @override
+  String get maintenanceMessage =>
+      'Our system is currently undergoing brief maintenance. Please try again shortly.';
+
+  @override
+  String get offlineScreenTitle => 'No Internet Connection';
+
+  @override
+  String get adminTitle => 'Türkiye Blood Network — Admin Panel';
+
+  @override
+  String get adminLoginTitle => 'Admin Sign In';
+
+  @override
+  String get adminNavDashboard => 'Dashboard';
+
+  @override
+  String get adminNavReports => 'Reports';
+
+  @override
+  String get adminNavRequests => 'Requests';
+
+  @override
+  String get adminNavUsers => 'Users';
+
+  @override
+  String get adminNavInstitutions => 'Institutions';
+
+  @override
+  String get adminNavCampaigns => 'Campaigns';
+
+  @override
+  String get adminNavAuditLog => 'Audit Log';
+
+  @override
+  String get adminNavSettings => 'Settings';
+
+  @override
+  String get adminStatOpenRequests => 'Open Requests';
+
+  @override
+  String get adminStatFulfillmentRate => 'Fulfillment Rate';
+
+  @override
+  String get adminStatPendingReports => 'Pending Reports';
+
+  @override
+  String get adminStatNewUsers => 'New Users';
+
+  @override
+  String get adminApproveAction => 'Approve';
+
+  @override
+  String get adminRejectAction => 'Reject';
+
+  @override
+  String get adminRestrictAction => 'Restrict';
 }

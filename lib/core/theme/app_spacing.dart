@@ -1,4 +1,6 @@
-/// Merkezi boşluk, kenar yuvarlaklığı ve erişilebilirlik boyut sabitleri.
+/// Merkezi boşluk ve ölçü token sınıfı.
+/// Boşluk ölçeği: 4 / 8 / 12 / 16 / 24 / 32.
+/// Dokunma alanı minimum 48dp, ana buton yüksekliği 52dp, içerik max genişlik 600dp.
 abstract final class AppSpacing {
   static const double xxs = 4.0;
   static const double xs = 8.0;
@@ -11,8 +13,17 @@ abstract final class AppSpacing {
   /// Erişilebilirlik kuralı: minimum dokunma alanı (48dp x 48dp).
   static const double minTouchTarget = 48.0;
 
-  /// Kenar yuvarlaklığı sabitleri.
+  /// Ana eylem butonu yüksekliği (52dp).
+  static const double primaryButtonHeight = 52.0;
+
+  /// Büyük ekranlarda içerik maksimum genişliği (600dp).
+  static const double maxContentWidth = 600.0;
+
+  /// Admin paneli maksimum genişliği.
+  static const double adminMaxContentWidth = 1440.0;
+
+  // Geriye dönük uyumluluk sabitleri (AppRadius ile eşdeğer)
   static const double radiusSm = 8.0;
-  static const double radiusMd = 12.0;
-  static const double radiusLg = 16.0;
+  static const double radiusMd = 16.0;
+  static const double radiusLg = 20.0;
 }

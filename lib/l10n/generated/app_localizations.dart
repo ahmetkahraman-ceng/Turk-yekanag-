@@ -1916,6 +1916,1248 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Açık Rıza Ver ve Devam Et'**
   String get donationKvkkGrantConsentButton;
+
+  /// No description provided for @splashSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir damla, bir umut.'**
+  String get splashSubtitle;
+
+  /// No description provided for @splashSemantics.
+  ///
+  /// In tr, this message translates to:
+  /// **'Türkiye Kan Ağı yükleniyor'**
+  String get splashSemantics;
+
+  /// No description provided for @urgencyCriticalShort.
+  ///
+  /// In tr, this message translates to:
+  /// **'ACİL'**
+  String get urgencyCriticalShort;
+
+  /// No description provided for @urgencyTodayShort.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugün'**
+  String get urgencyTodayShort;
+
+  /// No description provided for @urgencyThisWeekShort.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu hafta'**
+  String get urgencyThisWeekShort;
+
+  /// No description provided for @statusOpen.
+  ///
+  /// In tr, this message translates to:
+  /// **'Açık'**
+  String get statusOpen;
+
+  /// No description provided for @statusFulfilled.
+  ///
+  /// In tr, this message translates to:
+  /// **'Karşılandı'**
+  String get statusFulfilled;
+
+  /// No description provided for @statusCancelled.
+  ///
+  /// In tr, this message translates to:
+  /// **'İptal'**
+  String get statusCancelled;
+
+  /// No description provided for @statusExpired.
+  ///
+  /// In tr, this message translates to:
+  /// **'Süresi doldu'**
+  String get statusExpired;
+
+  /// No description provided for @verifiedBadgeLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Doğrulanmış'**
+  String get verifiedBadgeLabel;
+
+  /// No description provided for @compatibleBadgeLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uyumlusun'**
+  String get compatibleBadgeLabel;
+
+  /// No description provided for @requestsNoOpenNearYouTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çevrende açık talep yok, bu iyi haber.'**
+  String get requestsNoOpenNearYouTitle;
+
+  /// No description provided for @requestsNoOpenNearYouSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeni bir acil kan ihtiyacı oluştuğunda seni hemen bilgilendireceğiz.'**
+  String get requestsNoOpenNearYouSubtitle;
+
+  /// No description provided for @actionWantBlood.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kan İstiyorum'**
+  String get actionWantBlood;
+
+  /// No description provided for @actionCanHelp.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yardım Edebilirim'**
+  String get actionCanHelp;
+
+  /// No description provided for @designGalleryTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tasarım Galerisi (Debug)'**
+  String get designGalleryTitle;
+
+  /// No description provided for @onboardingV2Slide1Title.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir damla, bir umut'**
+  String get onboardingV2Slide1Title;
+
+  /// No description provided for @onboardingV2Slide1Body.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kan ihtiyacı olanlarla yakınındaki gönüllü bağışçıları hızla buluşturuyoruz.'**
+  String get onboardingV2Slide1Body;
+
+  /// No description provided for @onboardingV2Slide2Title.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yakınındaki ihtiyacı gör'**
+  String get onboardingV2Slide2Title;
+
+  /// No description provided for @onboardingV2Slide2Body.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bulunduğun il ve ilçedeki acil kan taleplerini tek ekranda takip et.'**
+  String get onboardingV2Slide2Body;
+
+  /// No description provided for @onboardingV2Slide3Title.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tek dokunuşla yardım et'**
+  String get onboardingV2Slide3Title;
+
+  /// No description provided for @onboardingV2Slide3Body.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kan grubun uyumluysa tek dokunuşla yardım teklif et ve hastaneye yönlen.'**
+  String get onboardingV2Slide3Body;
+
+  /// No description provided for @onboardingV2Slide4Title.
+  ///
+  /// In tr, this message translates to:
+  /// **'Verin güvende'**
+  String get onboardingV2Slide4Title;
+
+  /// No description provided for @onboardingV2Slide4Body.
+  ///
+  /// In tr, this message translates to:
+  /// **'Telefon numaran ve konumun korunur; yalnızca senin onayınla paylaşılır.'**
+  String get onboardingV2Slide4Body;
+
+  /// No description provided for @onboardingStartButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Başla'**
+  String get onboardingStartButton;
+
+  /// No description provided for @kvkkSummaryCardTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Verileriniz Sizin Kontrolünüzde'**
+  String get kvkkSummaryCardTitle;
+
+  /// No description provided for @kvkkSummaryCardBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sağlık verileriniz şifreli saklanır, üçüncü kişilerle paylaşılmaz ve istediğiniz an silinebilir.'**
+  String get kvkkSummaryCardBody;
+
+  /// No description provided for @kvkkIlluminationLink.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aydınlatma Metni'**
+  String get kvkkIlluminationLink;
+
+  /// No description provided for @kvkkExplicitConsentLink.
+  ///
+  /// In tr, this message translates to:
+  /// **'Açık Rıza Metni'**
+  String get kvkkExplicitConsentLink;
+
+  /// No description provided for @kvkkRequiredBadge.
+  ///
+  /// In tr, this message translates to:
+  /// **'Zorunlu'**
+  String get kvkkRequiredBadge;
+
+  /// No description provided for @kvkkOptionalBadge.
+  ///
+  /// In tr, this message translates to:
+  /// **'İsteğe Bağlı'**
+  String get kvkkOptionalBadge;
+
+  /// No description provided for @kvkkContinueButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Devam'**
+  String get kvkkContinueButton;
+
+  /// No description provided for @authSendCodeShort.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kod Gönder'**
+  String get authSendCodeShort;
+
+  /// No description provided for @authOrSimple.
+  ///
+  /// In tr, this message translates to:
+  /// **'veya'**
+  String get authOrSimple;
+
+  /// No description provided for @authGoogleShort.
+  ///
+  /// In tr, this message translates to:
+  /// **'Google ile devam et'**
+  String get authGoogleShort;
+
+  /// No description provided for @authAppleShort.
+  ///
+  /// In tr, this message translates to:
+  /// **'Apple ile devam et'**
+  String get authAppleShort;
+
+  /// No description provided for @authResendTimer.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kodu tekrar gönder ({seconds} sn)'**
+  String authResendTimer(int seconds);
+
+  /// No description provided for @authOtpWrongCodeError.
+  ///
+  /// In tr, this message translates to:
+  /// **'Girdiğiniz doğrulama kodu hatalı. Lütfen tekrar deneyin.'**
+  String get authOtpWrongCodeError;
+
+  /// No description provided for @authOtpVerifiedSuccess.
+  ///
+  /// In tr, this message translates to:
+  /// **'Doğrulandı!'**
+  String get authOtpVerifiedSuccess;
+
+  /// No description provided for @wizardStep1Title.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ad ve Görünürlük'**
+  String get wizardStep1Title;
+
+  /// No description provided for @wizardStep2Title.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kan Grubun'**
+  String get wizardStep2Title;
+
+  /// No description provided for @wizardStep3Title.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kişisel Bilgiler'**
+  String get wizardStep3Title;
+
+  /// No description provided for @wizardStep4Title.
+  ///
+  /// In tr, this message translates to:
+  /// **'İl ve İlçe'**
+  String get wizardStep4Title;
+
+  /// No description provided for @wizardBloodUnknownCard.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bilmiyorum'**
+  String get wizardBloodUnknownCard;
+
+  /// No description provided for @locationPermissionTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Neden İstiyoruz?'**
+  String get locationPermissionTitle;
+
+  /// No description provided for @locationPermissionSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tam konumun başkalarına asla gösterilmez. Yalnızca sana en yakın hastanedeki acil kan ihtiyaçlarını sıralamak için kullanılır.'**
+  String get locationPermissionSubtitle;
+
+  /// No description provided for @locationPermissionAllowButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumu Aç'**
+  String get locationPermissionAllowButton;
+
+  /// No description provided for @locationPermissionSkipButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şimdi Değil, il/ilçe ile devam et'**
+  String get locationPermissionSkipButton;
+
+  /// No description provided for @readyCelebrationTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hazırsın!'**
+  String get readyCelebrationTitle;
+
+  /// No description provided for @readyCelebrationSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dayanışma ağına hoş geldin. Birlikte hayat kurtarabiliriz.'**
+  String get readyCelebrationSubtitle;
+
+  /// No description provided for @readyCelebrationAction.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ana Ekrana Geç'**
+  String get readyCelebrationAction;
+
+  /// No description provided for @donorStatusEligibleCard.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağışa uygunsun'**
+  String get donorStatusEligibleCard;
+
+  /// No description provided for @donorStatusWaitingCard.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sonraki bağışına {days} gün var'**
+  String donorStatusWaitingCard(int days);
+
+  /// No description provided for @filterMyBloodGroup.
+  ///
+  /// In tr, this message translates to:
+  /// **'Benim kan grubum'**
+  String get filterMyBloodGroup;
+
+  /// No description provided for @filterNearMe.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yakınımda'**
+  String get filterNearMe;
+
+  /// No description provided for @filterDistanceTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mesafe'**
+  String get filterDistanceTitle;
+
+  /// No description provided for @filterDistanceAllCity.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tüm Şehir'**
+  String get filterDistanceAllCity;
+
+  /// No description provided for @filterApplyButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uygula'**
+  String get filterApplyButton;
+
+  /// No description provided for @filterClearButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Temizle'**
+  String get filterClearButton;
+
+  /// No description provided for @requestRemainingHours.
+  ///
+  /// In tr, this message translates to:
+  /// **'{hours} sa kaldı'**
+  String requestRemainingHours(int hours);
+
+  /// No description provided for @requestRemainingDays.
+  ///
+  /// In tr, this message translates to:
+  /// **'{days} gün kaldı'**
+  String requestRemainingDays(int days);
+
+  /// No description provided for @requestDirectionsButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yol Tarifi'**
+  String get requestDirectionsButton;
+
+  /// No description provided for @requestTrustSectionTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Güven ve Doğrulama'**
+  String get requestTrustSectionTitle;
+
+  /// No description provided for @requestTrustSectionBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu talep telefon doğrulaması yapılmış kullanıcı tarafından oluşturulmuştur. Para veya ücret talep edilmesi kesinlikle yasaktır.'**
+  String get requestTrustSectionBody;
+
+  /// No description provided for @requestClosedBannerFulfilled.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu kan talebi karşılanmıştır. Tüm gönüllülere teşekkür ederiz.'**
+  String get requestClosedBannerFulfilled;
+
+  /// No description provided for @requestClosedBannerCancelled.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu kan talebi talep sahibi tarafından iptal edilmiştir.'**
+  String get requestClosedBannerCancelled;
+
+  /// No description provided for @requestClosedBannerExpired.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu kan talebinin süresi dolmuştur.'**
+  String get requestClosedBannerExpired;
+
+  /// No description provided for @shareWhatsAppButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'WhatsApp\'ta paylaş'**
+  String get shareWhatsAppButton;
+
+  /// No description provided for @shareImageButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Görsel olarak paylaş'**
+  String get shareImageButton;
+
+  /// No description provided for @draftSavePromptTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Taslak kaydedilsin mi?'**
+  String get draftSavePromptTitle;
+
+  /// No description provided for @draftSavePromptBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Girdiğiniz bilgiler silinmeden taslak olarak saklanabilir.'**
+  String get draftSavePromptBody;
+
+  /// No description provided for @draftKeepButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Taslağı Kaydet'**
+  String get draftKeepButton;
+
+  /// No description provided for @draftDiscardButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sil ve Çık'**
+  String get draftDiscardButton;
+
+  /// No description provided for @requestPublishedSuccessTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Talebiniz Yayınlandı'**
+  String get requestPublishedSuccessTitle;
+
+  /// No description provided for @requestPublishedSuccessSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yakındaki uyumlu bağışçılara bildirim gönderiliyor. Daha hızlı ulaşmak için paylaşabilirsiniz.'**
+  String get requestPublishedSuccessSubtitle;
+
+  /// No description provided for @canHelpConfirmTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yardım Teklifi Gönder'**
+  String get canHelpConfirmTitle;
+
+  /// No description provided for @canHelpConfirmBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Talep sahibine bildirim gidecek, onaylarsa iletişim açılacak.'**
+  String get canHelpConfirmBody;
+
+  /// No description provided for @canHelpEligibilityReminder.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son 24 saatte alkol almadığınızdan, kendinizi iyi hissettiğinizden ve kimliğinizin yanınızda olduğundan emin olun.'**
+  String get canHelpEligibilityReminder;
+
+  /// No description provided for @donorTrackingTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağış Takibi'**
+  String get donorTrackingTitle;
+
+  /// No description provided for @donorStepOffered.
+  ///
+  /// In tr, this message translates to:
+  /// **'Teklif gönderildi'**
+  String get donorStepOffered;
+
+  /// No description provided for @donorStepApproved.
+  ///
+  /// In tr, this message translates to:
+  /// **'Onaylandı'**
+  String get donorStepApproved;
+
+  /// No description provided for @donorStepOnWay.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yoldayım'**
+  String get donorStepOnWay;
+
+  /// No description provided for @donorStepArrived.
+  ///
+  /// In tr, this message translates to:
+  /// **'Vardım'**
+  String get donorStepArrived;
+
+  /// No description provided for @donorStepDonated.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağış yaptım'**
+  String get donorStepDonated;
+
+  /// No description provided for @quickMsg15Min.
+  ///
+  /// In tr, this message translates to:
+  /// **'15 dakikada oradayım'**
+  String get quickMsg15Min;
+
+  /// No description provided for @quickMsgWhichWard.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hangi servis?'**
+  String get quickMsgWhichWard;
+
+  /// No description provided for @quickMsgArrivedWhere.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geldim, neredesiniz?'**
+  String get quickMsgArrivedWhere;
+
+  /// No description provided for @celebrationTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir hayata dokundun'**
+  String get celebrationTitle;
+
+  /// No description provided for @celebrationSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gönüllü desteğin için yürekten teşekkürler.'**
+  String get celebrationSubtitle;
+
+  /// No description provided for @celebrationBadgeEarned.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kazanılan Rozet: İlk Umut Damlası'**
+  String get celebrationBadgeEarned;
+
+  /// No description provided for @thankYouSheetTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gönüllüye Teşekkür Gönder'**
+  String get thankYouSheetTitle;
+
+  /// No description provided for @thankYouChip1.
+  ///
+  /// In tr, this message translates to:
+  /// **'İyi ki varsınız, çok teşekkür ederiz.'**
+  String get thankYouChip1;
+
+  /// No description provided for @thankYouChip2.
+  ///
+  /// In tr, this message translates to:
+  /// **'Desteğiniz bize umut oldu.'**
+  String get thankYouChip2;
+
+  /// No description provided for @thankYouChip3.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dualarımız sizinle, sağ olun.'**
+  String get thankYouChip3;
+
+  /// No description provided for @thankYouCustomHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kısa teşekkür mesajınız...'**
+  String get thankYouCustomHint;
+
+  /// No description provided for @thankYouSendButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Teşekkür Gönder'**
+  String get thankYouSendButton;
+
+  /// No description provided for @notificationsGroupToday.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugün'**
+  String get notificationsGroupToday;
+
+  /// No description provided for @notificationsGroupEarlier.
+  ///
+  /// In tr, this message translates to:
+  /// **'Daha önce'**
+  String get notificationsGroupEarlier;
+
+  /// No description provided for @notificationsMarkAllReadShort.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hepsini okundu yap'**
+  String get notificationsMarkAllReadShort;
+
+  /// No description provided for @notificationPermissionSheetTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Acil Çağrıları Kaçırma'**
+  String get notificationPermissionSheetTitle;
+
+  /// No description provided for @notificationPermissionSheetBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yalnızca kan grubuna uygun ve yakınındaki acil talepler için bildirim göndeririz.'**
+  String get notificationPermissionSheetBody;
+
+  /// No description provided for @notificationPermissionAllow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirimlere İzin Ver'**
+  String get notificationPermissionAllow;
+
+  /// No description provided for @notificationPermissionDeniedBanner.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirimler kapalı. Acil çağrıları görmek için ayarlardan açabilirsiniz.'**
+  String get notificationPermissionDeniedBanner;
+
+  /// No description provided for @notificationOpenSettings.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ayarları Aç'**
+  String get notificationOpenSettings;
+
+  /// No description provided for @urgentHeadsUpTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yakınında ACİL Uyumlu Talep!'**
+  String get urgentHeadsUpTitle;
+
+  /// No description provided for @urgentHeadsUpAction.
+  ///
+  /// In tr, this message translates to:
+  /// **'İncele'**
+  String get urgentHeadsUpAction;
+
+  /// No description provided for @mapFilterRequests.
+  ///
+  /// In tr, this message translates to:
+  /// **'Talepler'**
+  String get mapFilterRequests;
+
+  /// No description provided for @mapFilterCenters.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağış merkezleri'**
+  String get mapFilterCenters;
+
+  /// No description provided for @mapFilterMyBlood.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kan grubum'**
+  String get mapFilterMyBlood;
+
+  /// No description provided for @mapMyLocationTooltip.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumuma git'**
+  String get mapMyLocationTooltip;
+
+  /// No description provided for @mapToggleList.
+  ///
+  /// In tr, this message translates to:
+  /// **'Liste'**
+  String get mapToggleList;
+
+  /// No description provided for @mapToggleMap.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harita'**
+  String get mapToggleMap;
+
+  /// No description provided for @mapNearbyListTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yakındaki Noktalar'**
+  String get mapNearbyListTitle;
+
+  /// No description provided for @centerOpenNow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şimdi Açık'**
+  String get centerOpenNow;
+
+  /// No description provided for @centerClosedNow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kapalı'**
+  String get centerClosedNow;
+
+  /// No description provided for @centerMobileUnitBadge.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugün burada'**
+  String get centerMobileUnitBadge;
+
+  /// No description provided for @centerMobileUnitTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gezici Kan Bağış Aracı'**
+  String get centerMobileUnitTitle;
+
+  /// No description provided for @mapNoLocationTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konum izni kapalı'**
+  String get mapNoLocationTitle;
+
+  /// No description provided for @mapNoLocationSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haritada yakınındaki hastaneleri ve bağış merkezlerini görmek için konumu açabilir veya listeyi inceleyebilirsin.'**
+  String get mapNoLocationSubtitle;
+
+  /// No description provided for @mapOpenLocationButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumu aç'**
+  String get mapOpenLocationButton;
+
+  /// No description provided for @mapViewListButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Listeyi gör'**
+  String get mapViewListButton;
+
+  /// No description provided for @directionsSheetTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yol Tarifi Uygulaması Seçin'**
+  String get directionsSheetTitle;
+
+  /// No description provided for @directionsGoogleMaps.
+  ///
+  /// In tr, this message translates to:
+  /// **'Google Maps'**
+  String get directionsGoogleMaps;
+
+  /// No description provided for @directionsYandexNavi.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yandex Navigasyon'**
+  String get directionsYandexNavi;
+
+  /// No description provided for @directionsAppleMaps.
+  ///
+  /// In tr, this message translates to:
+  /// **'Apple Haritalar'**
+  String get directionsAppleMaps;
+
+  /// No description provided for @donationDaysRemaining.
+  ///
+  /// In tr, this message translates to:
+  /// **'{days} gün kaldı'**
+  String donationDaysRemaining(int days);
+
+  /// No description provided for @donationEligibleBadge.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağışa uygunsun'**
+  String get donationEligibleBadge;
+
+  /// No description provided for @donationLastDate.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son bağış: {date}'**
+  String donationLastDate(String date);
+
+  /// No description provided for @donationLivesSavedTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hayat kurtardın'**
+  String get donationLivesSavedTitle;
+
+  /// No description provided for @donationLivesSavedSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Her tam kan bağışı 3 kişiye kadar umut olabilir (Kızılay bilgilendirme notu).'**
+  String get donationLivesSavedSubtitle;
+
+  /// No description provided for @donationAmIEligibleTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uygun muyum?'**
+  String get donationAmIEligibleTitle;
+
+  /// No description provided for @donationAmIEligibleSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'1 dakikada hızlı ön kontrol testi yap'**
+  String get donationAmIEligibleSubtitle;
+
+  /// No description provided for @donationAddButtonShort.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağış Ekle'**
+  String get donationAddButtonShort;
+
+  /// No description provided for @donationEmptyReadyTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlk bağışını yapmaya hazır mısın?'**
+  String get donationEmptyReadyTitle;
+
+  /// No description provided for @badgesSectionTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Rozet Vitrini'**
+  String get badgesSectionTitle;
+
+  /// No description provided for @badgeFirstDrop.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlk Damla'**
+  String get badgeFirstDrop;
+
+  /// No description provided for @badgeFirstDropHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlk gönüllü kan bağışını tamamla'**
+  String get badgeFirstDropHint;
+
+  /// No description provided for @badgeRegularHero.
+  ///
+  /// In tr, this message translates to:
+  /// **'Düzenli Gönüllü'**
+  String get badgeRegularHero;
+
+  /// No description provided for @badgeRegularHeroHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'3 kez düzenli kan bağışı yap'**
+  String get badgeRegularHeroHint;
+
+  /// No description provided for @badgeEmergencyResponder.
+  ///
+  /// In tr, this message translates to:
+  /// **'Acil Hızır'**
+  String get badgeEmergencyResponder;
+
+  /// No description provided for @badgeEmergencyResponderHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Acil bir talebe aynı gün yanıt ver'**
+  String get badgeEmergencyResponderHint;
+
+  /// No description provided for @badgeApheresisStar.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aferez Yıldızı'**
+  String get badgeApheresisStar;
+
+  /// No description provided for @badgeApheresisStarHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Trombosit/aferez bağışında bulun'**
+  String get badgeApheresisStarHint;
+
+  /// No description provided for @badgeCommunityBuilder.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dayanışma Elçisi'**
+  String get badgeCommunityBuilder;
+
+  /// No description provided for @badgeCommunityBuilderHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'3 arkadaşını ağa davet et'**
+  String get badgeCommunityBuilderHint;
+
+  /// No description provided for @surveyStaffDecisionNotice.
+  ///
+  /// In tr, this message translates to:
+  /// **'Karar kan merkezindeki sağlık personelindedir.'**
+  String get surveyStaffDecisionNotice;
+
+  /// No description provided for @profileVerifiedPhone.
+  ///
+  /// In tr, this message translates to:
+  /// **'Telefon Doğrulandı'**
+  String get profileVerifiedPhone;
+
+  /// No description provided for @profileSectionMyInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bilgilerim'**
+  String get profileSectionMyInfo;
+
+  /// No description provided for @profileSectionNotifPrefs.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirim tercihleri'**
+  String get profileSectionNotifPrefs;
+
+  /// No description provided for @profileSectionLocationTravel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konum ve seyahat modu'**
+  String get profileSectionLocationTravel;
+
+  /// No description provided for @profileSectionCommunities.
+  ///
+  /// In tr, this message translates to:
+  /// **'Topluluklarım'**
+  String get profileSectionCommunities;
+
+  /// No description provided for @profileSectionInvite.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arkadaşını davet et'**
+  String get profileSectionInvite;
+
+  /// No description provided for @profileSectionAppearance.
+  ///
+  /// In tr, this message translates to:
+  /// **'Görünüm'**
+  String get profileSectionAppearance;
+
+  /// No description provided for @profileSectionPrivacyData.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gizlilik ve veri'**
+  String get profileSectionPrivacyData;
+
+  /// No description provided for @profileSectionHelpFaq.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yardım ve SSS'**
+  String get profileSectionHelpFaq;
+
+  /// No description provided for @profileSectionAbout.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hakkında'**
+  String get profileSectionAbout;
+
+  /// No description provided for @travelModeTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Seyahat Modu'**
+  String get travelModeTitle;
+
+  /// No description provided for @travelModeSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Farklı bir şehirdeyken geçici olarak o şehrin taleplerini gör'**
+  String get travelModeSubtitle;
+
+  /// No description provided for @travelModeActiveBanner.
+  ///
+  /// In tr, this message translates to:
+  /// **'Seyahat Modu Aktif: {city} ({dateRange})'**
+  String travelModeActiveBanner(String city, String dateRange);
+
+  /// No description provided for @deleteAccountTypeConfirmHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Onaylamak için SİL yazın'**
+  String get deleteAccountTypeConfirmHint;
+
+  /// No description provided for @deleteAccountTypeConfirmWord.
+  ///
+  /// In tr, this message translates to:
+  /// **'SİL'**
+  String get deleteAccountTypeConfirmWord;
+
+  /// No description provided for @communitiesTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Topluluklar ve Nadir Kan Ağı'**
+  String get communitiesTitle;
+
+  /// No description provided for @communityJoinButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Katıl'**
+  String get communityJoinButton;
+
+  /// No description provided for @communityLeaveButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ayrıl'**
+  String get communityLeaveButton;
+
+  /// No description provided for @rareBloodNetworkTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Nadir Kan Ağı (Rh Negatif)'**
+  String get rareBloodNetworkTitle;
+
+  /// No description provided for @rareBloodNetworkSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Nadir bulunan Rh(-) kan grupları için özel dayanışma ağına katılın.'**
+  String get rareBloodNetworkSubtitle;
+
+  /// No description provided for @institutionTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kurumsal Hesap ve Kampanyalar'**
+  String get institutionTitle;
+
+  /// No description provided for @institutionApplyTab.
+  ///
+  /// In tr, this message translates to:
+  /// **'Başvuru'**
+  String get institutionApplyTab;
+
+  /// No description provided for @institutionCampaignsTab.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kampanyalar'**
+  String get institutionCampaignsTab;
+
+  /// No description provided for @institutionPendingBanner.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kurum başvurunuz inceleniyor (Onay Bekliyor)'**
+  String get institutionPendingBanner;
+
+  /// No description provided for @institutionVerifiedBadge.
+  ///
+  /// In tr, this message translates to:
+  /// **'Doğrulanmış Kurum'**
+  String get institutionVerifiedBadge;
+
+  /// No description provided for @campaignJoinButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Katılıyorum'**
+  String get campaignJoinButton;
+
+  /// No description provided for @bloodMatrixTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kan Grupları Uyumluluk Matrisi'**
+  String get bloodMatrixTitle;
+
+  /// No description provided for @bloodMatrixCanGiveTo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kime Verebilir?'**
+  String get bloodMatrixCanGiveTo;
+
+  /// No description provided for @bloodMatrixCanReceiveFrom.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kimden Alabilir?'**
+  String get bloodMatrixCanReceiveFrom;
+
+  /// No description provided for @faqTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sıkça Sorulan Sorular ve Rehber'**
+  String get faqTitle;
+
+  /// No description provided for @mythsAndFactsTab.
+  ///
+  /// In tr, this message translates to:
+  /// **'Efsaneler ve Gerçekler'**
+  String get mythsAndFactsTab;
+
+  /// No description provided for @emergencyGuideTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kan lazım, ne yapmalıyım?'**
+  String get emergencyGuideTitle;
+
+  /// No description provided for @leaderboardTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gönüllü Onur Tablosu'**
+  String get leaderboardTitle;
+
+  /// No description provided for @leaderboardOptInWarning.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gönüllülük yarış değildir; bu tablo yalnızca motivasyon amaçlıdır ve varsayılan olarak kapalıdır.'**
+  String get leaderboardOptInWarning;
+
+  /// No description provided for @leaderboardEnableButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tabloyu Göster'**
+  String get leaderboardEnableButton;
+
+  /// No description provided for @inviteTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arkadaşını Davet Et'**
+  String get inviteTitle;
+
+  /// No description provided for @inviteSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dayanışma ağını büyüt, daha fazla hayata dokun.'**
+  String get inviteSubtitle;
+
+  /// No description provided for @inviteCopyLink.
+  ///
+  /// In tr, this message translates to:
+  /// **'Davet Linkini Kopyala'**
+  String get inviteCopyLink;
+
+  /// No description provided for @inviteCountLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} arkadaşın senin davetinle katıldı'**
+  String inviteCountLabel(int count);
+
+  /// No description provided for @aboutTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hakkında ve Geri Bildirim'**
+  String get aboutTitle;
+
+  /// No description provided for @feedbackTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geri Bildirim Gönder'**
+  String get feedbackTitle;
+
+  /// No description provided for @maintenanceTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bakım Çalışması'**
+  String get maintenanceTitle;
+
+  /// No description provided for @maintenanceMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sistemimiz şu anda kısa süreli bakım çalışmasındadır. Lütfen biraz sonra tekrar deneyin.'**
+  String get maintenanceMessage;
+
+  /// No description provided for @offlineScreenTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'İnternet Bağlantısı Yok'**
+  String get offlineScreenTitle;
+
+  /// No description provided for @adminTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Türkiye Kan Ağı — Yönetim Paneli'**
+  String get adminTitle;
+
+  /// No description provided for @adminLoginTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yönetici Girişi'**
+  String get adminLoginTitle;
+
+  /// No description provided for @adminNavDashboard.
+  ///
+  /// In tr, this message translates to:
+  /// **'Pano'**
+  String get adminNavDashboard;
+
+  /// No description provided for @adminNavReports.
+  ///
+  /// In tr, this message translates to:
+  /// **'Raporlar'**
+  String get adminNavReports;
+
+  /// No description provided for @adminNavRequests.
+  ///
+  /// In tr, this message translates to:
+  /// **'Talepler'**
+  String get adminNavRequests;
+
+  /// No description provided for @adminNavUsers.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kullanıcılar'**
+  String get adminNavUsers;
+
+  /// No description provided for @adminNavInstitutions.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kurumlar'**
+  String get adminNavInstitutions;
+
+  /// No description provided for @adminNavCampaigns.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kampanyalar'**
+  String get adminNavCampaigns;
+
+  /// No description provided for @adminNavAuditLog.
+  ///
+  /// In tr, this message translates to:
+  /// **'Denetim Kaydı'**
+  String get adminNavAuditLog;
+
+  /// No description provided for @adminNavSettings.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ayarlar'**
+  String get adminNavSettings;
+
+  /// No description provided for @adminStatOpenRequests.
+  ///
+  /// In tr, this message translates to:
+  /// **'Açık Talep'**
+  String get adminStatOpenRequests;
+
+  /// No description provided for @adminStatFulfillmentRate.
+  ///
+  /// In tr, this message translates to:
+  /// **'Karşılanma Oranı'**
+  String get adminStatFulfillmentRate;
+
+  /// No description provided for @adminStatPendingReports.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bekleyen Rapor'**
+  String get adminStatPendingReports;
+
+  /// No description provided for @adminStatNewUsers.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeni Kullanıcı'**
+  String get adminStatNewUsers;
+
+  /// No description provided for @adminApproveAction.
+  ///
+  /// In tr, this message translates to:
+  /// **'Onayla'**
+  String get adminApproveAction;
+
+  /// No description provided for @adminRejectAction.
+  ///
+  /// In tr, this message translates to:
+  /// **'Reddet'**
+  String get adminRejectAction;
+
+  /// No description provided for @adminRestrictAction.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kısıtla'**
+  String get adminRestrictAction;
 }
 
 class _AppLocalizationsDelegate
