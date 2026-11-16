@@ -79,7 +79,11 @@ void main() {
 
         // 1. Zorunlu Sağlık Verisi rızasını işaretle
         final healthCb = find.byKey(const Key('consent_health_checkbox'));
-        await tester.ensureVisible(healthCb);
+        await tester.scrollUntilVisible(
+          healthCb,
+          100,
+          scrollable: find.byType(Scrollable).first,
+        );
         await tester.pumpAndSettle();
         await tester.tap(healthCb);
         await tester.pump();
@@ -87,7 +91,11 @@ void main() {
 
         // 2. Zorunlu Konum rızasını işaretle -> artık Devam aktif olmalı
         final locCb = find.byKey(const Key('consent_location_checkbox'));
-        await tester.ensureVisible(locCb);
+        await tester.scrollUntilVisible(
+          locCb,
+          100,
+          scrollable: find.byType(Scrollable).first,
+        );
         await tester.pumpAndSettle();
         await tester.tap(locCb);
         await tester.pump();

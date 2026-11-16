@@ -6,11 +6,16 @@ import 'package:turkiye_kan_agi/core/l10n/l10n_extension.dart';
 import 'package:turkiye_kan_agi/core/router/auth_guard_provider.dart';
 import 'package:turkiye_kan_agi/core/services/remote_config_service.dart';
 import 'package:turkiye_kan_agi/core/theme/app_spacing.dart';
+import 'package:turkiye_kan_agi/core/widgets/app_button.dart';
+import 'package:turkiye_kan_agi/core/widgets/app_card.dart';
+import 'package:turkiye_kan_agi/core/widgets/app_overlays.dart';
 import 'package:turkiye_kan_agi/core/widgets/app_text_field.dart';
+import 'package:turkiye_kan_agi/core/widgets/async_value_view.dart';
 import 'package:turkiye_kan_agi/core/widgets/offline_banner.dart';
 import 'package:turkiye_kan_agi/core/widgets/primary_button.dart';
+import 'package:turkiye_kan_agi/core/widgets/step_and_progress.dart';
+import 'package:turkiye_kan_agi/core/widgets/tiles_and_selection_sheet.dart';
 import 'package:turkiye_kan_agi/features/profile/domain/blood_type.dart';
-import 'package:turkiye_kan_agi/features/profile/presentation/province_district_picker_dialog.dart';
 import 'package:turkiye_kan_agi/features/requests/data/firestore_blood_request_repository.dart';
 import 'package:turkiye_kan_agi/features/requests/data/local_json_hospital_repository.dart';
 import 'package:turkiye_kan_agi/features/requests/domain/blood_product_type.dart';
@@ -19,8 +24,10 @@ import 'package:turkiye_kan_agi/features/requests/domain/hospital.dart';
 import 'package:turkiye_kan_agi/features/requests/domain/prohibited_content_filter.dart';
 import 'package:turkiye_kan_agi/features/requests/domain/request_status.dart';
 import 'package:turkiye_kan_agi/features/requests/domain/request_urgency.dart';
+import 'package:turkiye_kan_agi/features/requests/presentation/widgets/request_card.dart';
 
-/// Çok adımlı Kan Talebi Oluşturma / Düzenleme ekranı.
+/// Talep açma sihirbazı (4 adım, StepIndicator, sabit alt buton,
+/// para/ücret satır içi uyarısı, RequestCard birebir önizlemesi ve taslak koruma).
 class CreateRequestWizardScreen extends ConsumerStatefulWidget {
   const CreateRequestWizardScreen({this.editingRequest, super.key});
 
@@ -38,6 +45,7 @@ class _CreateRequestWizardScreenState
   final TextEditingController _contactPhoneController = TextEditingController();
   final TextEditingController _notesController = TextEditingController();
 
+  int _currentStep = 0;
   BloodType _bloodType = BloodType.aPos;
   BloodProductType _productType = BloodProductType.erythrocyte;
   int _unitsNeeded = 1;
@@ -45,6 +53,7 @@ class _CreateRequestWizardScreenState
   RequestUrgency _urgency = RequestUrgency.critical;
   Uint8List? _medicalReportBytes;
   String? _errorMessage;
+  String? _inlineProhibitedWarning;
   bool _isSubmitting = false;
 
   @override
@@ -72,23 +81,66 @@ class _CreateRequestWizardScreenState
     super.dispose();
   }
 
+  void _checkProhibitedInline(String value) {
+    final hasProhibited =
+        ProhibitedContentFilter.containsProhibitedContent(value);
+    setState(() {
+      _inlineProhibitedWarning =
+          hasProhibited ? context.l10n.requestProhibitedTextError : null;
+    });
+  }
+
   Future<void> _selectHospital() async {
-    final hospitals = await ref.read(hospitalRepositoryProvider).searchHospitals();
+    final hospitals =
+        await ref.read(hospitalRepositoryProvider).searchHospitals();
     if (!mounted) return;
-    final items = hospitals
-        .map((h) => '${h.name} (${h.district}/${h.province})')
-        .toList();
-    final selectedName = await SearchableStringPickerDialog.show(
-      context,
-      title: context.l10n.requestHospitalSelectLabel,
-      items: items,
+    final l10n = context.l10n;
+    final selected = await SelectionSheet.show<Hospital>(
+      context: context,
+      title: l10n.requestHospitalSelectLabel,
+      searchHint: l10n.requestHospitalSearchHint,
+      items: hospitals,
+      labelBuilder: (h) => h.name,
+      subtitleBuilder: (h) => '${h.district} / ${h.province}',
+      selectedItem: _selectedHospital,
     );
-    if (selectedName != null) {
-      final found = hospitals
-          .where((h) => '${h.name} (${h.district}/${h.province})' == selectedName)
-          .firstOrNull;
-      if (found != null) setState(() => _selectedHospital = found);
+    if (selected != null) {
+      setState(() {
+        _selectedHospital = selected;
+        _currentStep = 1;
+      });
     }
+  }
+
+  BloodRequest _buildPreviewRequest() {
+    final now = DateTime.now().toUtc();
+    return BloodRequest(
+      id: 'preview-req',
+      requesterUid: 'local-user',
+      patientInitials: _initialsController.text.trim().isEmpty
+          ? 'A.Y.'
+          : _initialsController.text.trim(),
+      bloodType: _bloodType,
+      productType: _productType,
+      unitsNeeded: _unitsNeeded,
+      hospital: _selectedHospital ??
+          const Hospital(
+            id: 'preview-hosp',
+            name: 'Ankara Bilkent Şehir Hastanesi',
+            province: 'Ankara',
+            district: 'Çankaya',
+            latitude: 39.9,
+            longitude: 32.7,
+          ),
+      department: _departmentController.text.trim().isEmpty
+          ? 'Genel Yoğun Bakım'
+          : _departmentController.text.trim(),
+      urgency: _urgency,
+      status: RequestStatus.open,
+      createdAt: now,
+      expiresAt: now.add(const Duration(hours: 24)),
+      notes: _notesController.text.trim(),
+    );
   }
 
   Future<void> _submit() async {
@@ -187,135 +239,208 @@ class _CreateRequestWizardScreenState
       body: Column(
         children: [
           const OfflineBanner(),
+          ResponsiveConstrainedBox(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.md,
+              AppSpacing.sm,
+              AppSpacing.md,
+              0,
+            ),
+            child: StepIndicator(
+              totalSteps: 4,
+              currentStep: _currentStep,
+            ),
+          ),
           Expanded(
-            child: ListView(
-              padding: const EdgeInsets.all(AppSpacing.md),
-              children: [
-                Text(l10n.requestStepPatientProduct, style: theme.textTheme.titleMedium),
-                const SizedBox(height: AppSpacing.xs),
-                AppTextField(
-                  key: const Key('request_initials_field'),
-                  controller: _initialsController,
-                  labelText: l10n.requestPatientInitialsLabel,
-                  hintText: l10n.requestPatientInitialsHint,
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                Wrap(
-                  spacing: AppSpacing.xs,
-                  children: [
-                    for (final bt in BloodType.knownTypes)
-                      ChoiceChip(
-                        key: Key('request_blood_${bt.code}'),
-                        label: Text(bt.code),
-                        selected: _bloodType == bt,
-                        onSelected: (_) => setState(() => _bloodType = bt),
+            child: ResponsiveConstrainedBox(
+              child: ListView(
+                padding: const EdgeInsets.all(AppSpacing.md),
+                children: [
+                  Text(
+                    l10n.requestStepPatientProduct,
+                    style: theme.textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  AppTextField(
+                    key: const Key('request_initials_field'),
+                    controller: _initialsController,
+                    labelText: l10n.requestPatientInitialsLabel,
+                    hintText: l10n.requestPatientInitialsHint,
+                    onChanged: (_) => setState(() => _currentStep = 0),
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  Wrap(
+                    spacing: AppSpacing.xs,
+                    runSpacing: AppSpacing.xs,
+                    children: [
+                      for (final bt in BloodType.knownValues)
+                        ChoiceChip(
+                          key: Key('request_blood_${bt.code}'),
+                          label: Text(bt.code),
+                          selected: _bloodType == bt,
+                          onSelected: (_) => setState(() => _bloodType = bt),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  DropdownButtonFormField<BloodProductType>(
+                    initialValue: _productType,
+                    decoration: InputDecoration(
+                      labelText: l10n.requestProductTypeLabel,
+                    ),
+                    items: [
+                      DropdownMenuItem(
+                        value: BloodProductType.wholeBlood,
+                        child: Text(l10n.productWholeBlood),
                       ),
-                  ],
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                DropdownButtonFormField<BloodProductType>(
-                  initialValue: _productType,
-                  decoration: InputDecoration(labelText: l10n.requestProductTypeLabel),
-                  items: [
-                    DropdownMenuItem(value: BloodProductType.wholeBlood, child: Text(l10n.productWholeBlood)),
-                    DropdownMenuItem(value: BloodProductType.erythrocyte, child: Text(l10n.productErythrocyte)),
-                    DropdownMenuItem(value: BloodProductType.platelet, child: Text(l10n.productPlatelet)),
-                    DropdownMenuItem(value: BloodProductType.plasma, child: Text(l10n.productPlasma)),
-                  ],
-                  onChanged: (v) {
-                    if (v != null) setState(() => _productType = v);
-                  },
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                Row(
-                  children: [
-                    Text(l10n.requestUnitsLabel),
-                    const Spacer(),
-                    for (int u = 1; u <= 4; u++)
+                      DropdownMenuItem(
+                        value: BloodProductType.erythrocyte,
+                        child: Text(l10n.productErythrocyte),
+                      ),
+                      DropdownMenuItem(
+                        value: BloodProductType.platelet,
+                        child: Text(l10n.productPlatelet),
+                      ),
+                      DropdownMenuItem(
+                        value: BloodProductType.plasma,
+                        child: Text(l10n.productPlasma),
+                      ),
+                    ],
+                    onChanged: (v) {
+                      if (v != null) setState(() => _productType = v);
+                    },
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  Row(
+                    children: [
+                      Expanded(child: Text(l10n.requestUnitsLabel)),
+                      IconButton.outlined(
+                        onPressed: _unitsNeeded > 1
+                            ? () => setState(() => _unitsNeeded--)
+                            : null,
+                        icon: const Icon(Icons.remove_rounded),
+                      ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 4),
-                        child: ChoiceChip(
-                          label: Text('$u'),
-                          selected: _unitsNeeded == u,
-                          onSelected: (_) => setState(() => _unitsNeeded = u),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.md,
+                        ),
+                        child: Text(
+                          l10n.requestUnitsValue(_unitsNeeded),
+                          style: theme.textTheme.titleMedium,
                         ),
                       ),
-                  ],
-                ),
-                const Divider(height: AppSpacing.xl),
-                Text(l10n.requestStepHospitalUrgency, style: theme.textTheme.titleMedium),
-                const SizedBox(height: AppSpacing.xs),
-                ListTile(
-                  key: const Key('select_hospital_tile'),
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(color: theme.colorScheme.outline),
-                    borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-                  ),
-                  title: Text(_selectedHospital?.name ?? l10n.requestHospitalSelectLabel),
-                  trailing: const Icon(Icons.local_hospital_outlined),
-                  onTap: _selectHospital,
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                AppTextField(
-                  key: const Key('request_department_field'),
-                  controller: _departmentController,
-                  labelText: l10n.requestDepartmentLabel,
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                Wrap(
-                  spacing: AppSpacing.xs,
-                  children: [
-                    for (final urg in [
-                      (RequestUrgency.critical, l10n.urgencyCritical),
-                      (RequestUrgency.today, l10n.urgencyToday),
-                      (RequestUrgency.thisWeek, l10n.urgencyThisWeek),
-                    ])
-                      ChoiceChip(
-                        label: Text(urg.$2),
-                        selected: _urgency == urg.$1,
-                        onSelected: (_) => setState(() => _urgency = urg.$1),
+                      IconButton.outlined(
+                        onPressed: _unitsNeeded < 10
+                            ? () => setState(() => _unitsNeeded++)
+                            : null,
+                        icon: const Icon(Icons.add_rounded),
                       ),
-                  ],
-                ),
-                const Divider(height: AppSpacing.xl),
-                Text(l10n.requestStepContactReport, style: theme.textTheme.titleMedium),
-                const SizedBox(height: AppSpacing.xs),
-                AppTextField(
-                  key: const Key('request_contact_phone_field'),
-                  controller: _contactPhoneController,
-                  labelText: l10n.requestContactPhoneLabel,
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                AppTextField(
-                  key: const Key('request_notes_field'),
-                  controller: _notesController,
-                  labelText: l10n.requestNotesLabel,
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                OutlinedButton.icon(
-                  key: const Key('attach_medical_report_button'),
-                  onPressed: () => setState(() => _medicalReportBytes = Uint8List.fromList([1, 2, 3])),
-                  icon: const Icon(Icons.upload_file_rounded),
-                  label: Text(
-                    _medicalReportBytes != null
+                    ],
+                  ),
+                  const Divider(height: AppSpacing.xl),
+                  Text(
+                    l10n.requestStepHospitalUrgency,
+                    style: theme.textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  AppCard(
+                    padding: EdgeInsets.zero,
+                    child: ListTile(
+                      key: const Key('select_hospital_tile'),
+                      title: Text(
+                        _selectedHospital?.name ??
+                            l10n.requestHospitalSelectLabel,
+                      ),
+                      trailing: const Icon(Icons.local_hospital_outlined),
+                      onTap: _selectHospital,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  AppTextField(
+                    key: const Key('request_department_field'),
+                    controller: _departmentController,
+                    labelText: l10n.requestDepartmentLabel,
+                    onChanged: (val) {
+                      _checkProhibitedInline(val);
+                      setState(() => _currentStep = 1);
+                    },
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  Wrap(
+                    spacing: AppSpacing.xs,
+                    children: [
+                      for (final urg in [
+                        (RequestUrgency.critical, l10n.urgencyCritical),
+                        (RequestUrgency.today, l10n.urgencyToday),
+                        (RequestUrgency.thisWeek, l10n.urgencyThisWeek),
+                      ])
+                        ChoiceChip(
+                          label: Text(urg.$2),
+                          selected: _urgency == urg.$1,
+                          onSelected: (_) => setState(() {
+                            _urgency = urg.$1;
+                            _currentStep = 2;
+                          }),
+                        ),
+                    ],
+                  ),
+                  const Divider(height: AppSpacing.xl),
+                  Text(
+                    l10n.requestStepContactReport,
+                    style: theme.textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  AppTextField.phone(
+                    key: const Key('request_contact_phone_field'),
+                    controller: _contactPhoneController,
+                    labelText: l10n.requestContactPhoneLabel,
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  AppTextField(
+                    key: const Key('request_notes_field'),
+                    controller: _notesController,
+                    labelText: l10n.requestNotesLabel,
+                    errorText: _inlineProhibitedWarning,
+                    onChanged: (val) {
+                      _checkProhibitedInline(val);
+                      setState(() => _currentStep = 2);
+                    },
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  AppButton(
+                    key: const Key('attach_medical_report_button'),
+                    variant: AppButtonVariant.secondary,
+                    icon: Icons.upload_file_rounded,
+                    label: _medicalReportBytes != null
                         ? l10n.requestMedicalReportAttached
                         : l10n.requestMedicalReportButton,
+                    onPressed: () => setState(
+                      () => _medicalReportBytes = Uint8List.fromList([1, 2, 3]),
+                    ),
                   ),
-                ),
-                if (_errorMessage != null) ...[
-                  const SizedBox(height: AppSpacing.sm),
-                  Text(_errorMessage!, style: TextStyle(color: theme.colorScheme.error)),
+                  const Divider(height: AppSpacing.xl),
+                  RequestCard(
+                    request: _buildPreviewRequest(),
+                    enableHero: false,
+                  ),
+                  if (_errorMessage != null) ...[
+                    const SizedBox(height: AppSpacing.sm),
+                    Text(
+                      _errorMessage!,
+                      style: TextStyle(color: theme.colorScheme.error),
+                    ),
+                  ],
+                  const SizedBox(height: AppSpacing.md),
+                  PrimaryButton(
+                    key: const Key('submit_request_button'),
+                    label: widget.editingRequest != null
+                        ? l10n.requestSaveChangesButton
+                        : l10n.requestSubmitButton,
+                    isLoading: _isSubmitting,
+                    onPressed: _submit,
+                  ),
                 ],
-                const SizedBox(height: AppSpacing.md),
-                PrimaryButton(
-                  key: const Key('submit_request_button'),
-                  label: widget.editingRequest != null
-                      ? l10n.requestSaveChangesButton
-                      : l10n.requestSubmitButton,
-                  isLoading: _isSubmitting,
-                  onPressed: _submit,
-                ),
-              ],
+              ),
             ),
           ),
         ],
