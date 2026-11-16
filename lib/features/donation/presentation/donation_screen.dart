@@ -19,6 +19,7 @@ import 'package:turkiye_kan_agi/features/donation/domain/next_donation_calculato
 import 'package:turkiye_kan_agi/features/donation/presentation/add_donation_sheet.dart';
 import 'package:turkiye_kan_agi/features/donation/presentation/donation_countdown_card.dart';
 import 'package:turkiye_kan_agi/features/donation/presentation/donation_history_list.dart';
+import 'package:turkiye_kan_agi/features/donation/presentation/widgets/badge_showcase.dart';
 import 'package:turkiye_kan_agi/features/onboarding/domain/kvkk_consent_record.dart';
 import 'package:turkiye_kan_agi/features/profile/data/firestore_profile_repository.dart';
 
@@ -284,6 +285,20 @@ class _DonationScreenState extends ConsumerState<DonationScreen> {
                         icon: const Icon(Icons.menu_book_rounded),
                         label: Text(l10n.donationQuickTipsButton),
                       ),
+                      const SizedBox(height: AppSpacing.md),
+                      Card(
+                        child: ListTile(
+                          leading: Icon(
+                            Icons.favorite_rounded,
+                            color: theme.colorScheme.primary,
+                          ),
+                          title: Text(l10n.donationLivesSavedTitle),
+                          subtitle: Text(l10n.donationLivesSavedSubtitle),
+                          trailing: const Icon(Icons.info_outline_rounded),
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                      BadgeShowcaseSection(donationCount: _history.length),
                       const SizedBox(height: AppSpacing.md),
                       DonationHistoryList(
                         records: _history,
