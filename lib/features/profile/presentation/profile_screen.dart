@@ -5,11 +5,14 @@ import 'package:turkiye_kan_agi/core/l10n/l10n_extension.dart';
 import 'package:turkiye_kan_agi/core/l10n/locale_provider.dart';
 import 'package:turkiye_kan_agi/core/router/app_routes.dart';
 import 'package:turkiye_kan_agi/core/router/auth_guard_provider.dart';
+import 'package:turkiye_kan_agi/core/services/location_service.dart';
 import 'package:turkiye_kan_agi/core/theme/app_colors.dart';
+import 'package:turkiye_kan_agi/core/theme/app_radius.dart';
 import 'package:turkiye_kan_agi/core/theme/app_spacing.dart';
 import 'package:turkiye_kan_agi/core/theme/theme_mode_provider.dart';
 import 'package:turkiye_kan_agi/core/widgets/app_button.dart';
 import 'package:turkiye_kan_agi/core/widgets/app_card.dart';
+import 'package:turkiye_kan_agi/core/widgets/app_overlays.dart';
 import 'package:turkiye_kan_agi/core/widgets/app_text_field.dart';
 import 'package:turkiye_kan_agi/core/widgets/async_value_view.dart';
 import 'package:turkiye_kan_agi/core/widgets/blood_type_badge.dart';
@@ -20,11 +23,13 @@ import 'package:turkiye_kan_agi/core/widgets/tiles_and_selection_sheet.dart';
 import 'package:turkiye_kan_agi/features/auth/data/firebase_auth_repository.dart';
 import 'package:turkiye_kan_agi/features/profile/data/firestore_profile_repository.dart';
 import 'package:turkiye_kan_agi/features/profile/domain/blood_type.dart';
+import 'package:turkiye_kan_agi/features/profile/domain/user_public_profile.dart';
+import 'package:turkiye_kan_agi/features/profile/domain/user_sensitive_profile.dart';
 
 final travelModeCityProvider = StateProvider<String?>((ref) => null);
 
-/// Aşama 7: Profil, ayarlar, seyahat modu, topluluklar, kurumsal, içerik,
-/// iki adımlı yazarak doğrulamalı hesap silme ve JSON veri indirme ekranı.
+/// Aşama 7: Profesyonel Bağışçı Kimlik Kartı, gerçek GPS konumu güncelleme,
+/// seyahat modu, topluluklar, kurumsal, içerik, iki adımlı hesap silme ve JSON veri indirme ekranı.
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
@@ -34,6 +39,42 @@ class ProfileScreen extends ConsumerStatefulWidget {
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   bool _isAvailable = true;
+  bool _isLocating = false;
+  UserPublicProfile? _publicProfile;
+  UserSensitiveProfile? _sensitiveProfile;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfile();
+  }
+
+  Future<void> _loadProfile() async {
+    final uid = ref.read(currentUserIdStateProvider) ?? 'local-user';
+    final repo = ref.read(profileRepositoryProvider);
+    final pubRes = await repo.getPublicProfile(uid);
+    final senRes = await repo.getSensitiveProfile(uid);
+    if (!mounted) return;
+    pubRes.when(
+      success: (p) {
+        if (p != null) {
+          setState(() {
+            _publicProfile = p;
+            _isAvailable = p.isAvailableToDonate;
+          });
+        }
+      },
+      failure: (_) {},
+    );
+    senRes.when(
+      success: (s) {
+        if (s != null) {
+          setState(() => _sensitiveProfile = s);
+        }
+      },
+      failure: (_) {},
+    );
+  }
 
   Future<void> _onToggleAvailability(bool value) async {
     setState(() => _isAvailable = value);
@@ -42,6 +83,64 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           uid: uid,
           isAvailable: value,
         );
+    await _loadProfile();
+  }
+
+  Future<void> _onUpdateLocationFromGps() async {
+    setState(() => _isLocating = true);
+    final loc =
+        await ref.read(userLocationProvider.notifier).refreshWithPermission();
+    if (!mounted) return;
+    setState(() => _isLocating = false);
+
+    if (loc == null) {
+      AppSnackbar.show(
+        context,
+        message: context.l10n.mapNoLocationTitle,
+      );
+      return;
+    }
+
+    final uid = ref.read(currentUserIdStateProvider) ?? 'local-user';
+    final now = DateTime.now().toUtc();
+    final updatedPublic = (_publicProfile ??
+            UserPublicProfile(
+              uid: uid,
+              displayName: 'Ahmet Kaya',
+              useNickname: false,
+              province: loc.province,
+              district: loc.district,
+              isAvailableToDonate: _isAvailable,
+              updatedAt: now,
+            ))
+        .copyWith(
+      province: loc.province,
+      district: loc.district,
+      updatedAt: now,
+    );
+
+    final currentSensitive = _sensitiveProfile ??
+        UserSensitiveProfile(
+          fullName: updatedPublic.displayName,
+          phoneNumber: '+90 532 ••• •• 48',
+          birthDate: DateTime(1993, 4, 18),
+          gender: UserGender.male,
+          weightKg: 76,
+          bloodType: BloodType.aPos,
+          updatedAt: now,
+        );
+
+    await ref.read(profileRepositoryProvider).saveFullProfile(
+          publicProfile: updatedPublic,
+          sensitiveProfile: currentSensitive,
+        );
+    ref.read(profileRevisionProvider.notifier).state++;
+    await _loadProfile();
+    if (!mounted) return;
+    AppSnackbar.show(
+      context,
+      message: '${loc.formattedArea} (${loc.formattedCoordinates})',
+    );
   }
 
   Future<void> _onExportData() async {
@@ -128,6 +227,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     context.go(AppRoutes.onboarding);
   }
 
+  String _initialsFor(String fullName) {
+    final parts = fullName
+        .trim()
+        .split(RegExp(r'\s+'))
+        .where((e) => e.isNotEmpty)
+        .toList();
+    if (parts.isEmpty) return 'AK';
+    if (parts.length == 1) return parts.first.substring(0, 1).toUpperCase();
+    return '${parts.first.substring(0, 1)}${parts.last.substring(0, 1)}'
+        .toUpperCase();
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -135,6 +246,25 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final currentThemeMode = ref.watch(themeModeProvider);
     final currentLocale = ref.watch(localeProvider);
     final travelCity = ref.watch(travelModeCityProvider);
+    final gpsState = ref.watch(userLocationProvider);
+    ref.listen<int>(profileRevisionProvider, (_, __) => _loadProfile());
+
+    final fullName =
+        _sensitiveProfile?.fullName.isNotEmpty == true
+            ? _sensitiveProfile!.fullName
+            : (_publicProfile?.displayName.isNotEmpty == true
+                ? _publicProfile!.displayName
+                : 'Ahmet Kaya');
+    final bloodType = _sensitiveProfile?.bloodType ?? BloodType.aPos;
+    final province = _publicProfile?.province.isNotEmpty == true
+        ? _publicProfile!.province
+        : 'Ankara';
+    final district = _publicProfile?.district.isNotEmpty == true
+        ? _publicProfile!.district
+        : 'Çankaya';
+    final phone = _sensitiveProfile?.phoneNumber ?? '+90 532 ••• •• 48';
+    final weightKg = _sensitiveProfile?.weightKg ?? 76;
+    final gpsData = gpsState.valueOrNull;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.profileTitle)),
@@ -178,40 +308,23 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               child: ListView(
                 padding: const EdgeInsets.all(AppSpacing.md),
                 children: [
-                  AppCard(
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 28,
-                          backgroundColor: theme.colorScheme.primaryContainer,
-                          child: Text(
-                            'AK',
-                            style: theme.textTheme.titleMedium?.copyWith(
-                              color: theme.colorScheme.onPrimaryContainer,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: AppSpacing.sm),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Ahmet K. (@gonullu_06)',
-                                style: theme.textTheme.titleMedium,
-                              ),
-                              const SizedBox(height: AppSpacing.xxs),
-                              VerifiedBadge(label: l10n.profileVerifiedPhone),
-                            ],
-                          ),
-                        ),
-                        const BloodTypeBadge(
-                          bloodType: BloodType.aPos,
-                          size: BloodBadgeSize.s,
-                        ),
-                      ],
-                    ),
+                  _DonorIdentityCard(
+                    initials: _initialsFor(fullName),
+                    fullName: fullName,
+                    phone: phone,
+                    province: province,
+                    district: district,
+                    weightKg: weightKg,
+                    bloodType: bloodType,
+                    isAvailable: _isAvailable,
+                    isLocating: _isLocating,
+                    gpsCoordinates: gpsData?.formattedCoordinates,
+                    verifiedLabel: l10n.profileVerifiedPhone,
+                    onUpdateGpsLocation: _onUpdateLocationFromGps,
+                    onEditProfile: () async {
+                      await context.push(AppRoutes.profileSetup);
+                      await _loadProfile();
+                    },
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   AppCard(
@@ -232,7 +345,19 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   _NavTile(
                     icon: Icons.edit_outlined,
                     title: l10n.profileEditButton,
-                    onTap: () => context.push(AppRoutes.profileSetup),
+                    subtitle: '$fullName • ${bloodType.code} • $district / $province',
+                    onTap: () async {
+                      await context.push(AppRoutes.profileSetup);
+                      await _loadProfile();
+                    },
+                  ),
+                  _NavTile(
+                    icon: Icons.my_location_rounded,
+                    title: l10n.locationPermissionAllowButton,
+                    subtitle: gpsData != null
+                        ? '$district / $province (${gpsData.formattedCoordinates})'
+                        : '$district / $province',
+                    onTap: _onUpdateLocationFromGps,
                   ),
                   _NavTile(
                     icon: Icons.notifications_active_outlined,
@@ -385,6 +510,267 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Profesyonel Dijital Kan Bağışçısı Kimlik Kartı.
+class _DonorIdentityCard extends StatelessWidget {
+  const _DonorIdentityCard({
+    required this.initials,
+    required this.fullName,
+    required this.phone,
+    required this.province,
+    required this.district,
+    required this.weightKg,
+    required this.bloodType,
+    required this.isAvailable,
+    required this.isLocating,
+    required this.verifiedLabel,
+    required this.onUpdateGpsLocation,
+    required this.onEditProfile,
+    this.gpsCoordinates,
+  });
+
+  final String initials;
+  final String fullName;
+  final String phone;
+  final String province;
+  final String district;
+  final int weightKg;
+  final BloodType bloodType;
+  final bool isAvailable;
+  final bool isLocating;
+  final String verifiedLabel;
+  final String? gpsCoordinates;
+  final VoidCallback onUpdateGpsLocation;
+  final VoidCallback onEditProfile;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = context.l10n;
+
+    return AppCard(
+      padding: const EdgeInsets.all(AppSpacing.md),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [AppColors.primary, AppColors.primaryDark],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  initials,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+              const SizedBox(width: AppSpacing.sm),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      fullName,
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      phone,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.xs),
+                    Wrap(
+                      spacing: AppSpacing.xs,
+                      runSpacing: 4,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        VerifiedBadge(label: verifiedLabel),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppSpacing.xs,
+                            vertical: 3,
+                          ),
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.surfaceContainerHighest,
+                            borderRadius: AppRadius.chipBorder,
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.location_on_rounded,
+                                size: 14,
+                                color: theme.colorScheme.primary,
+                              ),
+                              const SizedBox(width: 3),
+                              Text(
+                                '$district / $province',
+                                style: theme.textTheme.labelSmall?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              BloodTypeBadge(
+                bloodType: bloodType,
+                size: BloodBadgeSize.m,
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.md),
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.sm,
+              vertical: AppSpacing.sm,
+            ),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surfaceContainerLow,
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: IntrinsicHeight(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: _ProfileMetricItem(
+                      label: l10n.navDonation,
+                      value: '4',
+                      icon: Icons.bloodtype_rounded,
+                    ),
+                  ),
+                  const VerticalDivider(width: 16),
+                  Expanded(
+                    child: _ProfileMetricItem(
+                      label: l10n.wizardWeightLabel,
+                      value: '$weightKg kg',
+                      icon: Icons.monitor_weight_outlined,
+                    ),
+                  ),
+                  const VerticalDivider(width: 16),
+                  Expanded(
+                    child: _ProfileMetricItem(
+                      label: l10n.wizardStep4Title,
+                      value: isAvailable ? 'Müsait' : 'Pasif',
+                      icon: isAvailable
+                          ? Icons.check_circle_rounded
+                          : Icons.pause_circle_outline_rounded,
+                      valueColor:
+                          isAvailable ? AppColors.success : AppColors.warning,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  key: const Key('profile_update_gps_location_button'),
+                  onPressed: isLocating ? null : onUpdateGpsLocation,
+                  icon: isLocating
+                      ? const SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Icon(Icons.my_location_rounded, size: 18),
+                  label: Text(
+                    l10n.locationPermissionAllowButton,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ),
+              const SizedBox(width: AppSpacing.xs),
+              Expanded(
+                child: FilledButton.tonalIcon(
+                  key: const Key('profile_quick_edit_button'),
+                  onPressed: onEditProfile,
+                  icon: const Icon(Icons.edit_outlined, size: 18),
+                  label: Text(
+                    l10n.profileEditButton,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ProfileMetricItem extends StatelessWidget {
+  const _ProfileMetricItem({
+    required this.label,
+    required this.value,
+    required this.icon,
+    this.valueColor,
+  });
+
+  final String label;
+  final String value;
+  final IconData icon;
+  final Color? valueColor;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(
+          icon,
+          size: 18,
+          color: valueColor ?? theme.colorScheme.primary,
+        ),
+        const SizedBox(height: 2),
+        Text(
+          value,
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w800,
+            color: valueColor,
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        Text(
+          label,
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 }

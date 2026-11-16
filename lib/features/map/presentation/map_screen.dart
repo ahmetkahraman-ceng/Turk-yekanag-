@@ -6,6 +6,7 @@ import 'package:turkiye_kan_agi/core/l10n/l10n_extension.dart';
 import 'package:turkiye_kan_agi/core/mock/center_repository.dart';
 import 'package:turkiye_kan_agi/core/mock/donation_center.dart';
 import 'package:turkiye_kan_agi/core/router/app_routes.dart';
+import 'package:turkiye_kan_agi/core/services/location_service.dart';
 import 'package:turkiye_kan_agi/core/theme/app_colors.dart';
 import 'package:turkiye_kan_agi/core/theme/app_spacing.dart';
 import 'package:turkiye_kan_agi/core/widgets/app_card.dart';
@@ -119,6 +120,33 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     );
   }
 
+  Future<void> _goToMyRealLocation() async {
+    final loc =
+        await ref.read(userLocationProvider.notifier).refreshWithPermission();
+    if (!mounted) return;
+    if (loc == null) {
+      setState(() => _hasLocationPermission = false);
+      AppSnackbar.show(
+        context,
+        message: context.l10n.mapNoLocationTitle,
+      );
+      return;
+    }
+    setState(() {
+      _hasLocationPermission = true;
+      _selectedCity = loc.province;
+    });
+    _mapController.moveTo(
+      latitude: loc.latitude,
+      longitude: loc.longitude,
+      zoom: 12.5,
+    );
+    AppSnackbar.show(
+      context,
+      message: '${loc.formattedArea} (${loc.formattedCoordinates})',
+    );
+  }
+
   List<BloodRequest> get _filteredRequests {
     if (!_showRequests) return const <BloodRequest>[];
     return _requests.where((r) {
@@ -157,9 +185,13 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           IconButton(
             key: const Key('toggle_location_permission_button'),
             tooltip: l10n.mapOpenLocationButton,
-            onPressed: () => setState(
-              () => _hasLocationPermission = !_hasLocationPermission,
-            ),
+            onPressed: () {
+              if (_hasLocationPermission) {
+                setState(() => _hasLocationPermission = false);
+              } else {
+                _goToMyRealLocation();
+              }
+            },
             icon: Icon(
               _hasLocationPermission
                   ? Icons.location_on_rounded
@@ -238,9 +270,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                             title: l10n.mapNoLocationTitle,
                             subtitle: l10n.mapNoLocationSubtitle,
                             actionLabel: l10n.mapOpenLocationButton,
-                            onAction: () => setState(
-                              () => _hasLocationPermission = true,
-                            ),
+                            onAction: _goToMyRealLocation,
                           ),
                         ),
                         Padding(
@@ -299,14 +329,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                                           ),
                                           heroTag: 'map_my_location_fab_hero',
                                           tooltip: l10n.mapMyLocationTooltip,
-                                          onPressed: () {
-                                            _focusCity('Ankara');
-                                            AppSnackbar.show(
-                                              context,
-                                              message:
-                                                  l10n.mapMyLocationTooltip,
-                                            );
-                                          },
+                                          onPressed: _goToMyRealLocation,
                                           child: const Icon(
                                             Icons.my_location_rounded,
                                           ),

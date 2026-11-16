@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:turkiye_kan_agi/core/l10n/l10n_extension.dart';
 import 'package:turkiye_kan_agi/core/router/app_routes.dart';
 import 'package:turkiye_kan_agi/core/router/auth_guard_provider.dart';
+import 'package:turkiye_kan_agi/core/services/location_service.dart';
 import 'package:turkiye_kan_agi/core/services/remote_config_service.dart';
 import 'package:turkiye_kan_agi/core/theme/app_spacing.dart';
 import 'package:turkiye_kan_agi/core/widgets/app_button.dart';
@@ -25,9 +26,9 @@ import 'package:turkiye_kan_agi/features/profile/presentation/widgets/profile_wi
 
 enum _WizardStage { form, locationPermission, celebration }
 
-/// Profil oluşturma sihirbazı (4 adım: StepIndicator, Ad/Takma ad,
+/// Profil oluşturma ve düzenleme sihirbazı (4 adım: StepIndicator, Ad Soyad,
 /// 8 Kan Grubu kartı + Bilmiyorum + bilgi sheet'i, Doğum tarihi/Cinsiyet/Kilo,
-/// İl/İlçe SelectionSheet; sonunda Konum izni açıklaması ve Hazırsın kutlaması).
+/// İl/İlçe SelectionSheet + Gerçek GPS Konumu; sonunda Konum izni ve Hazırsın kutlaması).
 /// Kızılay ve Sağlık Bakanlığı güncel kurallarıyla doğrulanmalıdır.
 class ProfileSetupWizardScreen extends ConsumerStatefulWidget {
   const ProfileSetupWizardScreen({super.key});
@@ -55,6 +56,54 @@ class _ProfileSetupWizardScreenState
   String? _selectedDistrict;
   String? _errorMessage;
   bool _isSaving = false;
+  bool _isFetchingLocation = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadExistingProfileIfCompleted();
+  }
+
+  Future<void> _loadExistingProfileIfCompleted() async {
+    final isCompleted = ref.read(profileCompletedStateProvider);
+    if (!isCompleted) return;
+    final uid = ref.read(currentUserIdStateProvider) ?? 'local-user';
+    final repo = ref.read(profileRepositoryProvider);
+    final pubRes = await repo.getPublicProfile(uid);
+    final senRes = await repo.getSensitiveProfile(uid);
+    if (!mounted) return;
+    pubRes.when(
+      success: (pub) {
+        if (pub != null) {
+          setState(() {
+            _useNickname = pub.useNickname;
+            _selectedProvince = pub.province.isNotEmpty ? pub.province : null;
+            _selectedDistrict = pub.district.isNotEmpty ? pub.district : null;
+          });
+        }
+      },
+      failure: (_) {},
+    );
+    senRes.when(
+      success: (sen) {
+        if (sen != null) {
+          setState(() {
+            if (_fullNameController.text.isEmpty) {
+              _fullNameController.text = sen.fullName;
+            }
+            if (sen.nickname != null && _nicknameController.text.isEmpty) {
+              _nicknameController.text = sen.nickname!;
+            }
+            _weightController.text = sen.weightKg.toString();
+            _birthDate = sen.birthDate;
+            _gender = sen.gender;
+            _bloodType = sen.bloodType;
+          });
+        }
+      },
+      failure: (_) {},
+    );
+  }
 
   @override
   void dispose() {
@@ -73,6 +122,35 @@ class _ProfileSetupWizardScreenState
     );
     if (picked != null) {
       setState(() => _birthDate = picked);
+    }
+  }
+
+  Future<void> _useCurrentGpsLocation() async {
+    setState(() {
+      _isFetchingLocation = true;
+      _currentStep = 3;
+    });
+    final loc =
+        await ref.read(userLocationProvider.notifier).refreshWithPermission();
+    if (!mounted) return;
+    setState(() {
+      _isFetchingLocation = false;
+      if (loc != null) {
+        _selectedProvince = loc.province;
+        _selectedDistrict = loc.district;
+        _errorMessage = null;
+      }
+    });
+    if (loc != null) {
+      AppSnackbar.show(
+        context,
+        message: '${loc.formattedArea} (${loc.formattedCoordinates})',
+      );
+    } else {
+      AppSnackbar.show(
+        context,
+        message: context.l10n.mapNoLocationTitle,
+      );
     }
   }
 
@@ -217,6 +295,7 @@ class _ProfileSetupWizardScreenState
     final sensitiveProfile = UserSensitiveProfile(
       fullName: fullName,
       nickname: nickname.isEmpty ? null : nickname,
+      phoneNumber: '+90 532 ••• •• 48',
       birthDate: _birthDate,
       gender: _gender,
       weightKg: weight,
@@ -230,6 +309,7 @@ class _ProfileSetupWizardScreenState
           sensitiveProfile: sensitiveProfile,
           consentRecord: consentRecord,
         );
+    ref.read(profileRevisionProvider.notifier).state++;
 
     if (!mounted) return;
     setState(() {
@@ -255,8 +335,13 @@ class _ProfileSetupWizardScreenState
         appBar: AppBar(title: Text(l10n.wizardTitle)),
         body: ResponsiveConstrainedBox(
           child: LocationPermissionExplainerView(
-            onAllowLocation: () =>
-                setState(() => _stage = _WizardStage.celebration),
+            onAllowLocation: () async {
+              await ref
+                  .read(userLocationProvider.notifier)
+                  .refreshWithPermission();
+              if (!mounted) return;
+              setState(() => _stage = _WizardStage.celebration);
+            },
             onSkipLocation: () =>
                 setState(() => _stage = _WizardStage.celebration),
           ),
@@ -311,17 +396,20 @@ class _ProfileSetupWizardScreenState
                     onChanged: (_) => setState(() => _currentStep = 0),
                   ),
                   const SizedBox(height: AppSpacing.sm),
-                  AppTextField(
-                    key: const Key('wizard_nickname_field'),
-                    controller: _nicknameController,
-                    labelText: l10n.wizardNicknameLabel,
-                    prefixIcon: Icons.badge_outlined,
-                  ),
                   SwitchTile(
                     title: l10n.wizardUseNicknameSwitch,
                     value: _useNickname,
                     onChanged: (val) => setState(() => _useNickname = val),
                   ),
+                  if (_useNickname) ...[
+                    const SizedBox(height: AppSpacing.xs),
+                    AppTextField(
+                      key: const Key('wizard_nickname_field'),
+                      controller: _nicknameController,
+                      labelText: l10n.wizardNicknameLabel,
+                      prefixIcon: Icons.badge_outlined,
+                    ),
+                  ],
                   const Divider(height: AppSpacing.xl),
                   Text(l10n.wizardStep2Title, style: theme.textTheme.titleLarge),
                   const SizedBox(height: AppSpacing.xs),
@@ -426,7 +514,31 @@ class _ProfileSetupWizardScreenState
                     onChanged: (_) => setState(() => _currentStep = 2),
                   ),
                   const Divider(height: AppSpacing.xl),
-                  Text(l10n.wizardStep4Title, style: theme.textTheme.titleLarge),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          l10n.wizardStep4Title,
+                          style: theme.textTheme.titleLarge,
+                        ),
+                      ),
+                      TextButton.icon(
+                        key: const Key('wizard_use_gps_location_button'),
+                        onPressed:
+                            _isFetchingLocation ? null : _useCurrentGpsLocation,
+                        icon: _isFetchingLocation
+                            ? const SizedBox(
+                                width: 16,
+                                height: 16,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : const Icon(Icons.my_location_rounded, size: 18),
+                        label: Text(l10n.locationPermissionAllowButton),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: AppSpacing.sm),
                   AppCard(
                     padding: EdgeInsets.zero,

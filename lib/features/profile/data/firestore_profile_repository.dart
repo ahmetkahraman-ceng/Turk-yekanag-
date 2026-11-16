@@ -8,6 +8,7 @@ import 'package:turkiye_kan_agi/core/error/result.dart';
 import 'package:turkiye_kan_agi/features/donation/data/firestore_donation_repository.dart';
 import 'package:turkiye_kan_agi/features/donation/domain/donation_repository.dart';
 import 'package:turkiye_kan_agi/features/onboarding/domain/kvkk_consent_record.dart';
+import 'package:turkiye_kan_agi/features/profile/domain/blood_type.dart';
 import 'package:turkiye_kan_agi/features/profile/domain/notification_preferences.dart';
 import 'package:turkiye_kan_agi/features/profile/domain/profile_repository.dart';
 import 'package:turkiye_kan_agi/features/profile/domain/user_public_profile.dart';
@@ -24,7 +25,9 @@ class FirestoreProfileRepository implements ProfileRepository {
   })  : _firestore = firestore,
         _storage = storage,
         _functions = functions,
-        _donationRepository = donationRepository;
+        _donationRepository = donationRepository {
+    _seedDefaultProfile();
+  }
 
   final FirebaseFirestore? _firestore;
   final FirebaseStorage? _storage;
@@ -41,6 +44,28 @@ class FirestoreProfileRepository implements ProfileRepository {
   static const String sensitiveDocId = 'sensitive_profile';
   static const String consentsDocId = 'consents';
   static const String notifPrefsDocId = 'notification_preferences';
+
+  void _seedDefaultProfile() {
+    final now = DateTime.now().toUtc();
+    _publicCache['local-user'] = UserPublicProfile(
+      uid: 'local-user',
+      displayName: 'Ahmet Kaya',
+      useNickname: false,
+      province: 'Ankara',
+      district: 'Çankaya',
+      isAvailableToDonate: true,
+      updatedAt: now,
+    );
+    _sensitiveCache['local-user'] = UserSensitiveProfile(
+      fullName: 'Ahmet Kaya',
+      phoneNumber: '+90 532 ••• •• 48',
+      birthDate: DateTime(1993, 4, 18),
+      gender: UserGender.male,
+      weightKg: 76,
+      bloodType: BloodType.aPos,
+      updatedAt: now,
+    );
+  }
 
   @override
   Future<Result<UserPublicProfile?>> getPublicProfile(String uid) async {
@@ -88,6 +113,8 @@ class FirestoreProfileRepository implements ProfileRepository {
     final uid = publicProfile.uid;
     _publicCache[uid] = publicProfile;
     _sensitiveCache[uid] = sensitiveProfile;
+    _publicCache['local-user'] = publicProfile;
+    _sensitiveCache['local-user'] = sensitiveProfile;
     if (consentRecord != null) {
       _consentCache[uid] = consentRecord;
     }
@@ -119,12 +146,14 @@ class FirestoreProfileRepository implements ProfileRepository {
     required String uid,
     required bool isAvailable,
   }) async {
-    final existing = _publicCache[uid];
+    final existing = _publicCache[uid] ?? _publicCache['local-user'];
     if (existing != null) {
-      _publicCache[uid] = existing.copyWith(
+      final updated = existing.copyWith(
         isAvailableToDonate: isAvailable,
         updatedAt: DateTime.now().toUtc(),
       );
+      _publicCache[uid] = updated;
+      _publicCache['local-user'] = updated;
     }
     final fs = _firestore;
     if (fs != null) {
@@ -284,3 +313,6 @@ final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
   final donationRepo = ref.watch(donationRepositoryProvider);
   return FirestoreProfileRepository(donationRepository: donationRepo);
 });
+
+/// Profil güncellendiğinde UI'ın anında yeniden okumasını sağlayan sayaç provider'ı.
+final profileRevisionProvider = StateProvider<int>((ref) => 0);
