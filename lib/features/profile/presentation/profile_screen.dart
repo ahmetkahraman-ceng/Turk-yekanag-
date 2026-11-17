@@ -7,24 +7,21 @@ import 'package:turkiye_kan_agi/core/router/app_routes.dart';
 import 'package:turkiye_kan_agi/core/router/auth_guard_provider.dart';
 import 'package:turkiye_kan_agi/core/services/location_service.dart';
 import 'package:turkiye_kan_agi/core/theme/app_colors.dart';
-import 'package:turkiye_kan_agi/core/theme/app_radius.dart';
 import 'package:turkiye_kan_agi/core/theme/app_spacing.dart';
 import 'package:turkiye_kan_agi/core/theme/theme_mode_provider.dart';
-import 'package:turkiye_kan_agi/core/widgets/app_button.dart';
 import 'package:turkiye_kan_agi/core/widgets/app_card.dart';
 import 'package:turkiye_kan_agi/core/widgets/app_overlays.dart';
 import 'package:turkiye_kan_agi/core/widgets/app_text_field.dart';
 import 'package:turkiye_kan_agi/core/widgets/async_value_view.dart';
-import 'package:turkiye_kan_agi/core/widgets/blood_type_badge.dart';
 import 'package:turkiye_kan_agi/core/widgets/offline_banner.dart';
-import 'package:turkiye_kan_agi/core/widgets/section_header.dart';
-import 'package:turkiye_kan_agi/core/widgets/status_and_urgency_tags.dart';
-import 'package:turkiye_kan_agi/core/widgets/tiles_and_selection_sheet.dart';
 import 'package:turkiye_kan_agi/features/auth/data/firebase_auth_repository.dart';
+import 'package:turkiye_kan_agi/features/donation/domain/donor_status_snapshot.dart';
 import 'package:turkiye_kan_agi/features/profile/data/firestore_profile_repository.dart';
 import 'package:turkiye_kan_agi/features/profile/domain/blood_type.dart';
 import 'package:turkiye_kan_agi/features/profile/domain/user_public_profile.dart';
 import 'package:turkiye_kan_agi/features/profile/domain/user_sensitive_profile.dart';
+import 'package:turkiye_kan_agi/features/profile/presentation/widgets/donor_identity_card.dart';
+import 'package:turkiye_kan_agi/features/profile/presentation/widgets/profile_settings_sections.dart';
 
 final travelModeCityProvider = StateProvider<String?>((ref) => null);
 
@@ -38,55 +35,18 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
-  bool _isAvailable = true;
   bool _isLocating = false;
-  UserPublicProfile? _publicProfile;
-  UserSensitiveProfile? _sensitiveProfile;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadProfile();
-  }
-
-  Future<void> _loadProfile() async {
-    final uid = ref.read(currentUserIdStateProvider) ?? 'local-user';
-    final repo = ref.read(profileRepositoryProvider);
-    final pubRes = await repo.getPublicProfile(uid);
-    final senRes = await repo.getSensitiveProfile(uid);
-    if (!mounted) return;
-    pubRes.when(
-      success: (p) {
-        if (p != null) {
-          setState(() {
-            _publicProfile = p;
-            _isAvailable = p.isAvailableToDonate;
-          });
-        }
-      },
-      failure: (_) {},
-    );
-    senRes.when(
-      success: (s) {
-        if (s != null) {
-          setState(() => _sensitiveProfile = s);
-        }
-      },
-      failure: (_) {},
-    );
-  }
 
   Future<void> _onToggleAvailability(bool value) async {
-    setState(() => _isAvailable = value);
     final uid = ref.read(currentUserIdStateProvider) ?? 'local-user';
     await ref.read(profileRepositoryProvider).updateAvailability(
           uid: uid,
           isAvailable: value,
         );
-    await _loadProfile();
+    ref.read(profileRevisionProvider.notifier).state++;
   }
 
-  Future<void> _onUpdateLocationFromGps() async {
+  Future<void> _onUpdateLocationFromGps(DonorStatusSnapshot? snapshot) async {
     setState(() => _isLocating = true);
     final loc =
         await ref.read(userLocationProvider.notifier).refreshWithPermission();
@@ -103,14 +63,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
     final uid = ref.read(currentUserIdStateProvider) ?? 'local-user';
     final now = DateTime.now().toUtc();
-    final updatedPublic = (_publicProfile ??
+    final updatedPublic = (snapshot?.publicProfile ??
             UserPublicProfile(
               uid: uid,
-              displayName: 'Ahmet Kaya',
+              displayName: snapshot?.displayName ?? 'Ahmet Kaya',
               useNickname: false,
               province: loc.province,
               district: loc.district,
-              isAvailableToDonate: _isAvailable,
+              isAvailableToDonate: snapshot?.isAvailableToDonate ?? true,
               updatedAt: now,
             ))
         .copyWith(
@@ -119,14 +79,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       updatedAt: now,
     );
 
-    final currentSensitive = _sensitiveProfile ??
+    final currentSensitive = snapshot?.sensitiveProfile ??
         UserSensitiveProfile(
           fullName: updatedPublic.displayName,
-          phoneNumber: '+90 532 ••• •• 48',
+          phoneNumber: snapshot?.phoneNumber ?? '+90 532 ••• •• 48',
           birthDate: DateTime(1993, 4, 18),
-          gender: UserGender.male,
-          weightKg: 76,
-          bloodType: BloodType.aPos,
+          gender: snapshot?.gender ?? UserGender.male,
+          weightKg: snapshot?.weightKg ?? 76,
+          bloodType: snapshot?.bloodType ?? BloodType.aPos,
           updatedAt: now,
         );
 
@@ -135,7 +95,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           sensitiveProfile: currentSensitive,
         );
     ref.read(profileRevisionProvider.notifier).state++;
-    await _loadProfile();
     if (!mounted) return;
     AppSnackbar.show(
       context,
@@ -247,23 +206,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final currentLocale = ref.watch(localeProvider);
     final travelCity = ref.watch(travelModeCityProvider);
     final gpsState = ref.watch(userLocationProvider);
-    ref.listen<int>(profileRevisionProvider, (_, __) => _loadProfile());
+    final donorStatus = ref.watch(currentDonorStatusProvider).valueOrNull;
 
-    final fullName =
-        _sensitiveProfile?.fullName.isNotEmpty == true
-            ? _sensitiveProfile!.fullName
-            : (_publicProfile?.displayName.isNotEmpty == true
-                ? _publicProfile!.displayName
-                : 'Ahmet Kaya');
-    final bloodType = _sensitiveProfile?.bloodType ?? BloodType.aPos;
-    final province = _publicProfile?.province.isNotEmpty == true
-        ? _publicProfile!.province
-        : 'Ankara';
-    final district = _publicProfile?.district.isNotEmpty == true
-        ? _publicProfile!.district
-        : 'Çankaya';
-    final phone = _sensitiveProfile?.phoneNumber ?? '+90 532 ••• •• 48';
-    final weightKg = _sensitiveProfile?.weightKg ?? 76;
+    final fullName = donorStatus?.fullName ?? 'Ahmet Kaya';
+    final bloodType = donorStatus?.bloodType ?? BloodType.aPos;
+    final province = donorStatus?.province ?? 'Ankara';
+    final district = donorStatus?.district ?? 'Çankaya';
+    final phone = donorStatus?.phoneNumber ?? '+90 532 ••• •• 48';
+    final weightKg = donorStatus?.weightKg ?? 76;
+    final donationCount = donorStatus?.totalDonations ?? 3;
+    final remainingDays = donorStatus?.remainingDays ?? 24;
+    final isEligibleNow = donorStatus?.isEligibleNow ?? false;
+    final isAvailable = donorStatus?.isAvailableToDonate ?? true;
     final gpsData = gpsState.valueOrNull;
 
     return Scaffold(
@@ -308,201 +262,67 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               child: ListView(
                 padding: const EdgeInsets.all(AppSpacing.md),
                 children: [
-                  _DonorIdentityCard(
+                  DonorIdentityCard(
                     initials: _initialsFor(fullName),
                     fullName: fullName,
                     phone: phone,
                     province: province,
                     district: district,
                     weightKg: weightKg,
+                    donationCount: donationCount,
+                    remainingDays: remainingDays,
+                    isEligibleNow: isEligibleNow,
                     bloodType: bloodType,
-                    isAvailable: _isAvailable,
+                    isAvailable: isAvailable,
                     isLocating: _isLocating,
                     gpsCoordinates: gpsData?.formattedCoordinates,
                     verifiedLabel: l10n.profileVerifiedPhone,
-                    onUpdateGpsLocation: _onUpdateLocationFromGps,
-                    onEditProfile: () async {
-                      await context.push(AppRoutes.profileSetup);
-                      await _loadProfile();
-                    },
+                    onUpdateGpsLocation: () =>
+                        _onUpdateLocationFromGps(donorStatus),
+                    onEditProfile: () => context.push(AppRoutes.profileSetup),
+                    onOpenDonationTab: () => context.go(AppRoutes.donation),
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   AppCard(
                     padding: EdgeInsets.zero,
                     child: SwitchListTile(
                       key: const Key('available_to_donate_switch'),
-                      value: _isAvailable,
+                      value: isAvailable,
                       onChanged: _onToggleAvailability,
                       title: Text(
                         l10n.profileAvailableSwitchTitle,
                         style: theme.textTheme.titleMedium,
                       ),
-                      subtitle: Text(l10n.profileAvailableSwitchSubtitle),
+                      subtitle: Text(
+                        remainingDays > 0
+                            ? '${l10n.donorStatusWaitingCard(remainingDays)} • ${l10n.profileAvailableSwitchSubtitle}'
+                            : l10n.profileAvailableSwitchSubtitle,
+                      ),
                     ),
                   ),
                   const SizedBox(height: AppSpacing.md),
-                  SectionHeader(title: l10n.profileSectionMyInfo),
-                  _NavTile(
-                    icon: Icons.edit_outlined,
-                    title: l10n.profileEditButton,
-                    subtitle: '$fullName • ${bloodType.code} • $district / $province',
-                    onTap: () async {
-                      await context.push(AppRoutes.profileSetup);
-                      await _loadProfile();
-                    },
-                  ),
-                  _NavTile(
-                    icon: Icons.my_location_rounded,
-                    title: l10n.locationPermissionAllowButton,
-                    subtitle: gpsData != null
-                        ? '$district / $province (${gpsData.formattedCoordinates})'
-                        : '$district / $province',
-                    onTap: _onUpdateLocationFromGps,
-                  ),
-                  _NavTile(
-                    icon: Icons.notifications_active_outlined,
-                    title: l10n.profileNotificationPrefsButton,
-                    onTap: () => context.push(AppRoutes.notificationPreferences),
-                  ),
-                  _NavTile(
-                    icon: Icons.flight_takeoff_rounded,
-                    title: l10n.travelModeTitle,
-                    subtitle: l10n.travelModeSubtitle,
-                    onTap: () async {
-                      final picked = await SelectionSheet.show<String>(
-                        context: context,
-                        title: l10n.travelModeTitle,
-                        searchHint: l10n.travelModeTitle,
-                        items: const ['İstanbul', 'Ankara', 'İzmir', 'Antalya'],
-                        labelBuilder: (s) => s,
-                        selectedItem: travelCity,
-                      );
-                      if (picked != null) {
-                        ref.read(travelModeCityProvider.notifier).state = picked;
-                      }
-                    },
-                  ),
-                  const SizedBox(height: AppSpacing.sm),
-                  SectionHeader(title: l10n.profileSectionCommunities),
-                  _NavTile(
-                    icon: Icons.groups_rounded,
-                    title: l10n.communitiesTitle,
-                    onTap: () => context.push(AppRoutes.communities),
-                  ),
-                  _NavTile(
-                    icon: Icons.apartment_rounded,
-                    title: l10n.institutionTitle,
-                    onTap: () => context.push(AppRoutes.institutions),
-                  ),
-                  _NavTile(
-                    icon: Icons.group_add_outlined,
-                    title: l10n.inviteTitle,
-                    onTap: () => context.push(AppRoutes.invite),
-                  ),
-                  _NavTile(
-                    icon: Icons.emoji_events_outlined,
-                    title: l10n.leaderboardTitle,
-                    onTap: () => context.push(AppRoutes.leaderboard),
-                  ),
-                  const SizedBox(height: AppSpacing.sm),
-                  SectionHeader(title: l10n.profileSectionHelpFaq),
-                  _NavTile(
-                    icon: Icons.grid_view_rounded,
-                    title: l10n.bloodMatrixTitle,
-                    onTap: () => context.push(AppRoutes.bloodMatrix),
-                  ),
-                  _NavTile(
-                    icon: Icons.medical_information_outlined,
-                    title: l10n.emergencyGuideTitle,
-                    onTap: () => context.push(AppRoutes.emergencyGuide),
-                  ),
-                  _NavTile(
-                    icon: Icons.quiz_outlined,
-                    title: l10n.faqTitle,
-                    onTap: () => context.push(AppRoutes.faq),
-                  ),
-                  _NavTile(
-                    icon: Icons.help_outline_rounded,
-                    title: l10n.wizardBloodTypeHowToLearnLink,
-                    onTap: () => context.push(AppRoutes.unknownBloodTypeGuide),
-                  ),
-                  const SizedBox(height: AppSpacing.sm),
-                  SectionHeader(title: l10n.profileSectionAppearance),
-                  Text(l10n.profileThemeTitle, style: theme.textTheme.titleSmall),
-                  const SizedBox(height: AppSpacing.xs),
-                  SegmentedButton<ThemeMode>(
-                    segments: [
-                      ButtonSegment(
-                        value: ThemeMode.system,
-                        label: Text(l10n.profileThemeSystem),
-                      ),
-                      ButtonSegment(
-                        value: ThemeMode.light,
-                        label: Text(l10n.profileThemeLight),
-                      ),
-                      ButtonSegment(
-                        value: ThemeMode.dark,
-                        label: Text(l10n.profileThemeDark),
-                      ),
-                    ],
-                    selected: {currentThemeMode},
-                    onSelectionChanged: (sel) => ref
+                  ProfileSettingsSections(
+                    fullName: fullName,
+                    bloodType: bloodType,
+                    province: province,
+                    district: district,
+                    gpsCoordinates: gpsData?.formattedCoordinates,
+                    travelCity: travelCity,
+                    currentThemeMode: currentThemeMode,
+                    currentLanguageCode: currentLocale.languageCode,
+                    onEditProfile: () => context.push(AppRoutes.profileSetup),
+                    onUpdateGpsLocation: () =>
+                        _onUpdateLocationFromGps(donorStatus),
+                    onTravelCitySelected: (city) =>
+                        ref.read(travelModeCityProvider.notifier).state = city,
+                    onThemeModeChanged: (mode) => ref
                         .read(themeModeProvider.notifier)
-                        .setThemeMode(sel.first),
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  Text(
-                    l10n.profileLanguageTitle,
-                    style: theme.textTheme.titleSmall,
-                  ),
-                  const SizedBox(height: AppSpacing.xs),
-                  SegmentedButton<String>(
-                    segments: [
-                      ButtonSegment(
-                        value: 'tr',
-                        label: Text(l10n.profileLanguageTr),
-                      ),
-                      ButtonSegment(
-                        value: 'en',
-                        label: Text(l10n.profileLanguageEn),
-                      ),
-                    ],
-                    selected: {currentLocale.languageCode},
-                    onSelectionChanged: (sel) => ref
+                        .setThemeMode(mode),
+                    onLanguageChanged: (lang) => ref
                         .read(localeProvider.notifier)
-                        .setLocale(Locale(sel.first)),
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  SectionHeader(title: l10n.profileSectionPrivacyData),
-                  _NavTile(
-                    icon: Icons.privacy_tip_outlined,
-                    title: l10n.privacyPolicyTitle,
-                    onTap: () => context.push(AppRoutes.privacyPolicy),
-                  ),
-                  _NavTile(
-                    icon: Icons.description_outlined,
-                    title: l10n.termsOfUseTitle,
-                    onTap: () => context.push(AppRoutes.termsOfUse),
-                  ),
-                  _NavTile(
-                    icon: Icons.info_outline_rounded,
-                    title: l10n.aboutTitle,
-                    onTap: () => context.push(AppRoutes.about),
-                  ),
-                  const SizedBox(height: AppSpacing.sm),
-                  AppButton(
-                    key: const Key('export_user_data_button'),
-                    label: l10n.profileExportDataButton,
-                    icon: Icons.download_rounded,
-                    onPressed: _onExportData,
-                  ),
-                  const SizedBox(height: AppSpacing.sm),
-                  AppButton(
-                    key: const Key('delete_account_button'),
-                    label: l10n.profileDeleteAccountButton,
-                    icon: Icons.delete_forever_rounded,
-                    variant: AppButtonVariant.danger,
-                    onPressed: _onConfirmDeleteAccount,
+                        .setLocale(Locale(lang)),
+                    onExportData: _onExportData,
+                    onDeleteAccount: _onConfirmDeleteAccount,
                   ),
                 ],
               ),
@@ -510,292 +330,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ),
         ],
       ),
-    );
-  }
-}
-
-/// Profesyonel Dijital Kan Bağışçısı Kimlik Kartı.
-class _DonorIdentityCard extends StatelessWidget {
-  const _DonorIdentityCard({
-    required this.initials,
-    required this.fullName,
-    required this.phone,
-    required this.province,
-    required this.district,
-    required this.weightKg,
-    required this.bloodType,
-    required this.isAvailable,
-    required this.isLocating,
-    required this.verifiedLabel,
-    required this.onUpdateGpsLocation,
-    required this.onEditProfile,
-    this.gpsCoordinates,
-  });
-
-  final String initials;
-  final String fullName;
-  final String phone;
-  final String province;
-  final String district;
-  final int weightKg;
-  final BloodType bloodType;
-  final bool isAvailable;
-  final bool isLocating;
-  final String verifiedLabel;
-  final String? gpsCoordinates;
-  final VoidCallback onUpdateGpsLocation;
-  final VoidCallback onEditProfile;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final l10n = context.l10n;
-
-    return AppCard(
-      padding: const EdgeInsets.all(AppSpacing.md),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [AppColors.primary, AppColors.primaryDark],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  initials,
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ),
-              const SizedBox(width: AppSpacing.sm),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      fullName,
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      phone,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: AppSpacing.xs),
-                    Wrap(
-                      spacing: AppSpacing.xs,
-                      runSpacing: 4,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        VerifiedBadge(label: verifiedLabel),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: AppSpacing.xs,
-                            vertical: 3,
-                          ),
-                          decoration: BoxDecoration(
-                            color: theme.colorScheme.surfaceContainerHighest,
-                            borderRadius: AppRadius.chipBorder,
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.location_on_rounded,
-                                size: 14,
-                                color: theme.colorScheme.primary,
-                              ),
-                              const SizedBox(width: 3),
-                              Text(
-                                '$district / $province',
-                                style: theme.textTheme.labelSmall?.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              BloodTypeBadge(
-                bloodType: bloodType,
-                size: BloodBadgeSize.m,
-              ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.md),
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.sm,
-              vertical: AppSpacing.sm,
-            ),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceContainerLow,
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: IntrinsicHeight(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: _ProfileMetricItem(
-                      label: l10n.navDonation,
-                      value: '4',
-                      icon: Icons.bloodtype_rounded,
-                    ),
-                  ),
-                  const VerticalDivider(width: 16),
-                  Expanded(
-                    child: _ProfileMetricItem(
-                      label: l10n.wizardWeightLabel,
-                      value: '$weightKg kg',
-                      icon: Icons.monitor_weight_outlined,
-                    ),
-                  ),
-                  const VerticalDivider(width: 16),
-                  Expanded(
-                    child: _ProfileMetricItem(
-                      label: l10n.wizardStep4Title,
-                      value: isAvailable ? 'Müsait' : 'Pasif',
-                      icon: isAvailable
-                          ? Icons.check_circle_rounded
-                          : Icons.pause_circle_outline_rounded,
-                      valueColor:
-                          isAvailable ? AppColors.success : AppColors.warning,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton.icon(
-                  key: const Key('profile_update_gps_location_button'),
-                  onPressed: isLocating ? null : onUpdateGpsLocation,
-                  icon: isLocating
-                      ? const SizedBox(
-                          width: 16,
-                          height: 16,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Icon(Icons.my_location_rounded, size: 18),
-                  label: Text(
-                    l10n.locationPermissionAllowButton,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ),
-              const SizedBox(width: AppSpacing.xs),
-              Expanded(
-                child: FilledButton.tonalIcon(
-                  key: const Key('profile_quick_edit_button'),
-                  onPressed: onEditProfile,
-                  icon: const Icon(Icons.edit_outlined, size: 18),
-                  label: Text(
-                    l10n.profileEditButton,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ProfileMetricItem extends StatelessWidget {
-  const _ProfileMetricItem({
-    required this.label,
-    required this.value,
-    required this.icon,
-    this.valueColor,
-  });
-
-  final String label;
-  final String value;
-  final IconData icon;
-  final Color? valueColor;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(
-          icon,
-          size: 18,
-          color: valueColor ?? theme.colorScheme.primary,
-        ),
-        const SizedBox(height: 2),
-        Text(
-          value,
-          style: theme.textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.w800,
-            color: valueColor,
-          ),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        Text(
-          label,
-          style: theme.textTheme.labelSmall?.copyWith(
-            color: theme.colorScheme.onSurfaceVariant,
-          ),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          textAlign: TextAlign.center,
-        ),
-      ],
-    );
-  }
-}
-
-class _NavTile extends StatelessWidget {
-  const _NavTile({
-    required this.icon,
-    required this.title,
-    required this.onTap,
-    this.subtitle,
-  });
-
-  final IconData icon;
-  final String title;
-  final String? subtitle;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(icon),
-      title: Text(title),
-      subtitle: subtitle != null ? Text(subtitle!) : null,
-      trailing: const Icon(Icons.chevron_right_rounded),
-      onTap: onTap,
     );
   }
 }

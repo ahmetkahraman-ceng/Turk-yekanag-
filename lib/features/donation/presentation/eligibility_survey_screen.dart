@@ -10,6 +10,7 @@ import 'package:turkiye_kan_agi/core/widgets/offline_banner.dart';
 import 'package:turkiye_kan_agi/core/widgets/primary_button.dart';
 import 'package:turkiye_kan_agi/features/donation/data/eligibility_questionnaire_source.dart';
 import 'package:turkiye_kan_agi/features/donation/data/firestore_donation_repository.dart';
+import 'package:turkiye_kan_agi/features/donation/domain/donor_status_snapshot.dart';
 import 'package:turkiye_kan_agi/features/donation/domain/eligibility_question.dart';
 import 'package:turkiye_kan_agi/features/donation/domain/eligibility_survey.dart';
 import 'package:turkiye_kan_agi/features/profile/data/firestore_profile_repository.dart';
@@ -124,6 +125,8 @@ class _EligibilitySurveyScreenState
     final lang = Localizations.localeOf(context).languageCode;
     final questions =
         _questionnaire?.questionsFor(_gender) ?? const <EligibilityQuestion>[];
+    final donorStatus = ref.watch(currentDonorStatusProvider).valueOrNull;
+    final remainingDays = donorStatus?.remainingDays ?? 0;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.donationSurveyTitle)),
@@ -146,6 +149,37 @@ class _EligibilitySurveyScreenState
                         : ListView(
                             padding: const EdgeInsets.all(AppSpacing.md),
                             children: [
+                              if (remainingDays > 0) ...[
+                                Card(
+                                  color: theme.colorScheme.tertiaryContainer,
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.all(AppSpacing.md),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.hourglass_top_rounded,
+                                          color: theme.colorScheme
+                                              .onTertiaryContainer,
+                                        ),
+                                        const SizedBox(width: AppSpacing.sm),
+                                        Expanded(
+                                          child: Text(
+                                            '${l10n.donorStatusWaitingCard(remainingDays)} — ${l10n.donationStatusWaitingTitle}',
+                                            style: theme.textTheme.bodyMedium
+                                                ?.copyWith(
+                                              color: theme.colorScheme
+                                                  .onTertiaryContainer,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: AppSpacing.xs),
+                              ],
                               Card(
                                 key: const Key('survey_medical_disclaimer_card'),
                                 color: theme.colorScheme.secondaryContainer,
@@ -237,7 +271,10 @@ class _EligibilitySurveyScreenState
                               ),
                               if (_evaluatedOutcome != null) ...[
                                 const SizedBox(height: AppSpacing.md),
-                                _OutcomeCard(outcome: _evaluatedOutcome!),
+                                _OutcomeCard(
+                                  outcome: _evaluatedOutcome!,
+                                  remainingDays: remainingDays,
+                                ),
                               ],
                             ],
                           ),
@@ -249,9 +286,13 @@ class _EligibilitySurveyScreenState
 }
 
 class _OutcomeCard extends StatelessWidget {
-  const _OutcomeCard({required this.outcome});
+  const _OutcomeCard({
+    required this.outcome,
+    required this.remainingDays,
+  });
 
   final SurveyOutcome outcome;
+  final int remainingDays;
 
   @override
   Widget build(BuildContext context) {
@@ -300,6 +341,16 @@ class _OutcomeCard extends StatelessWidget {
               ),
               const SizedBox(height: AppSpacing.xs),
               Text(body, style: theme.textTheme.bodyMedium),
+              if (remainingDays > 0) ...[
+                const SizedBox(height: AppSpacing.xs),
+                Text(
+                  '${l10n.donorStatusWaitingCard(remainingDays)}. ${l10n.donationAutoPausedNotice}',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
               const SizedBox(height: AppSpacing.xs),
               Text(
                 l10n.donationSurveyDisclaimer,

@@ -253,6 +253,8 @@ class _RealMapTileCanvasState extends State<RealMapTileCanvas> {
       child: LayoutBuilder(
         builder: (context, constraints) {
           final size = Size(constraints.maxWidth, constraints.maxHeight);
+          final hospitalSeenCount = <String, int>{};
+
           return GestureDetector(
             behavior: HitTestBehavior.opaque,
             onScaleStart: (details) {
@@ -287,41 +289,23 @@ class _RealMapTileCanvasState extends State<RealMapTileCanvas> {
                   // 2. Kullanıcı Mavi Konum Noktası (Gerçek GPS koordinatında)
                   _buildUserLocationMarker(size),
 
-                  // 3. Kümeleme (Cluster) Rozeti
-                  if (widget.requests.length > 6)
-                    Positioned(
-                      left: 16,
-                      top: 12,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppSpacing.sm,
-                          vertical: AppSpacing.xxs,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.primaryDark,
-                          borderRadius: AppRadius.chipBorder,
-                          border: Border.all(color: Colors.white, width: 2),
-                        ),
-                        child: Text(
-                          '+${widget.requests.length - 6}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w800,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                    ),
+                  // 3. Gerçek Koordinatlı Kızılay & Gezici Araç Pin'leri
+                  for (final center in widget.centers)
+                    _buildCenterPin(center, size),
 
                   // 4. Gerçek Hastane Koordinatlı Kan Talebi Pin'leri
-                  for (var i = 0; i < widget.requests.length; i++)
-                    _buildRequestPin(widget.requests[i], i, size),
+                  for (final req in widget.requests)
+                    _buildRequestPin(
+                      req,
+                      hospitalSeenCount.update(
+                        req.hospital.id,
+                        (v) => v + 1,
+                        ifAbsent: () => 0,
+                      ),
+                      size,
+                    ),
 
-                  // 5. Gerçek Koordinatlı Kızılay & Gezici Araç Pin'leri
-                  for (var j = 0; j < widget.centers.length; j++)
-                    _buildCenterPin(widget.centers[j], j, size),
-
-                  // 6. Sağ Üst Yakınlaştır / Uzaklaştır Kontrolleri
+                  // 5. Sağ Üst Yakınlaştır / Uzaklaştır Kontrolleri
                   Positioned(
                     right: AppSpacing.sm,
                     top: AppSpacing.sm,
@@ -342,7 +326,7 @@ class _RealMapTileCanvasState extends State<RealMapTileCanvas> {
                     ),
                   ),
 
-                  // 7. Sol Alt OpenStreetMap / Harita Katkı Etiketi
+                  // 6. Sol Alt OpenStreetMap / Harita Katkı Etiketi
                   Positioned(
                     left: 8,
                     bottom: 6,
@@ -353,7 +337,7 @@ class _RealMapTileCanvasState extends State<RealMapTileCanvas> {
                       ),
                       decoration: BoxDecoration(
                         color: (isDark ? Colors.black : Colors.white)
-                            .withValues(alpha: 0.75),
+                            .withValues(alpha: 0.78),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
@@ -482,9 +466,15 @@ class _RealMapTileCanvasState extends State<RealMapTileCanvas> {
       lon: widget.userLongitude,
       viewportSize: size,
     );
+    if (pos.dx < -24 ||
+        pos.dx > size.width + 24 ||
+        pos.dy < -24 ||
+        pos.dy > size.height + 24) {
+      return const SizedBox.shrink();
+    }
     return Positioned(
-      left: (pos.dx - 11).clamp(8.0, size.width - 28.0),
-      top: (pos.dy - 11).clamp(8.0, size.height - 28.0),
+      left: pos.dx - 11,
+      top: pos.dy - 11,
       child: Container(
         width: 22,
         height: 22,
@@ -504,34 +494,36 @@ class _RealMapTileCanvasState extends State<RealMapTileCanvas> {
     );
   }
 
-  Widget _buildRequestPin(BloodRequest req, int index, Size size) {
-    // Aynı hastanede birden fazla talep varsa üst üste binmemesi için küçük açısal ofset
-    final angle = (index * 1.15);
-    final jitterLat = req.hospital.latitude + math.sin(angle) * 0.0035;
-    final jitterLon = req.hospital.longitude + math.cos(angle) * 0.0045;
+  Widget _buildRequestPin(
+    BloodRequest req,
+    int sameHospitalIndex,
+    Size size,
+  ) {
+    // Yalnızca aynı hastanede birden fazla talep varsa üst üste binmemesi için küçük açısal ofset
+    double lat = req.hospital.latitude;
+    double lon = req.hospital.longitude;
+    if (sameHospitalIndex > 0) {
+      final angle = sameHospitalIndex * 1.35;
+      lat += math.sin(angle) * 0.0022;
+      lon += math.cos(angle) * 0.0028;
+    }
 
     final rawPos = _latLngToViewportOffset(
-      lat: jitterLat,
-      lon: jitterLon,
+      lat: lat,
+      lon: lon,
       viewportSize: size,
     );
 
-    // İlk 6 pin'in her zaman görünür alanda kalmasını garanti et (farklı şehirlerde olsalar bile kenarda/yakında erişilebilir)
-    final bool isOut = rawPos.dx < 8 ||
-        rawPos.dx > size.width - 68 ||
-        rawPos.dy < 8 ||
-        rawPos.dy > size.height - 44;
-
-    if (isOut && index >= 6) {
+    if (rawPos.dx < -60 ||
+        rawPos.dx > size.width + 20 ||
+        rawPos.dy < -36 ||
+        rawPos.dy > size.height + 20) {
       return const SizedBox.shrink();
     }
 
-    final dx = rawPos.dx.clamp(12.0, math.max(12.0, size.width - 74.0)).toDouble();
-    final dy = rawPos.dy.clamp(12.0, math.max(12.0, size.height - 44.0)).toDouble();
-
     return Positioned(
-      left: dx,
-      top: dy,
+      left: rawPos.dx - 28,
+      top: rawPos.dy - 14,
       child: GestureDetector(
         key: Key('map_request_pin_${req.id}'),
         onTap: () => widget.onSelectRequest(req),
@@ -576,28 +568,23 @@ class _RealMapTileCanvasState extends State<RealMapTileCanvas> {
     );
   }
 
-  Widget _buildCenterPin(DonationCenter center, int index, Size size) {
+  Widget _buildCenterPin(DonationCenter center, Size size) {
     final rawPos = _latLngToViewportOffset(
       lat: center.latitude,
       lon: center.longitude,
       viewportSize: size,
     );
 
-    final bool isOut = rawPos.dx < 8 ||
-        rawPos.dx > size.width - 80 ||
-        rawPos.dy < 8 ||
-        rawPos.dy > size.height - 44;
-
-    if (isOut && index >= 4) {
+    if (rawPos.dx < -70 ||
+        rawPos.dx > size.width + 20 ||
+        rawPos.dy < -36 ||
+        rawPos.dy > size.height + 20) {
       return const SizedBox.shrink();
     }
 
-    final dx = rawPos.dx.clamp(12.0, math.max(12.0, size.width - 96.0)).toDouble();
-    final dy = rawPos.dy.clamp(12.0, math.max(12.0, size.height - 44.0)).toDouble();
-
     return Positioned(
-      left: dx,
-      top: dy,
+      left: rawPos.dx - 18,
+      top: rawPos.dy - 14,
       child: GestureDetector(
         key: Key('map_center_pin_${center.id}'),
         onTap: () => widget.onSelectCenter(center),
@@ -691,7 +678,6 @@ class _OfflineStreetFallbackPainter extends CustomPainter {
     final bg = isDark ? const Color(0xFF1F1616) : const Color(0xFFEDE8E2);
     canvas.drawRect(Offset.zero & size, Paint()..color = bg);
 
-    // Park / yeşil alanlar ve su kütleleri (gerçek harita dokusu)
     final parkPaint = Paint()
       ..color = isDark ? const Color(0xFF1E2D24) : const Color(0xFFD8E8C8);
     canvas.drawRRect(

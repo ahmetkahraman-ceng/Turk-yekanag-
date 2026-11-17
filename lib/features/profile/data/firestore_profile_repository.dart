@@ -45,18 +45,19 @@ class FirestoreProfileRepository implements ProfileRepository {
   static const String consentsDocId = 'consents';
   static const String notifPrefsDocId = 'notification_preferences';
 
+  static const Set<String> _seededUids = <String>{
+    'local-user',
+    'default-authenticated-user',
+    'uid-google-user',
+    'uid-apple-user',
+  };
+
+  bool _isSeededOrAuthDevUid(String uid) =>
+      _seededUids.contains(uid) || uid.startsWith('uid-');
+
   void _seedDefaultProfile() {
     final now = DateTime.now().toUtc();
-    _publicCache['local-user'] = UserPublicProfile(
-      uid: 'local-user',
-      displayName: 'Ahmet Kaya',
-      useNickname: false,
-      province: 'Ankara',
-      district: 'Çankaya',
-      isAvailableToDonate: true,
-      updatedAt: now,
-    );
-    _sensitiveCache['local-user'] = UserSensitiveProfile(
+    final defaultSensitive = UserSensitiveProfile(
       fullName: 'Ahmet Kaya',
       phoneNumber: '+90 532 ••• •• 48',
       birthDate: DateTime(1993, 4, 18),
@@ -65,6 +66,18 @@ class FirestoreProfileRepository implements ProfileRepository {
       bloodType: BloodType.aPos,
       updatedAt: now,
     );
+    for (final uid in _seededUids) {
+      _publicCache[uid] = UserPublicProfile(
+        uid: uid,
+        displayName: 'Ahmet Kaya',
+        useNickname: false,
+        province: 'Ankara',
+        district: 'Çankaya',
+        isAvailableToDonate: true,
+        updatedAt: now,
+      );
+      _sensitiveCache[uid] = defaultSensitive;
+    }
   }
 
   @override
@@ -80,7 +93,10 @@ class FirestoreProfileRepository implements ProfileRepository {
         }
       } catch (_) {}
     }
-    return Result.success(_publicCache[uid]);
+    return Result.success(
+      _publicCache[uid] ??
+          (uid.startsWith('uid-') ? _publicCache['local-user'] : null),
+    );
   }
 
   @override
@@ -101,7 +117,10 @@ class FirestoreProfileRepository implements ProfileRepository {
         }
       } catch (_) {}
     }
-    return Result.success(_sensitiveCache[uid]);
+    return Result.success(
+      _sensitiveCache[uid] ??
+          (uid.startsWith('uid-') ? _sensitiveCache['local-user'] : null),
+    );
   }
 
   @override
@@ -113,8 +132,12 @@ class FirestoreProfileRepository implements ProfileRepository {
     final uid = publicProfile.uid;
     _publicCache[uid] = publicProfile;
     _sensitiveCache[uid] = sensitiveProfile;
-    _publicCache['local-user'] = publicProfile;
-    _sensitiveCache['local-user'] = sensitiveProfile;
+    if (_isSeededOrAuthDevUid(uid)) {
+      for (final sUid in _seededUids) {
+        _publicCache[sUid] = publicProfile.copyWith(uid: sUid);
+        _sensitiveCache[sUid] = sensitiveProfile;
+      }
+    }
     if (consentRecord != null) {
       _consentCache[uid] = consentRecord;
     }
@@ -146,14 +169,19 @@ class FirestoreProfileRepository implements ProfileRepository {
     required String uid,
     required bool isAvailable,
   }) async {
-    final existing = _publicCache[uid] ?? _publicCache['local-user'];
+    final existing = _publicCache[uid] ??
+        (_isSeededOrAuthDevUid(uid) ? _publicCache['local-user'] : null);
     if (existing != null) {
       final updated = existing.copyWith(
         isAvailableToDonate: isAvailable,
         updatedAt: DateTime.now().toUtc(),
       );
       _publicCache[uid] = updated;
-      _publicCache['local-user'] = updated;
+      if (_isSeededOrAuthDevUid(uid)) {
+        for (final sUid in _seededUids) {
+          _publicCache[sUid] = updated.copyWith(uid: sUid);
+        }
+      }
     }
     final fs = _firestore;
     if (fs != null) {

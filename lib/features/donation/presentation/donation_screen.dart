@@ -15,6 +15,7 @@ import 'package:turkiye_kan_agi/features/donation/data/firestore_donation_reposi
 import 'package:turkiye_kan_agi/features/donation/data/local_notification_reminder_service.dart';
 import 'package:turkiye_kan_agi/features/donation/domain/donation_availability_state.dart';
 import 'package:turkiye_kan_agi/features/donation/domain/donation_record.dart';
+import 'package:turkiye_kan_agi/features/donation/domain/donor_status_snapshot.dart';
 import 'package:turkiye_kan_agi/features/donation/domain/next_donation_calculator.dart';
 import 'package:turkiye_kan_agi/features/donation/presentation/add_donation_sheet.dart';
 import 'package:turkiye_kan_agi/features/donation/presentation/donation_countdown_card.dart';
@@ -96,6 +97,8 @@ class _DonationScreenState extends ConsumerState<DonationScreen> {
                 );
         final stateRes = await donationRepo.getAvailabilityState(uid);
         if (!mounted) return;
+        ref.read(donationRevisionProvider.notifier).state++;
+        ref.read(profileRevisionProvider.notifier).state++;
         setState(() {
           _hasHealthConsent = hasConsent;
           _history = list;

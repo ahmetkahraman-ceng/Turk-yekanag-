@@ -17,7 +17,9 @@ import 'package:turkiye_kan_agi/core/widgets/async_value_view.dart';
 import 'package:turkiye_kan_agi/core/widgets/empty_state.dart';
 import 'package:turkiye_kan_agi/core/widgets/feature_placeholder_view.dart';
 import 'package:turkiye_kan_agi/core/widgets/section_header.dart';
+import 'package:turkiye_kan_agi/features/donation/domain/donor_status_snapshot.dart';
 import 'package:turkiye_kan_agi/features/map/presentation/widgets/map_canvas_and_sheets.dart';
+import 'package:turkiye_kan_agi/features/matching/domain/blood_compatibility_engine.dart';
 import 'package:turkiye_kan_agi/features/profile/domain/blood_type.dart';
 import 'package:turkiye_kan_agi/features/requests/data/firestore_blood_request_repository.dart';
 import 'package:turkiye_kan_agi/features/requests/domain/blood_request.dart';
@@ -53,8 +55,9 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   bool _onlyMyBlood = false;
   bool _isListView = false;
   bool _hasLocationPermission = true;
+  bool _didInitialFocus = false;
   String _searchQuery = '';
-  String _selectedCity = 'Ankara';
+  String? _selectedCity = 'Ankara';
   BloodRequest? _selectedRequest;
   DonationCenter? _selectedCenter;
 
@@ -80,7 +83,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
 
   Future<void> _loadMapData() async {
     final reqRes =
-        await ref.read(bloodRequestRepositoryProvider).fetchRequests(limit: 20);
+        await ref.read(bloodRequestRepositoryProvider).fetchRequests(limit: 25);
     final ctrRes = await ref.read(centerRepositoryProvider).fetchCenters();
     if (!mounted) return;
     reqRes.when(
@@ -109,14 +112,19 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     });
   }
 
-  void _focusCity(String city) {
+  void _focusCity(String? city) {
+    setState(() {
+      _selectedCity = city;
+      _selectedRequest = null;
+      _selectedCenter = null;
+    });
+    if (city == null) return;
     final coords = _cityCoordinates[city];
     if (coords == null) return;
-    setState(() => _selectedCity = city);
     _mapController.moveTo(
       latitude: coords.$1,
       longitude: coords.$2,
-      zoom: 11.5,
+      zoom: 11.4,
     );
   }
 
@@ -134,12 +142,13 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     }
     setState(() {
       _hasLocationPermission = true;
-      _selectedCity = loc.province;
+      _selectedCity =
+          _cityCoordinates.containsKey(loc.province) ? loc.province : null;
     });
     _mapController.moveTo(
       latitude: loc.latitude,
       longitude: loc.longitude,
-      zoom: 12.5,
+      zoom: 12.2,
     );
     AppSnackbar.show(
       context,
@@ -147,10 +156,24 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     );
   }
 
-  List<BloodRequest> get _filteredRequests {
+  List<BloodRequest> _filteredRequestsFor(BloodType userBloodType) {
     if (!_showRequests) return const <BloodRequest>[];
+    final effectiveBlood =
+        userBloodType == BloodType.unknown ? BloodType.aPos : userBloodType;
     return _requests.where((r) {
-      if (_onlyMyBlood && r.bloodType != BloodType.aPos) return false;
+      if (_selectedCity != null &&
+          _searchQuery.isEmpty &&
+          r.hospital.province != _selectedCity) {
+        return false;
+      }
+      if (_onlyMyBlood) {
+        final compatible = BloodCompatibilityEngine.isCompatible(
+          donor: effectiveBlood,
+          recipient: r.bloodType,
+          productType: r.productType,
+        );
+        if (!compatible && r.bloodType != effectiveBlood) return false;
+      }
       if (_searchQuery.isNotEmpty) {
         final hay =
             '${r.hospital.name} ${r.hospital.district} ${r.hospital.province}'
@@ -164,6 +187,11 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   List<DonationCenter> get _filteredCenters {
     if (!_showCenters) return const <DonationCenter>[];
     return _centers.where((c) {
+      if (_selectedCity != null &&
+          _searchQuery.isEmpty &&
+          c.province != _selectedCity) {
+        return false;
+      }
       if (_searchQuery.isNotEmpty) {
         final hay = '${c.name} ${c.district} ${c.province}'.toLowerCase();
         if (!hay.contains(_searchQuery)) return false;
@@ -175,7 +203,21 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final reqs = _filteredRequests;
+    final donorStatus = ref.watch(currentDonorStatusProvider).valueOrNull;
+    final userBloodType = donorStatus?.bloodType ?? BloodType.aPos;
+    final gpsData = ref.watch(userLocationProvider).valueOrNull;
+
+    if (!_didInitialFocus && donorStatus != null) {
+      _didInitialFocus = true;
+      final profCity = donorStatus.province;
+      if (_cityCoordinates.containsKey(profCity) && _selectedCity != profCity) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) _focusCity(profCity);
+        });
+      }
+    }
+
+    final reqs = _filteredRequestsFor(userBloodType);
     final ctrs = _filteredCenters;
 
     return Scaffold(
@@ -242,7 +284,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                   ),
                   const SizedBox(width: AppSpacing.xs),
                   AppChip(
-                    label: l10n.mapFilterMyBlood,
+                    label: '${l10n.mapFilterMyBlood} (${userBloodType.code})',
                     selected: _onlyMyBlood,
                     onSelected: (v) => setState(() => _onlyMyBlood = v),
                   ),
@@ -252,7 +294,9 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                       label: city,
                       icon: Icons.place_outlined,
                       selected: _selectedCity == city,
-                      onSelected: (_) => _focusCity(city),
+                      onSelected: (_) => _focusCity(
+                        _selectedCity == city ? null : city,
+                      ),
                     ),
                     const SizedBox(width: AppSpacing.xs),
                   ],
@@ -284,7 +328,11 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                       ],
                     )
                   : _isListView
-                      ? _NearbyListView(requests: reqs, centers: ctrs)
+                      ? _NearbyListView(
+                          requests: reqs,
+                          centers: ctrs,
+                          userBloodType: userBloodType,
+                        )
                       : Stack(
                           children: [
                             Column(
@@ -297,6 +345,10 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                                         controller: _mapController,
                                         requests: reqs,
                                         centers: ctrs,
+                                        userLatitude:
+                                            gpsData?.latitude ?? 39.9208,
+                                        userLongitude:
+                                            gpsData?.longitude ?? 32.8541,
                                         onSelectRequest: (r) {
                                           _mapController.moveTo(
                                             latitude: r.hospital.latitude,
@@ -343,6 +395,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                                   child: _NearbyListView(
                                     requests: reqs,
                                     centers: ctrs,
+                                    userBloodType: userBloodType,
                                   ),
                                 ),
                               ],
@@ -352,6 +405,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                               MapPinSummarySheet(
                                 request: _selectedRequest,
                                 center: _selectedCenter,
+                                userBloodType: userBloodType,
                                 onClose: () => setState(() {
                                   _selectedRequest = null;
                                   _selectedCenter = null;
@@ -371,10 +425,12 @@ class _NearbyListView extends StatelessWidget {
   const _NearbyListView({
     required this.requests,
     required this.centers,
+    required this.userBloodType,
   });
 
   final List<BloodRequest> requests;
   final List<DonationCenter> centers;
+  final BloodType userBloodType;
 
   @override
   Widget build(BuildContext context) {
@@ -384,7 +440,7 @@ class _NearbyListView extends StatelessWidget {
       children: [
         if (centers.isNotEmpty) ...[
           SectionHeader(title: l10n.mapFilterCenters),
-          for (final center in centers.take(4))
+          for (final center in centers.take(5))
             Padding(
               padding: const EdgeInsets.only(bottom: AppSpacing.xs),
               child: AppCard(
@@ -412,11 +468,12 @@ class _NearbyListView extends StatelessWidget {
         ],
         if (requests.isNotEmpty) ...[
           SectionHeader(title: l10n.mapNearbyListTitle),
-          for (final req in requests.take(6))
+          for (final req in requests.take(8))
             Padding(
               padding: const EdgeInsets.only(bottom: AppSpacing.xs),
               child: RequestCard(
                 request: req,
+                userBloodType: userBloodType,
                 enableHero: false,
                 onTap: () => context.push('${AppRoutes.requests}/${req.id}'),
               ),

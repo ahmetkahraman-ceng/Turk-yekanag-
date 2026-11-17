@@ -37,6 +37,7 @@ class UserPublicProfile {
   final DateTime updatedAt;
 
   UserPublicProfile copyWith({
+    String? uid,
     String? displayName,
     bool? useNickname,
     String? province,
@@ -46,7 +47,7 @@ class UserPublicProfile {
     DateTime? updatedAt,
   }) {
     return UserPublicProfile(
-      uid: uid,
+      uid: uid ?? this.uid,
       displayName: displayName ?? this.displayName,
       useNickname: useNickname ?? this.useNickname,
       province: province ?? this.province,

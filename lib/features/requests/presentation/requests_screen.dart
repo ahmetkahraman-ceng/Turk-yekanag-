@@ -15,6 +15,7 @@ import 'package:turkiye_kan_agi/core/widgets/empty_state.dart';
 import 'package:turkiye_kan_agi/core/widgets/error_state.dart';
 import 'package:turkiye_kan_agi/core/widgets/skeleton_widgets.dart';
 import 'package:turkiye_kan_agi/core/widgets/tiles_and_selection_sheet.dart';
+import 'package:turkiye_kan_agi/features/donation/domain/donor_status_snapshot.dart';
 import 'package:turkiye_kan_agi/features/profile/domain/blood_type.dart';
 import 'package:turkiye_kan_agi/features/profile/domain/turkey_location_data.dart';
 import 'package:turkiye_kan_agi/features/requests/data/firestore_blood_request_repository.dart';
@@ -26,7 +27,7 @@ import 'package:turkiye_kan_agi/features/requests/presentation/widgets/request_f
 
 /// Talepler ekranı (CustomScrollView + slivers):
 /// - Küçülen SliverAppBar (il/ilçe seçici, sağda filtre ikonu ve uygulanan filtre sayısı rozeti)
-/// - Bağış durumu kartı ("Bağışa uygunsun" yeşil veya "Sonraki bağışına 24 gün var" küçük CountdownRing, dokununca Bağış sekmesine)
+/// - Bağış durumu kartı ("Bağışa uygunsun" yeşil veya "Sonraki bağışına X gün var" küçük CountdownRing, dokununca Bağış sekmesine)
 /// - Yatay filtre çipleri (Benim kan grubum, Tümü, ACİL, Bugün, Yakınımda)
 /// - RequestCard listesi, pull-to-refresh, sonsuz kaydırma, skeleton, empty ve error
 /// - Sağ altta genişletilmiş FAB "Kan İstiyorum" (kaydırırken sadece ikona küçülür).
@@ -159,6 +160,9 @@ class _RequestsScreenState extends ConsumerState<RequestsScreen> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final filterCount = _activeFilterCount;
+    final donorStatus = ref.watch(currentDonorStatusProvider).valueOrNull;
+    final userBloodType = donorStatus?.bloodType ?? BloodType.aPos;
+    final remainingDays = donorStatus?.remainingDays ?? 24;
 
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
@@ -220,8 +224,7 @@ class _RequestsScreenState extends ConsumerState<RequestsScreen> {
                     AppSpacing.xs,
                   ),
                   child: _DonorQuickStatusBanner(
-                    // Mock: son bağış 66 gün önce, tam kan aralığı 90 gün (Remote Config).
-                    remainingDays: 24,
+                    remainingDays: remainingDays,
                     onTap: () => context.go(AppRoutes.donation),
                   ),
                 ),
@@ -229,6 +232,7 @@ class _RequestsScreenState extends ConsumerState<RequestsScreen> {
               SliverToBoxAdapter(
                 child: _HorizontalQuickFilterBar(
                   filter: _filter,
+                  userBloodType: userBloodType,
                   hasAnyFilter: filterCount > 0,
                   onFilterChanged: (updated) {
                     setState(() => _filter = updated);
@@ -298,6 +302,7 @@ class _RequestsScreenState extends ConsumerState<RequestsScreen> {
                       final req = _requests[index];
                       return RequestCard(
                         request: req,
+                        userBloodType: userBloodType,
                         distanceKm: 1.8 + (index % 7) * 1.3,
                         onTap: () => context.push(
                           '${AppRoutes.requests}/${req.id}',
@@ -372,12 +377,14 @@ class _DonorQuickStatusBanner extends StatelessWidget {
 class _HorizontalQuickFilterBar extends StatelessWidget {
   const _HorizontalQuickFilterBar({
     required this.filter,
+    required this.userBloodType,
     required this.hasAnyFilter,
     required this.onFilterChanged,
     required this.onClear,
   });
 
   final BloodRequestFilter filter;
+  final BloodType userBloodType;
   final bool hasAnyFilter;
   final ValueChanged<BloodRequestFilter> onFilterChanged;
   final VoidCallback onClear;
@@ -385,6 +392,9 @@ class _HorizontalQuickFilterBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final effectiveMyBlood =
+        userBloodType == BloodType.unknown ? BloodType.aPos : userBloodType;
+
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.symmetric(
@@ -401,11 +411,11 @@ class _HorizontalQuickFilterBar extends StatelessWidget {
           const SizedBox(width: AppSpacing.xs),
           AppChip(
             key: const Key('filter_my_blood_chip'),
-            label: l10n.filterMyBloodGroup,
-            selected: filter.bloodType == BloodType.aPos,
+            label: '${l10n.filterMyBloodGroup} (${effectiveMyBlood.code})',
+            selected: filter.bloodType == effectiveMyBlood,
             onSelected: (sel) => onFilterChanged(
               sel
-                  ? filter.copyWith(bloodType: BloodType.aPos)
+                  ? filter.copyWith(bloodType: effectiveMyBlood)
                   : filter.copyWith(clearBloodType: true),
             ),
           ),

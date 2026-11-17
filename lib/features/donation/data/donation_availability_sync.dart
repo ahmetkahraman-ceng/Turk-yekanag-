@@ -96,11 +96,15 @@ class DonationAvailabilitySync {
     if (updatedStatus.reminderEnabled &&
         !nextInfo.isEligibleNow &&
         nextInfo.nextEligibleAt != null) {
+      int reminderHour = 10;
+      try {
+        reminderHour = _remoteConfig.donationReminderHour;
+      } catch (_) {}
       await _reminderService.scheduleNextDonationReminder(
         eligibleAtUtc: nextInfo.nextEligibleAt!,
         title: reminderTitle,
         body: reminderBody,
-        reminderHour: _remoteConfig.donationReminderHour,
+        reminderHour: reminderHour,
       );
     } else {
       await _reminderService.cancelNextDonationReminder();

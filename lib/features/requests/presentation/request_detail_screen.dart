@@ -16,6 +16,7 @@ import 'package:turkiye_kan_agi/core/widgets/empty_state.dart';
 import 'package:turkiye_kan_agi/core/widgets/offline_banner.dart';
 import 'package:turkiye_kan_agi/core/widgets/skeleton_widgets.dart';
 import 'package:turkiye_kan_agi/core/widgets/status_and_urgency_tags.dart';
+import 'package:turkiye_kan_agi/features/donation/domain/donor_status_snapshot.dart';
 import 'package:turkiye_kan_agi/features/matching/presentation/donor_offer_panel.dart';
 import 'package:turkiye_kan_agi/features/profile/domain/blood_type.dart';
 import 'package:turkiye_kan_agi/features/requests/data/firestore_blood_request_repository.dart';
@@ -35,12 +36,12 @@ import 'package:turkiye_kan_agi/features/requests/presentation/share_request_car
 class RequestDetailScreen extends ConsumerStatefulWidget {
   const RequestDetailScreen({
     required this.requestId,
-    this.donorBloodType = BloodType.aPos,
+    this.donorBloodType,
     super.key,
   });
 
   final String requestId;
-  final BloodType donorBloodType;
+  final BloodType? donorBloodType;
 
   @override
   ConsumerState<RequestDetailScreen> createState() =>
@@ -303,7 +304,9 @@ class _RequestDetailScreenState extends ConsumerState<RequestDetailScreen> {
                   const SizedBox(height: AppSpacing.md),
                   DonorOfferPanel(
                     request: req,
-                    donorBloodType: widget.donorBloodType,
+                    donorBloodType: widget.donorBloodType ??
+                        ref.watch(currentDonorStatusProvider).valueOrNull?.bloodType ??
+                        BloodType.aPos,
                     onOffersChanged: () {
                       setState(() {
                         _request = req.copyWith(offerCount: req.offerCount + 1);

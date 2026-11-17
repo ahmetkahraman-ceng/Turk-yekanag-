@@ -305,5 +305,38 @@ void main() {
         );
       },
     );
+
+    test(
+      'Varsayılan kullanıcı için Talepler geri sayımı, Bağış sekmesi ve Profil bağış sayısı tek kaynaktan (24 gün / 3 bağış) tutarlı döner',
+      () async {
+        final donationRepo = FirestoreDonationRepository();
+        final profileRepo = FirestoreProfileRepository(
+          donationRepository: donationRepo,
+        );
+        final rc = FirebaseRemoteConfigService();
+        final reminder = FakeReminderService();
+        final sync = DonationAvailabilitySync(
+          donationRepository: donationRepo,
+          profileRepository: profileRepo,
+          remoteConfig: rc,
+          reminderService: reminder,
+        );
+
+        final history =
+            (await donationRepo.getHistory('default-authenticated-user')).when(
+          success: (l) => l,
+          failure: (_) => const <DonationRecord>[],
+        );
+        expect(history.length, 3);
+
+        final nextInfo = await sync.syncForUser(
+          uid: 'default-authenticated-user',
+          reminderTitle: 'Hatırlatma',
+          reminderBody: 'Tekrar bağış yapabilirsiniz',
+        );
+        expect(nextInfo.isEligibleNow, isFalse);
+        expect(nextInfo.remainingDays, 24);
+      },
+    );
   });
 }

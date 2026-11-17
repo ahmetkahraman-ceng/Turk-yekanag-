@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:turkiye_kan_agi/core/error/app_failure.dart';
 import 'package:turkiye_kan_agi/core/error/result.dart';
+import 'package:turkiye_kan_agi/core/mock/mock_data.dart';
 import 'package:turkiye_kan_agi/features/donation/domain/donation_availability_state.dart';
 import 'package:turkiye_kan_agi/features/donation/domain/donation_record.dart';
 import 'package:turkiye_kan_agi/features/donation/domain/donation_repository.dart';
@@ -16,7 +17,9 @@ import 'package:turkiye_kan_agi/features/requests/domain/blood_product_type.dart
 /// - `users/{uid}/private_data/donation_status`
 class FirestoreDonationRepository implements DonationRepository {
   FirestoreDonationRepository({FirebaseFirestore? firestore})
-      : _firestore = firestore;
+      : _firestore = firestore {
+    _seedDefaultHistory();
+  }
 
   final FirebaseFirestore? _firestore;
 
@@ -29,6 +32,44 @@ class FirestoreDonationRepository implements DonationRepository {
   static const String surveysCollection = 'health_surveys';
   static const String privateCollection = 'private_data';
   static const String statusDocId = 'donation_status';
+
+  static const Set<String> _seededUids = <String>{
+    'local-user',
+    'default-authenticated-user',
+    'uid-google-user',
+    'uid-apple-user',
+  };
+
+  void _seedDefaultHistory() {
+    final samples = List<DonationRecord>.of(MockData.sampleDonations);
+    final nextEligible =
+        samples.first.donatedAt.toUtc().add(const Duration(days: 90));
+    final initialStatus = DonationAvailabilityState(
+      autoPaused: true,
+      reminderEnabled: true,
+      nextEligibleAt: nextEligible,
+    );
+    for (final uid in _seededUids) {
+      _historyCache[uid] = List<DonationRecord>.of(samples);
+      _statusCache[uid] = initialStatus;
+    }
+  }
+
+  bool _isSeededOrAuthDevUid(String uid) =>
+      _seededUids.contains(uid) || uid.startsWith('uid-');
+
+  List<DonationRecord> _resolveHistoryFor(String uid) {
+    final existing = _historyCache[uid];
+    if (existing != null) return existing;
+    if (uid.startsWith('uid-')) {
+      final seeded = List<DonationRecord>.of(
+        _historyCache['local-user'] ?? MockData.sampleDonations,
+      );
+      _historyCache[uid] = seeded;
+      return seeded;
+    }
+    return const <DonationRecord>[];
+  }
 
   @override
   Future<Result<List<DonationRecord>>> getHistory(String uid) async {
@@ -48,7 +89,7 @@ class FirestoreDonationRepository implements DonationRepository {
         return Result.success(list);
       } catch (_) {}
     }
-    final cached = List<DonationRecord>.of(_historyCache[uid] ?? const []);
+    final cached = List<DonationRecord>.of(_resolveHistoryFor(uid));
     cached.sort((a, b) => b.donatedAt.compareTo(a.donatedAt));
     return Result.success(List<DonationRecord>.unmodifiable(cached));
   }
@@ -85,9 +126,14 @@ class FirestoreDonationRepository implements DonationRepository {
       createdAt: nowUtc,
     );
 
-    final list = List<DonationRecord>.of(_historyCache[uid] ?? const []);
+    final list = List<DonationRecord>.of(_resolveHistoryFor(uid));
     list.insert(0, record);
     _historyCache[uid] = list;
+    if (_isSeededOrAuthDevUid(uid)) {
+      for (final sUid in _seededUids) {
+        _historyCache[sUid] = List<DonationRecord>.of(list);
+      }
+    }
 
     final fs = _firestore;
     if (fs != null) {
@@ -108,7 +154,7 @@ class FirestoreDonationRepository implements DonationRepository {
     required String uid,
     required String recordId,
   }) async {
-    final list = List<DonationRecord>.of(_historyCache[uid] ?? const []);
+    final list = List<DonationRecord>.of(_resolveHistoryFor(uid));
     final idx = list.indexWhere((r) => r.id == recordId);
     if (idx != -1 && list[idx].source == DonationRecordSource.request) {
       return const Result.failure(
@@ -117,6 +163,11 @@ class FirestoreDonationRepository implements DonationRepository {
     }
     list.removeWhere((r) => r.id == recordId);
     _historyCache[uid] = list;
+    if (_isSeededOrAuthDevUid(uid)) {
+      for (final sUid in _seededUids) {
+        _historyCache[sUid] = List<DonationRecord>.of(list);
+      }
+    }
 
     final fs = _firestore;
     if (fs != null) {
@@ -151,10 +202,15 @@ class FirestoreDonationRepository implements DonationRepository {
       createdAt: nowUtc,
     );
 
-    final list = List<DonationRecord>.of(_historyCache[donorUid] ?? const []);
+    final list = List<DonationRecord>.of(_resolveHistoryFor(donorUid));
     list.removeWhere((r) => r.id == requestId || r.requestId == requestId);
     list.insert(0, record);
     _historyCache[donorUid] = list;
+    if (_isSeededOrAuthDevUid(donorUid)) {
+      for (final sUid in _seededUids) {
+        _historyCache[sUid] = List<DonationRecord>.of(list);
+      }
+    }
 
     // Not: Firestore'da `source == 'request'` kayıtlarını yalnızca Cloud Function
     // (`onDonationOfferUpdated`) yazabilir; istemci doğrudan yazmaya çalışmaz.
@@ -229,9 +285,10 @@ class FirestoreDonationRepository implements DonationRepository {
         }
       } catch (_) {}
     }
-    return Result.success(
-      _statusCache[uid] ?? const DonationAvailabilityState(),
-    );
+    final state = _statusCache[uid] ??
+        (uid.startsWith('uid-') ? _statusCache['local-user'] : null) ??
+        const DonationAvailabilityState();
+    return Result.success(state);
   }
 
   @override
@@ -240,6 +297,11 @@ class FirestoreDonationRepository implements DonationRepository {
     required DonationAvailabilityState state,
   }) async {
     _statusCache[uid] = state;
+    if (_isSeededOrAuthDevUid(uid)) {
+      for (final sUid in _seededUids) {
+        _statusCache[sUid] = state;
+      }
+    }
     final fs = _firestore;
     if (fs != null) {
       try {

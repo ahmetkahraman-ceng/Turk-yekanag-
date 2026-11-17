@@ -10,6 +10,7 @@ import 'package:turkiye_kan_agi/core/widgets/app_button.dart';
 import 'package:turkiye_kan_agi/core/widgets/app_card.dart';
 import 'package:turkiye_kan_agi/core/widgets/app_overlays.dart';
 import 'package:turkiye_kan_agi/features/map/presentation/widgets/real_map_tile_canvas.dart';
+import 'package:turkiye_kan_agi/features/profile/domain/blood_type.dart';
 import 'package:turkiye_kan_agi/features/requests/domain/blood_request.dart';
 import 'package:turkiye_kan_agi/features/requests/presentation/widgets/request_card.dart';
 
@@ -88,10 +89,12 @@ class MapPinSummarySheet extends StatelessWidget {
     super.key,
     this.request,
     this.center,
+    this.userBloodType = BloodType.aPos,
   });
 
   final BloodRequest? request;
   final DonationCenter? center;
+  final BloodType userBloodType;
   final VoidCallback onClose;
 
   @override
@@ -134,6 +137,7 @@ class MapPinSummarySheet extends StatelessWidget {
               if (request != null) ...[
                 RequestCard(
                   request: request!,
+                  userBloodType: userBloodType,
                   enableHero: false,
                   onTap: () =>
                       context.push('${AppRoutes.requests}/${request!.id}'),
@@ -240,6 +244,8 @@ class InteractiveMapCanvas extends StatelessWidget {
     required this.onSelectCenter,
     super.key,
     this.controller,
+    this.userLatitude = 39.9208,
+    this.userLongitude = 32.8541,
   });
 
   final List<BloodRequest> requests;
@@ -247,6 +253,8 @@ class InteractiveMapCanvas extends StatelessWidget {
   final ValueChanged<BloodRequest> onSelectRequest;
   final ValueChanged<DonationCenter> onSelectCenter;
   final RealMapController? controller;
+  final double userLatitude;
+  final double userLongitude;
 
   @override
   Widget build(BuildContext context) {
@@ -256,6 +264,8 @@ class InteractiveMapCanvas extends StatelessWidget {
       onSelectRequest: onSelectRequest,
       onSelectCenter: onSelectCenter,
       controller: controller,
+      userLatitude: userLatitude,
+      userLongitude: userLongitude,
     );
   }
 }
