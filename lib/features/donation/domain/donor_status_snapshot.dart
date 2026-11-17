@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:turkiye_kan_agi/core/router/auth_guard_provider.dart';
+import 'package:turkiye_kan_agi/core/services/location_service.dart';
 import 'package:turkiye_kan_agi/core/services/remote_config_service.dart';
 import 'package:turkiye_kan_agi/features/donation/data/firestore_donation_repository.dart';
 import 'package:turkiye_kan_agi/features/donation/domain/donation_availability_state.dart';
@@ -65,6 +66,9 @@ final currentDonorStatusProvider =
     FutureProvider<DonorStatusSnapshot>((ref) async {
   ref.watch(profileRevisionProvider);
   ref.watch(donationRevisionProvider);
+  final gpsLoc = LocationService.isFlutterTest
+      ? null
+      : ref.watch(userLocationProvider).valueOrNull;
   final uid = ref.watch(currentUserIdStateProvider) ?? 'local-user';
   final profileRepo = ref.watch(profileRepositoryProvider);
   final donationRepo = ref.watch(donationRepositoryProvider);
@@ -107,10 +111,12 @@ final currentDonorStatusProvider =
   final phone = (sen?.phoneNumber != null && sen!.phoneNumber!.isNotEmpty)
       ? sen.phoneNumber!
       : '+90 532 ••• •• 48';
-  final province =
-      (pub?.province.isNotEmpty == true) ? pub!.province : 'Ankara';
-  final district =
-      (pub?.district.isNotEmpty == true) ? pub!.district : 'Çankaya';
+  final province = (pub?.province.isNotEmpty == true)
+      ? pub!.province
+      : (gpsLoc?.province ?? 'Ankara');
+  final district = (pub?.district.isNotEmpty == true)
+      ? pub!.district
+      : (gpsLoc?.district ?? 'Çankaya');
   final bloodType = sen?.bloodType ?? BloodType.aPos;
   final weightKg = sen?.weightKg ?? 76;
   final isAvailable = pub?.isAvailableToDonate ?? nextInfo.isEligibleNow;

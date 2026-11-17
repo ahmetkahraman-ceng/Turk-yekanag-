@@ -65,8 +65,19 @@ class _ProfileSetupWizardScreenState
   }
 
   Future<void> _loadExistingProfileIfCompleted() async {
+    final gpsLoc = LocationService.isFlutterTest
+        ? null
+        : ref.read(userLocationProvider).valueOrNull;
     final isCompleted = ref.read(profileCompletedStateProvider);
-    if (!isCompleted) return;
+    if (!isCompleted) {
+      if (gpsLoc != null) {
+        setState(() {
+          _selectedProvince = gpsLoc.province;
+          _selectedDistrict = gpsLoc.district;
+        });
+      }
+      return;
+    }
     final uid = ref.read(currentUserIdStateProvider) ?? 'local-user';
     final repo = ref.read(profileRepositoryProvider);
     final pubRes = await repo.getPublicProfile(uid);
@@ -77,8 +88,10 @@ class _ProfileSetupWizardScreenState
         if (pub != null) {
           setState(() {
             _useNickname = pub.useNickname;
-            _selectedProvince = pub.province.isNotEmpty ? pub.province : null;
-            _selectedDistrict = pub.district.isNotEmpty ? pub.district : null;
+            _selectedProvince = gpsLoc?.province ??
+                (pub.province.isNotEmpty ? pub.province : null);
+            _selectedDistrict = gpsLoc?.district ??
+                (pub.district.isNotEmpty ? pub.district : null);
           });
         }
       },
@@ -264,11 +277,21 @@ class _ProfileSetupWizardScreenState
     }
 
     if (_selectedProvince == null || _selectedDistrict == null) {
-      setState(() {
-        _currentStep = 3;
-        _errorMessage = l10n.wizardLocationRequiredError;
-      });
-      return;
+      setState(() => _isFetchingLocation = true);
+      final loc =
+          await ref.read(userLocationProvider.notifier).refreshWithPermission();
+      if (!mounted) return;
+      setState(() => _isFetchingLocation = false);
+      if (loc != null) {
+        _selectedProvince = loc.province;
+        _selectedDistrict = loc.district;
+      } else {
+        setState(() {
+          _currentStep = 3;
+          _errorMessage = l10n.wizardLocationRequiredError;
+        });
+        return;
+      }
     }
 
     setState(() {
@@ -336,10 +359,16 @@ class _ProfileSetupWizardScreenState
         body: ResponsiveConstrainedBox(
           child: LocationPermissionExplainerView(
             onAllowLocation: () async {
-              await ref
+              final loc = await ref
                   .read(userLocationProvider.notifier)
                   .refreshWithPermission();
-              if (!mounted) return;
+              if (!context.mounted) return;
+              if (loc != null) {
+                AppSnackbar.show(
+                  context,
+                  message: '${loc.formattedArea} (${loc.formattedCoordinates})',
+                );
+              }
               setState(() => _stage = _WizardStage.celebration);
             },
             onSkipLocation: () =>

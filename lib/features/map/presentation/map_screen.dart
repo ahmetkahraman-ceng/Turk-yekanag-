@@ -57,7 +57,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   bool _hasLocationPermission = true;
   bool _didInitialFocus = false;
   String _searchQuery = '';
-  String? _selectedCity = 'Ankara';
+  String? _selectedCity;
   BloodRequest? _selectedRequest;
   DonationCenter? _selectedCenter;
 
@@ -71,6 +71,17 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   void initState() {
     super.initState();
     _loadMapData();
+    if (!LocationService.isFlutterTest) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        final existing = ref.read(userLocationProvider).valueOrNull;
+        if (existing != null) {
+          _applyUserLocationToCamera(existing);
+        } else {
+          _goToMyRealLocation(silent: true);
+        }
+      });
+    }
   }
 
   @override
@@ -128,32 +139,41 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     );
   }
 
-  Future<void> _goToMyRealLocation() async {
-    final loc =
-        await ref.read(userLocationProvider.notifier).refreshWithPermission();
-    if (!mounted) return;
-    if (loc == null) {
-      setState(() => _hasLocationPermission = false);
-      AppSnackbar.show(
-        context,
-        message: context.l10n.mapNoLocationTitle,
-      );
-      return;
-    }
+  void _applyUserLocationToCamera(UserLocationData loc) {
     setState(() {
       _hasLocationPermission = true;
+      _didInitialFocus = true;
       _selectedCity =
           _cityCoordinates.containsKey(loc.province) ? loc.province : null;
     });
     _mapController.moveTo(
       latitude: loc.latitude,
       longitude: loc.longitude,
-      zoom: 12.2,
+      zoom: 13.0,
     );
-    AppSnackbar.show(
-      context,
-      message: '${loc.formattedArea} (${loc.formattedCoordinates})',
-    );
+  }
+
+  Future<void> _goToMyRealLocation({bool silent = false}) async {
+    final loc =
+        await ref.read(userLocationProvider.notifier).refreshWithPermission();
+    if (!mounted) return;
+    if (loc == null) {
+      if (!silent) {
+        setState(() => _hasLocationPermission = false);
+        AppSnackbar.show(
+          context,
+          message: context.l10n.mapNoLocationTitle,
+        );
+      }
+      return;
+    }
+    _applyUserLocationToCamera(loc);
+    if (!silent) {
+      AppSnackbar.show(
+        context,
+        message: '${loc.formattedArea} (${loc.formattedCoordinates})',
+      );
+    }
   }
 
   List<BloodRequest> _filteredRequestsFor(BloodType userBloodType) {
@@ -207,7 +227,21 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     final userBloodType = donorStatus?.bloodType ?? BloodType.aPos;
     final gpsData = ref.watch(userLocationProvider).valueOrNull;
 
-    if (!_didInitialFocus && donorStatus != null) {
+    ref.listen<AsyncValue<UserLocationData?>>(userLocationProvider, (prev, next) {
+      final loc = next.valueOrNull;
+      if (loc != null && prev?.valueOrNull?.updatedAt != loc.updatedAt) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) _applyUserLocationToCamera(loc);
+        });
+      }
+    });
+
+    if (!_didInitialFocus && gpsData != null) {
+      _didInitialFocus = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _applyUserLocationToCamera(gpsData);
+      });
+    } else if (!_didInitialFocus && donorStatus != null) {
       _didInitialFocus = true;
       final profCity = donorStatus.province;
       if (_cityCoordinates.containsKey(profCity) && _selectedCity != profCity) {

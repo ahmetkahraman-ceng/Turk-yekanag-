@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:turkiye_kan_agi/core/network/connectivity_service.dart';
+import 'package:turkiye_kan_agi/core/services/location_service.dart';
 import 'package:turkiye_kan_agi/features/onboarding/domain/kvkk_consent_record.dart';
 import 'package:turkiye_kan_agi/features/profile/data/firestore_profile_repository.dart';
 import 'package:turkiye_kan_agi/features/profile/domain/blood_type.dart';
@@ -206,6 +207,37 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.text('Verileriniz Hazır (JSON)'), findsOneWidget);
+      },
+    );
+
+    test(
+      'LocationService ve TurkeyGeocoderTable 81 il/ilçe çözümlemesini Türkçe karakter duyarsız ve doğru yapar',
+      () async {
+        TestWidgetsFlutterBinding.ensureInitialized();
+        const service = LocationService();
+
+        final kadikoy = await service.resolveProvinceAndDistrict(
+          40.9901,
+          29.0292,
+        );
+        expect(kadikoy.province, 'İstanbul');
+        expect(kadikoy.district, 'Kadıköy');
+
+        final bursaNilufer = await service.resolveProvinceAndDistrict(
+          40.2169,
+          28.9850,
+        );
+        expect(bursaNilufer.province, 'Bursa');
+        expect(bursaNilufer.district, 'Nilüfer');
+
+        final asciiMatch = TurkeyGeocoderTable.matchCanonicalArea(
+          provinceCandidates: const ['Istanbul Province'],
+          districtCandidates: const ['Kadikoy District'],
+          lat: 40.99,
+          lon: 29.03,
+        );
+        expect(asciiMatch.province, 'İstanbul');
+        expect(asciiMatch.district, 'Kadıköy');
       },
     );
   });
